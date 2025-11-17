@@ -1,0 +1,863 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Fix dropdown scroll reset issue */
+.k-popup.k-dropdown-popup {
+  position: fixed !important;
+  z-index: 10000 !important;
+}
+
+.k-popup.k-dropdown-popup .k-list-container {
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  scroll-behavior: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.k-popup.k-dropdown-popup .k-list {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+/* Prevent dropdown from re-rendering and losing scroll position */
+.k-popup.k-dropdown-popup .k-list-item {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+}
+
+/* Disable animations that cause scroll reset */
+.k-animation-container.k-popup {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Ensure stable positioning */
+.k-popup[data-role="popup"] {
+  transform: none !important;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-body {
+  display: flex;
+  height: calc(100vh - 56px);
+  overflow: visible;
+  background-color: #f8f9fa;
+}
+
+.content {
+  flex: 1;
+  padding: 24px;
+  background: #f8f9fa;
+  overflow: visible;
+}
+
+/* Drawer Styles */
+.hamburger-button {
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer;
+  padding: 8px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.hamburger-button:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.hamburger-icon {
+  width: 24px;
+  height: 18px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hamburger-line {
+  width: 100%;
+  height: 2px;
+  background-color: white;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.hamburger-icon.open .hamburger-line:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger-icon.open .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-icon.open .hamburger-line:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+.drawer-container {
+  height: 100%;
+  background-color: #ffffff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 0;
+  overflow: hidden;
+  border-right: 1px solid #e2e8f0;
+  box-shadow: none;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.drawer-container.expanded {
+  width: 250px; /* Slightly more compact */
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+}
+
+.drawer-content {
+  height: 100%;
+  padding: 8px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 250px;
+  background-color: #ffffff;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.drawer-container.expanded .drawer-content {
+  opacity: 1;
+  visibility: visible;
+}
+
+.menu-item-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.drawer-item {
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  user-select: none;
+  padding: 8px 12px;
+  white-space: nowrap;
+  width: calc(100% - 24px);
+  margin: 0 12px;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.drawer-container.expanded .drawer-item {
+  opacity: 1;
+  visibility: visible;
+}
+
+.drawer-item:hover {
+  background-color: #f7f7f7;
+}
+
+.drawer-item.selected {
+  background-color: #fffbeb; /* Soft yellow background */
+  border-radius: 6px;
+}
+
+.drawer-item.selected .item-text,
+.drawer-item.selected .menu-icon {
+  color: #7c2d12; /* Warm dark brown text */
+  font-weight: 600;
+}
+
+.item-content {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* More compact */
+  position: relative;
+}
+
+.menu-icon {
+  font-size: 18px;
+  color: #4a5568;
+  min-width: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.item-text-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.item-text-container.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.item-text {
+  font-size: 14px;
+  color: #374151; /* Slightly darker text for better readability */
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.submenu {
+  margin-left: 20px;
+  margin-top: 4px;
+  padding-left: 10px;
+  border-left: 1px solid #e2e8f0;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drawer-container.expanded .submenu {
+  max-height: 200px;
+}
+
+.submenu-item {
+  padding: 6px 0;
+}
+
+.submenu-item .item-text {
+  font-size: 13px;
+  color: #4a5568;
+}
+
+.submenu-item.selected .item-text {
+  color: #7c2d12; /* Warm dark brown text */
+  font-weight: 500;
+}
+
+.has-submenu {
+  position: relative;
+}
+
+.submenu-arrow {
+  font-size: 12px;
+  color: #a0aec0;
+  transition: transform 0.2s ease;
+  margin-left: 4px;
+}
+
+.submenu-arrow.expanded {
+  transform: rotate(90deg);
+}
+
+/* Header Styles */
+.header {
+  background-color: #1976d2 !important;
+  color: white;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding: 0 16px !important;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-icon-button {
+  color: white !important;
+  padding: 8px !important;
+  position: relative;
+  background: transparent !important;
+  border: none !important;
+}
+
+.header-icon-button:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.notification-button {
+  position: relative;
+}
+
+.notification-button .k-badge-container {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+}
+
+.profile-section {
+  position: relative;
+}
+
+.profile-button {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 8px 16px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  color: white !important;
+  transition: all 0.2s ease !important;
+}
+
+.profile-button:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.profile-avatar {
+  width: 32px;
+  height: 32px;
+  background-color: #64b5f6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin-right: 8px;
+}
+
+.profile-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  line-height: 1.2;
+}
+
+.profile-role {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.k-appbar {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Form and Grid Styles */
+.k-form-field {
+  margin-bottom: 20px;
+}
+
+.k-grid {
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.dashboard-container,
+.customer-list-container,
+.vendor-list-container {
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.dashboard-container h1,
+.customer-list-container h1,
+.vendor-list-container h1 {
+  color: #2d3748;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: visible;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  align-items: start;
+  margin-bottom: 0;
+}
+
+.form-row.two-columns {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.k-form-field {
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.k-form-field.k-colspan-2 {
+  grid-column: span 2;
+}
+
+.k-form-field.k-colspan-3 {
+  grid-column: span 3;
+}
+
+.k-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+  margin-bottom: 4px;
+}
+
+/* Common Input Styles */
+.k-textbox,
+.k-dropdown,
+.k-datepicker,
+.k-picker-wrap,
+.k-dropdown-wrap,
+.k-input-inner {
+  width: 100% !important;
+  height: 44px !important;
+  background-color: white !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 6px !important;
+  font-size: 14px !important;
+  box-sizing: border-box !important;
+}
+
+/* Input field styles */
+.k-textbox,
+.k-dropdown .k-input,
+.k-datepicker .k-input,
+.k-dropdown-wrap .k-input,
+.k-input-inner {
+  height: 42px !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  color: #2d3748 !important;
+  display: flex !important;
+  align-items: center !important;
+  background-color: white !important;
+  border: none !important;
+  outline: none !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Ensure text inputs have the same dimensions */
+.k-textbox.k-input,
+.k-textbox.k-input-md,
+input.k-textbox,
+input.k-input {
+  min-height: 44px !important;
+  height: 44px !important;
+  line-height: 44px !important;
+  padding: 0 12px !important;
+}
+
+/* Dropdown and picker button styles */
+.k-dropdown-wrap .k-select,
+.k-picker-wrap .k-select {
+  width: 42px !important;
+  height: 42px !important;
+  border-left: 1px solid #e2e8f0 !important;
+  background-color: transparent !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.k-dropdown-wrap {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+}
+
+/* Hover and focus states */
+.k-textbox:hover,
+.k-dropdown:hover,
+.k-datepicker:hover,
+.k-picker-wrap:hover,
+.k-dropdown-wrap:hover {
+  border-color: #cbd5e0 !important;
+}
+
+.k-textbox:focus,
+.k-textbox:focus-within,
+.k-dropdown.k-state-focused,
+.k-datepicker.k-state-focused,
+.k-picker-wrap.k-state-focused,
+.k-dropdown-wrap.k-state-focused {
+  border-color: #4299e1 !important;
+  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2) !important;
+}
+
+/* Make sure the dropdown list items are consistent */
+.k-animation-container .k-list-item {
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+}
+
+/* Ensure dropdown lists display vertically */
+.k-popup .k-list,
+.k-animation-container .k-list,
+.k-dropdown-wrap .k-list,
+.k-list-ul,
+.k-list-container .k-list {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+}
+
+.k-popup .k-list-item,
+.k-animation-container .k-list-item,
+.k-dropdown-wrap .k-list-item,
+.k-list-item {
+  display: block !important;
+  width: 100% !important;
+  padding: 8px 12px !important;
+  margin: 0 !important;
+  border: none !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Simple dropdown positioning fix */
+.k-popup.k-dropdown-popup,
+.k-animation-container {
+  min-width: 200px;
+  max-width: 300px;
+}
+
+.k-list-item:hover {
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+
+.k-list-item.k-selected,
+.k-list-item.k-state-selected {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+/* TextArea Styles */
+.k-textarea {
+  width: 100% !important;
+  min-height: 120px !important;
+  padding: 12px !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 6px !important;
+  resize: vertical !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  background-color: white !important;
+}
+
+.k-textarea:hover {
+  border-color: #cbd5e0 !important;
+}
+
+.k-textarea:focus {
+  border-color: #4299e1 !important;
+  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2) !important;
+}
+
+/* Form field wrapper styles */
+.k-form-field {
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.k-form-field > .k-label {
+  margin-bottom: 8px;
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  color: #4a5568;
+}
+
+/* Ensure form field content is properly sized */
+.k-form-field-wrap {
+  width: 100% !important;
+}
+
+.k-form-field > .k-form-field-wrap > * {
+  width: 100% !important;
+}
+
+/* Grid Styles */
+.order-items-grid {
+  margin-top: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Order Items Section */
+.order-items-section {
+  margin-top: 4px;
+}
+
+.order-items-grid {
+  margin-top: 4px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+/* Button spacing in order items */
+.order-items-section .k-button {
+  margin-top: 8px;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .form-grid {
+    gap: 10px;
+    padding: 16px;
+  }
+  
+  .form-row {
+    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    padding: 16px;
+    gap: 8px;
+  }
+  
+  .form-row {
+    gap: 8px;
+    grid-template-columns: 1fr;
+  }
+  
+  .k-form-field.k-colspan-2,
+  .k-form-field.k-colspan-3 {
+    grid-column: span 1;
+  }
+}
+
+body {
+                background: #dfdfdf;
+            }
+            .title {
+                font-size: 26px;
+                margin: 6px 6px;
+            }
+            .k-badge-container {
+                margin-right: 10px;
+            }
+            ul {
+                font-size: 16px;
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+                display: flex;
+            }
+            li {
+                margin: 0 9px;
+            }
+            li:hover {
+                cursor: pointer;
+                color: #84cef1;
+            }
+            .k-appbar-section {
+                display: flex;
+            }
+            .content li {
+                margin: 0;
+                padding: 6px 5px;
+            }
+            .content ul {
+                display: block;
+            }
+            .content {
+                padding: 4px 8px;
+            }
+            @media only screen and (max-width: 600px) {
+                .appbar-items,
+                .user-actions,
+                .k-avatar,
+                .k-appbar-separator {
+                    display: none;
+                }
+                .overflow-button {
+                    display: block;
+                }
+                .content ul li:last-child {
+                    display: block;
+                }
+            }
+            /* Small devices (portrait tablets and large phones, 600px and up) */
+            @media only screen and (min-width: 600px) {
+                .appbar-items,
+                .user-actions .k-badge-container,
+                .k-avatar,
+                .k-appbar-separator {
+                    display: none;
+                }
+                .overflow-button {
+                    display: block;
+                }
+                .content ul li:last-child {
+                    display: none;
+                }
+            }
+            /* Medium devices (landscape tablets, 768px and up) */
+            @media only screen and (min-width: 768px) {
+                .appbar-items,
+                .user-actions .k-badge-container,
+                .k-appbar-separator,
+                .k-avatar {
+                    display: block;
+                }
+                .overflow-button {
+                    display: none;
+                }
+            }
+            /* Large devices (laptops/desktops, 992px and up) */
+            @media only screen and (min-width: 992px) {}
+
+input.k-input {
+  min-height: 44px !important;
+  height: 44px !important;
+  line-height: 44px !important;
+  padding: 0 12px !important;
+}
+
+/* Dropdown and picker button styles */
+.k-dropdown-wrap .k-select,
+.k-picker-wrap .k-select {
+  width: 42px !important;
+  height: 42px !important;
+  border-left: 1px solid #e2e8f0 !important;
+  background-color: transparent !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.k-dropdown-wrap {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+}
+
+/* Hover and focus states */
+.k-textbox:hover,
+.k-dropdown:hover,
+.k-datepicker:hover,
+.k-picker-wrap:hover,
+.k-dropdown-wrap:hover {
+  border-color: #cbd5e0 !important;
+}
+
+.k-textbox:focus,
+.k-textbox:focus-within,
+.k-dropdown.k-state-focused,
+.k-datepicker.k-state-focused,
+.k-picker-wrap.k-state-focused,
+.k-dropdown-wrap.k-state-focused {
+  border-color: #4299e1 !important;
+  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2) !important;
+}
+
+/* Make sure the dropdown list items are consistent */
+.k-animation-container .k-list-item {
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+}
+
+/* Ensure dropdown lists display vertically */
+.k-popup .k-list,
+.k-animation-container .k-list,
+.k-dropdown-wrap .k-list,
+.k-list-ul,
+.k-list-container .k-list {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+}
+
+.k-popup .k-list-item,
+.k-animation-container .k-list-item,
+.k-dropdown-wrap .k-list-item,
+.k-list-item {
+  display: block !important;
+  width: 100% !important;
+  padding: 8px 12px !important;
+  margin: 0 !important;
+  border: none !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Simple dropdown positioning fix */
+.k-popup.k-dropdown-popup,
+.k-animation-container {
+  min-width: 200px;
+  max-width: 300px;
+}
+
+.k-list-item:hover {
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+
+.k-list-item.k-selected,
+.k-list-item.k-state-selected {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+
+

@@ -1,0 +1,253 @@
+﻿{
+   "CodeGenerationMode": 4,
+   "ContextClassName": "AccountingDbContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": ".",
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "Accounting.Persistence",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[AccountType]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ChartOfAccounts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CreditMemo]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CreditMemoLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CreditMemoPaymentLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Customer]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerPayment]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerPaymentLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomFieldValues]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomFormFields]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DebitMemo]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DebitMemoLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Forms]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FormSequence]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FormSourceType]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[InventoryAdjustment]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[InventoryAdjustmentLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[InventoryDetail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[InventoryLedger]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[InventoryTransfer]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[InventoryTransferLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Invoice]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[InvoiceLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ItemFulfilment]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ItemFulfilmentLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ItemReceipt]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ItemReceiptLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ItemType]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[JournalEntry]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[JournalEntryLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Location]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Product]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductStock]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PurchaseOrder]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PurchaseOrderLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RecordType]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesOrder]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesOrderLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesOrderNumberSequence]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[StandardFields]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Status]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Tax]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TransactionStatus]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TypeOfField]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Vendor]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VendorBill]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VendorBillLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VendorCredit]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VendorCreditLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VendorCreditPaymentLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VendorPayment]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VendorPaymentLines]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": true,
+   "UseDatabaseNames": true,
+   "UseDatabaseNamesForRoutines": true,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseInternalAccessModifiersForSprocsAndFunctions": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": true,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": true,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": true,
+   "UseT4Split": false
+}

@@ -1,0 +1,12 @@
+D:\GitHub- Accounting\Accounting-Software\Accounting-Software\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Abstractions\bin\Debug\net8.0\ExcentOne.EntityFrameworkCore.Abstractions.deps.json
+D:\GitHub- Accounting\Accounting-Software\Accounting-Software\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Abstractions\bin\Debug\net8.0\ExcentOne.EntityFrameworkCore.Abstractions.dll
+D:\GitHub- Accounting\Accounting-Software\Accounting-Software\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Abstractions\bin\Debug\net8.0\ExcentOne.EntityFrameworkCore.Abstractions.pdb
+D:\GitHub- Accounting\Accounting-Software\Accounting-Software\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Abstractions\obj\Debug\net8.0\ExcentOne.EntityFrameworkCore.Abstractions.GeneratedMSBuildEditorConfig.editorconfig
+D:\GitHub- Accounting\Accounting-Software\Accounting-Software\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Abstractions\obj\Debug\net8.0\ExcentOne.EntityFrameworkCore.Abstractions.AssemblyInfoInputs.cache
+D:\GitHub- Accounting\Accounting-Software\Accounting-Software\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Abstractions\obj\Debug\net8.0\ExcentOne.EntityFrameworkCore.Abstractions.AssemblyInfo.cs
+D:\GitHub- Accounting\Accounting-Software\Accounting-Software\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Abstractions\obj\Debug\net8.0\ExcentOne.EntityFrameworkCore.Abstractions.csproj.CoreCompileInputs.cache
+D:\GitHub- Accounting\Accounting-Software\Accounting-Software\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Abstractions\obj\Debug\net8.0\ExcentOne.EntityFrameworkCore.Abstractions.sourcelink.json
+D:\GitHub- Accounting\Accounting-Software\Accounting-Software\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Abstractions\obj\Debug\net8.0\ExcentOne.EntityFrameworkCore.Abstractions.dll
+D:\GitHub- Accounting\Accounting-Software\Accounting-Software\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Abstractions\obj\Debug\net8.0\refint\ExcentOne.EntityFrameworkCore.Abstractions.dll
+D:\GitHub- Accounting\Accounting-Software\Accounting-Software\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Abstractions\obj\Debug\net8.0\ExcentOne.EntityFrameworkCore.Abstractions.pdb
+D:\GitHub- Accounting\Accounting-Software\Accounting-Software\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Abstractions\obj\Debug\net8.0\ref\ExcentOne.EntityFrameworkCore.Abstractions.dll

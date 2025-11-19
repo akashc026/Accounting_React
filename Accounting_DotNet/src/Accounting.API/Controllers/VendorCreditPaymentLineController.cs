@@ -1,0 +1,156 @@
+using Accounting.Application.Features;
+using ExcentOne.Application.Features.Results;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Accounting.API.Controllers
+{
+
+    [ApiController]
+    [Route("vendor-credit-payment-line")]
+    public class VendorCreditPaymentLineController : ControllerBase
+    {
+        private readonly IMediator _mediator;
+
+        public VendorCreditPaymentLineController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
+        [HttpGet]
+        public async Task<PaginatedList<VendorCreditPaymentLineResultDto>> Get([FromQuery] GetAllVendorCreditPaymentLine request)
+        {
+            return await _mediator.Send(request);
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<VendorCreditPaymentLineResultDto>> Get(Guid id)
+        {
+            try
+            {
+                GetVendorCreditPaymentLine request = new() { Id = id };
+                var result = await _mediator.Send(request);
+                
+                if (result == null)
+                {
+                    return NotFound($"VendorCreditPaymentLine with ID {id} not found");
+                }
+                
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error retrieving VendorCreditPaymentLine: {ex.Message}");
+            }
+        }
+
+    [HttpGet("by-payment/{paymentId:guid}")]
+    public async Task<ActionResult<PaginatedList<VendorCreditPaymentLineResultDto>>> GetByPaymentId(Guid paymentId)
+    {
+        try
+        {
+            var request = new GetAllVendorCreditPaymentLine { SearchText = paymentId.ToString(), PageSize = 1000 };
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error: {ex.Message}");
+        }
+    }
+
+    [HttpGet("by-vendor-credit/{vendorCreditId}")]
+    public async Task<ActionResult<object>> GetByVendorCreditId(Guid vendorCreditId)
+    {
+        try
+        {
+            // First check if the vendor credit exists
+            var vendorCreditQuery = new GetVendorCredit { Id = vendorCreditId };
+            var vendorCredit = await _mediator.Send(vendorCreditQuery);
+
+            // Then get all vendor credit payment lines for this vendor credit
+            var query = new GetAllVendorCreditPaymentLine { PageSize = 1000 };
+            var allLines = await _mediator.Send(query);
+            var filteredLines = allLines.Results.Where(x => x.VCID == vendorCreditId).ToList();
+
+            return Ok(new
+            {
+                VendorCreditExists = vendorCredit != null,
+                VendorCredit = vendorCredit,
+                TotalVendorCreditPaymentLines = allLines.TotalItems,
+                LinesForThisVendorCredit = filteredLines.Count,
+                Lines = filteredLines
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error: {ex.Message}");
+        }
+    }
+
+    [HttpGet("by-record-id/{recordId}")]
+    public async Task<ActionResult<IEnumerable<VendorCreditPaymentLineResultDto>>> GetByRecordId(string recordId)
+    {
+        try
+        {
+            var query = new GetAllVendorCreditPaymentLine { PageSize = 1000 };
+            var allLines = await _mediator.Send(query);
+            var filteredLines = allLines.Results.Where(x => x.RecordID == recordId).ToList();
+            return Ok(filteredLines);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error retrieving VendorCreditPaymentLines by RecordID: {ex.Message}");
+        }
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<Guid>> Create([FromBody] CreateVendorCreditPaymentLine request)
+    {
+        try
+        {
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error creating VendorCreditPaymentLine: {ex.Message}");
+        }
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<ActionResult<Guid>> Update(Guid id, [FromBody] UpdateVendorCreditPaymentLine request)
+    {
+        try
+        {
+            request.Id = id;
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error updating VendorCreditPaymentLine: {ex.Message}");
+        }
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<ActionResult> Delete(Guid id)
+    {
+        try
+        {
+            DeleteVendorCreditPaymentLine request = new() { Id = id };
+            await _mediator.Send(request);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error deleting VendorCreditPaymentLine: {ex.Message}");
+        }
+    }
+    }
+}

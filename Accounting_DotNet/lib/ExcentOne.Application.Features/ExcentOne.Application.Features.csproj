@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ApplicationFeatureBuilder.cs" />
+    <Compile Remove="IApplicationFeature.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="8.1.8" />
+    <PackageReference Include="Mapster" Version="7.4.0" />
+    <PackageReference Include="Scrutor" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExcentOne.EntityFrameworkCore.Auditing\ExcentOne.EntityFrameworkCore.Auditing.csproj" />
+    <ProjectReference Include="..\ExcentOne.EntityFrameworkCore.Publishing\ExcentOne.EntityFrameworkCore.Publishing.csproj" />
+    <ProjectReference Include="..\ExcentOne.EntityFrameworkCore.SqlServer\ExcentOne.EntityFrameworkCore.SqlServer.csproj" />
+    <ProjectReference Include="..\ExcentOne.Linq.Extensions\ExcentOne.Linq.Extensions.csproj" />
+    <ProjectReference Include="..\ExcentOne.MediatR.EntityFrameworkCore\ExcentOne.MediatR.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\ExcentOne.MediatR.FluentValidation\ExcentOne.MediatR.FluentValidation.csproj" />
+    <ProjectReference Include="..\ExcentOne.Persistence.Features\ExcentOne.Persistence.Features.csproj" />
+  </ItemGroup>
+
+</Project>

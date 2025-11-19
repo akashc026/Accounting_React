@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Http\**" />
+	  <EmbeddedResource Remove="Http\**" />
+	  <None Remove="Http\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="ServiceRegistrationExtensions.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.13" />
+	</ItemGroup>
+
+</Project>

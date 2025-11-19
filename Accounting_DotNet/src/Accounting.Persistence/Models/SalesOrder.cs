@@ -1,0 +1,48 @@
+﻿using System;
+using System.Collections.Generic;
+using ExcentOne.Persistence.Features.Models;
+
+namespace Accounting.Persistence.Models;
+
+public partial class SalesOrder : IEntity<System.Guid>
+{
+    public Guid Id { get; set; }
+
+    public Guid CustomerID { get; set; }
+
+    public DateTime SODate { get; set; }
+
+    public decimal TotalAmount { get; set; }
+
+    public Guid? LocationID { get; set; }
+
+    public Guid Form { get; set; }
+
+    public string SequenceNumber { get; set; } = null!;
+
+    public bool? Inactive { get; set; }
+
+    public decimal? Discount { get; set; }
+
+    public Guid? Status { get; set; }
+
+    public decimal? GrossAmount { get; set; }
+
+    public decimal? TaxTotal { get; set; }
+
+    public decimal? SubTotal { get; set; }
+
+    public decimal? NetTotal { get; set; }
+
+    public virtual Customer Customer { get; set; } = null!;
+
+    public virtual Form FormNavigation { get; set; } = null!;
+
+    public virtual ICollection<ItemFulfilment> ItemFulfilments { get; set; } = new List<ItemFulfilment>();
+
+    public virtual Location? Location { get; set; }
+
+    public virtual ICollection<SalesOrderLine> SalesOrderLines { get; set; } = new List<SalesOrderLine>();
+
+    public virtual Status? StatusNavigation { get; set; }
+}

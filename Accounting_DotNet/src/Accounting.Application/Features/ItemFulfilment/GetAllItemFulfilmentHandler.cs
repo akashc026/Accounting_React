@@ -31,23 +31,40 @@ namespace Accounting.Application.Features
 
         protected override Expression<Func<ItemFulfilment, bool>> ComposeFilter(Expression<Func<ItemFulfilment, bool>> predicate, GetAllItemFulfilment request)
         {
+            // Build the filter expression
+            Expression<Func<ItemFulfilment, bool>>? filterExpression = null;
+
+            // Add search text filter
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
-                predicate = predicate.And(x => EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%"));
+                filterExpression = x =>
+                    EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%")
+                    || (x.Customer != null && EF.Functions.Like(x.Customer.Name!, $"%{request.SearchText}%"));
             }
 
-            return predicate;
+            // Apply the filter if any conditions were added
+            return filterExpression != null ? predicate.Or(filterExpression) : predicate;
         }
 
         protected override IQueryable<ItemFulfilment> ApplyFiltering(IQueryable<ItemFulfilment> queryable, Expression<Func<ItemFulfilment, bool>> predicate, GetAllItemFulfilment request)
         {
-            return queryable
+            var query = queryable
                 .Include(x => x.Customer)
                 .Include(x => x.FormNavigation)
                 .Include(x => x.Location)
                 .Include(x => x.SO)
                 .Include(x => x.StatusNavigation)
                 .Where(predicate);
+
+            // Apply sorting
+            if (!string.IsNullOrWhiteSpace(request.SortBy) && request.SortBy.Equals("sequenceNumber", StringComparison.OrdinalIgnoreCase))
+            {
+                query = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase)
+                    ? query.OrderBy(x => x.SequenceNumber)
+                    : query.OrderByDescending(x => x.SequenceNumber);
+            }
+
+            return query;
         }
 
         protected override PaginatedList<ItemFulfilmentResultDto> OnQuerySuccess(DbQuerySuccessArgs<GetAllItemFulfilment, IEnumerable<ItemFulfilment>> args)

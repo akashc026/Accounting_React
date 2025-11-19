@@ -19,26 +19,47 @@ namespace Accounting.Application.Features
 
         protected override IQueryable<CreditMemo> ApplyFiltering(IQueryable<CreditMemo> queryable, Expression<Func<CreditMemo, bool>> predicate, GetAllCreditMemo request)
         {
-            return queryable
+            var query = queryable
                 .Include(x => x.FormNavigation)
                 .Include(x => x.Customer)
                 .Include(x => x.Location)
                 .Where(predicate);
+
+            // Apply sorting
+            if (!string.IsNullOrWhiteSpace(request.SortBy) && request.SortBy.Equals("sequenceNumber", StringComparison.OrdinalIgnoreCase))
+            {
+                query = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase)
+                    ? query.OrderBy(x => x.SequenceNumber)
+                    : query.OrderByDescending(x => x.SequenceNumber);
+            }
+
+            return query;
         }
 
         protected override Expression<Func<CreditMemo, bool>> ComposeFilter(Expression<Func<CreditMemo, bool>> predicate, GetAllCreditMemo request)
         {
+            // Build the filter expression
+            Expression<Func<CreditMemo, bool>>? filterExpression = null;
+
+            // Add search text filter
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
-                predicate = predicate.And(x => EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%"));
+                filterExpression = x =>
+                    EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%")
+                    || (x.Customer != null && EF.Functions.Like(x.Customer.Name!, $"%{request.SearchText}%"));
             }
 
+            // Add LocationId filter
             if (request.LocationId.HasValue)
             {
-                predicate = predicate.And(x => x.LocationID == request.LocationId.Value);
+                Expression<Func<CreditMemo, bool>> locationFilter = x => x.LocationID == request.LocationId.Value;
+                filterExpression = filterExpression == null
+                    ? locationFilter
+                    : filterExpression.And(locationFilter);
             }
 
-            return predicate;
+            // Apply the filter if any conditions were added
+            return filterExpression != null ? predicate.Or(filterExpression) : predicate;
         }
 
         protected override IQueryable<CreditMemo> ApplyPagination(IQueryable<CreditMemo> queryable, GetAllCreditMemo request)

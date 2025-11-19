@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.MediatR.FluentValidation\\ExcentOne.MediatR.FluentValidation.csproj": {}
+    "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.MediatR.FluentValidation\\ExcentOne.MediatR.FluentValidation.csproj": {}
   },
   "projects": {
-    "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.MediatR.FluentValidation\\ExcentOne.MediatR.FluentValidation.csproj": {
+    "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.MediatR.FluentValidation\\ExcentOne.MediatR.FluentValidation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.MediatR.FluentValidation\\ExcentOne.MediatR.FluentValidation.csproj",
+        "projectUniqueName": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.MediatR.FluentValidation\\ExcentOne.MediatR.FluentValidation.csproj",
         "projectName": "ExcentOne.MediatR.FluentValidation",
-        "projectPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.MediatR.FluentValidation\\ExcentOne.MediatR.FluentValidation.csproj",
+        "projectPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.MediatR.FluentValidation\\ExcentOne.MediatR.FluentValidation.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.MediatR.FluentValidation\\obj\\",
+        "outputPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.MediatR.FluentValidation\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

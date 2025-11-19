@@ -31,23 +31,40 @@ namespace Accounting.Application.Features
 
         protected override IQueryable<Invoice> ApplyFiltering(IQueryable<Invoice> queryable, Expression<Func<Invoice, bool>> predicate, GetAllInvoice request)
         {
-            return queryable
+            var query = queryable
                 .Include(x => x.StatusNavigation)
                 .Include(x => x.Customer)
                 .Include(x => x.FormNavigation)
                 .Include(x => x.Location)
                 .Include(x => x.DN)
                 .Where(predicate);
+
+            // Apply sorting
+            if (!string.IsNullOrWhiteSpace(request.SortBy) && request.SortBy.Equals("sequenceNumber", StringComparison.OrdinalIgnoreCase))
+            {
+                query = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase)
+                    ? query.OrderBy(x => x.SequenceNumber)
+                    : query.OrderByDescending(x => x.SequenceNumber);
+            }
+
+            return query;
         }
 
         protected override Expression<Func<Invoice, bool>> ComposeFilter(Expression<Func<Invoice, bool>> predicate, GetAllInvoice request)
         {
+            // Build the filter expression
+            Expression<Func<Invoice, bool>>? filterExpression = null;
+
+            // Add search text filter
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
-                predicate = predicate.And(x => EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%"));
+                filterExpression = x =>
+                    EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%")
+                    || (x.Customer != null && EF.Functions.Like(x.Customer.Name!, $"%{request.SearchText}%"));
             }
 
-            return predicate;
+            // Apply the filter if any conditions were added
+            return filterExpression != null ? predicate.Or(filterExpression) : predicate;
         }
 
         protected override PaginatedList<InvoiceResultDto> OnQuerySuccess(DbQuerySuccessArgs<GetAllInvoice, IEnumerable<Invoice>> args)

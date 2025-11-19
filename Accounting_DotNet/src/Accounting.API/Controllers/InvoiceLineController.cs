@@ -36,23 +36,23 @@ namespace Accounting.API.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> Create(CreateInvoiceLine request)
+        public async Task<List<Guid>> Create(CreateInvoiceLines request)
         {
             return await mediator.Send(request);
         }
 
-        [HttpPut("{id:guid}")]
-        public async Task<Guid> Update(Guid id, UpdateInvoiceLine request)
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateInvoiceLines request)
         {
-            request.Id = id;
-            return await mediator.Send(request);
+            var updatedCount = await mediator.Send(request);
+            return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} invoice line(s) updated successfully" });
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task Delete(Guid id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(DeleteInvoiceLines request)
         {
-            DeleteInvoiceLine request = new() { Id = id };
-            await mediator.Send(request);
+            var deletedCount = await mediator.Send(request);
+            return Ok(new { DeletedCount = deletedCount, Message = $"{deletedCount} invoice line(s) deleted successfully" });
         }
 
         [HttpGet("by-invoice/{invoiceId}")]

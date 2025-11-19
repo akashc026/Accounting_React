@@ -51,6 +51,12 @@ namespace Accounting.API.Controllers
             return await mediator.Send(request);
         }
 
+        [HttpPost("balances")]
+        public async Task<List<ChartOfAccountBalanceDto>> GetBalances(GetChartOfAccountsBalances request)
+        {
+            return await mediator.Send(request);
+        }
+
         [HttpPut("{id:guid}")]
         public async Task<Guid> Update(Guid id, UpdateChartOfAccount request)
         {
@@ -58,6 +64,12 @@ namespace Accounting.API.Controllers
             return await mediator.Send(request);
         }
 
+        [HttpPut("bulk")]
+        public async Task<IActionResult> UpdateBulk(UpdateChartOfAccountsBulk request)
+        {
+            var updatedCount = await mediator.Send(request);
+            return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} chart of account(s) updated successfully" });
+        }
 
         [HttpGet("check-account-number-exists")]
         public async Task<bool> CheckAccountNumberExists([FromQuery] string accountNumber)

@@ -31,23 +31,40 @@ namespace Accounting.Application.Features
 
         protected override IQueryable<ItemReceipt> ApplyFiltering(IQueryable<ItemReceipt> queryable, Expression<Func<ItemReceipt, bool>> predicate, GetAllItemReceipt request)
         {
-            return queryable
+            var query = queryable
                 .Include(x => x.Vendor)
                 .Include(x => x.PO)
                 .Include(x => x.Location)
                 .Include(x => x.FormNavigation)
                 .Include(x => x.StatusNavigation)
                 .Where(predicate);
+
+            // Apply sorting
+            if (!string.IsNullOrWhiteSpace(request.SortBy) && request.SortBy.Equals("sequenceNumber", StringComparison.OrdinalIgnoreCase))
+            {
+                query = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase)
+                    ? query.OrderBy(x => x.SequenceNumber)
+                    : query.OrderByDescending(x => x.SequenceNumber);
+            }
+
+            return query;
         }
 
         protected override Expression<Func<ItemReceipt, bool>> ComposeFilter(Expression<Func<ItemReceipt, bool>> predicate, GetAllItemReceipt request)
         {
+            // Build the filter expression
+            Expression<Func<ItemReceipt, bool>>? filterExpression = null;
+
+            // Add search text filter
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
-                predicate = predicate.And(x => EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%"));
+                filterExpression = x =>
+                    EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%")
+                    || (x.Vendor != null && EF.Functions.Like(x.Vendor.Name!, $"%{request.SearchText}%"));
             }
 
-            return predicate;
+            // Apply the filter if any conditions were added
+            return filterExpression != null ? predicate.Or(filterExpression) : predicate;
         }
 
         protected override PaginatedList<ItemReceiptResultDto> OnQuerySuccess(DbQuerySuccessArgs<GetAllItemReceipt, IEnumerable<ItemReceipt>> args)

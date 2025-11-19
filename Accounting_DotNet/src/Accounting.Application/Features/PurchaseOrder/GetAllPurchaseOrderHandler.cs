@@ -9,6 +9,7 @@ using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
+
 namespace Accounting.Application.Features
 {
     public class GetAllPurchaseOrderHandler : GetEntitiesHandler<AccountingDbContext, PurchaseOrder, GetAllPurchaseOrder, PaginatedList<PurchaseOrderResultDto>>
@@ -31,22 +32,39 @@ namespace Accounting.Application.Features
 
         protected override IQueryable<PurchaseOrder> ApplyFiltering(IQueryable<PurchaseOrder> queryable, Expression<Func<PurchaseOrder, bool>> predicate, GetAllPurchaseOrder request)
         {
-            return queryable
+            var query = queryable
                 .Include(x => x.Vendor)
                 .Include(x => x.Location)
                 .Include(x => x.FormNavigation)
                 .Include(x => x.StatusNavigation)
                 .Where(predicate);
+
+            // Apply sorting
+            if (!string.IsNullOrWhiteSpace(request.SortBy) && request.SortBy.Equals("sequenceNumber", StringComparison.OrdinalIgnoreCase))
+            {
+                query = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase)
+                    ? query.OrderBy(x => x.SequenceNumber)
+                    : query.OrderByDescending(x => x.SequenceNumber);
+            }
+
+            return query;
         }
 
         protected override Expression<Func<PurchaseOrder, bool>> ComposeFilter(Expression<Func<PurchaseOrder, bool>> predicate, GetAllPurchaseOrder request)
         {
+            // Build the filter expression
+            Expression<Func<PurchaseOrder, bool>>? filterExpression = null;
+
+            // Add search text filter
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
-                predicate = predicate.And(x => EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%"));
+                filterExpression = x =>
+                    EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%")
+                    || (x.Vendor != null && EF.Functions.Like(x.Vendor.Name!, $"%{request.SearchText}%"));
             }
 
-            return predicate;
+            // Apply the filter if any conditions were added
+            return filterExpression != null ? predicate.Or(filterExpression) : predicate;
         }
 
         protected override PaginatedList<PurchaseOrderResultDto> OnQuerySuccess(DbQuerySuccessArgs<GetAllPurchaseOrder, IEnumerable<PurchaseOrder>> args)

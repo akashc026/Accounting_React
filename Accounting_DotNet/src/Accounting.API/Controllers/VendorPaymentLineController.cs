@@ -49,32 +49,16 @@ namespace Accounting.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Create([FromBody] CreateVendorPaymentLine request)
+        public async Task<List<Guid>> Create(CreateVendorPaymentLines request)
         {
-            try
-            {
-                var result = await _mediator.Send(request);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error creating VendorPaymentLine: {ex.Message}");
-            }
+            return await _mediator.Send(request);
         }
 
-        [HttpPut("{id:guid}")]
-        public async Task<ActionResult<Guid>> Update(Guid id, [FromBody] UpdateVendorPaymentLine request)
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateVendorPaymentLines request)
         {
-            try
-            {
-                request.Id = id;
-                var result = await _mediator.Send(request);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error updating VendorPaymentLine: {ex.Message}");
-            }
+            var updatedCount = await _mediator.Send(request);
+            return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} vendor payment line(s) updated successfully" });
         }
 
         [HttpGet("by-vendor-payment/{vendorPaymentId}")]
@@ -106,19 +90,11 @@ namespace Accounting.API.Controllers
             }
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task<ActionResult> Delete(Guid id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(DeleteVendorPaymentLines request)
         {
-            try
-            {
-                DeleteVendorPaymentLine request = new() { Id = id };
-                await _mediator.Send(request);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error deleting VendorPaymentLine: {ex.Message}");
-            }
+            var deletedCount = await _mediator.Send(request);
+            return Ok(new { DeletedCount = deletedCount, Message = $"{deletedCount} vendor payment line(s) deleted successfully" });
         }
 
         [HttpGet("by-record-id/{recordId}")]

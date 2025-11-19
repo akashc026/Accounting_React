@@ -49,16 +49,16 @@ namespace Accounting.API.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> Create(CreateVendorBillLine request)
+        public async Task<List<Guid>> Create(CreateVendorBillLines request)
         {
             return await _mediator.Send(request);
         }
 
-        [HttpPut("{id:guid}")]
-        public async Task<Guid> Update(Guid id, UpdateVendorBillLine request)
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateVendorBillLines request)
         {
-            request.Id = id;
-            return await _mediator.Send(request);
+            var updatedCount = await _mediator.Send(request);
+            return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} vendor bill line(s) updated successfully" });
         }
 
         [HttpGet("by-vendor-bill/{vendorBillId}")]
@@ -90,11 +90,11 @@ namespace Accounting.API.Controllers
             }
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task Delete(Guid id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(DeleteVendorBillLines request)
         {
-            DeleteVendorBillLine request = new() { Id = id };
-            await _mediator.Send(request);
+            var deletedCount = await _mediator.Send(request);
+            return Ok(new { DeletedCount = deletedCount, Message = $"{deletedCount} vendor bill line(s) deleted successfully" });
         }
     }
 } 

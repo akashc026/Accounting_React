@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Publishing\\ExcentOne.EntityFrameworkCore.Publishing.csproj": {}
+    "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Publishing\\ExcentOne.EntityFrameworkCore.Publishing.csproj": {}
   },
   "projects": {
-    "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Publishing\\ExcentOne.EntityFrameworkCore.Publishing.csproj": {
+    "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Publishing\\ExcentOne.EntityFrameworkCore.Publishing.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Publishing\\ExcentOne.EntityFrameworkCore.Publishing.csproj",
+        "projectUniqueName": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Publishing\\ExcentOne.EntityFrameworkCore.Publishing.csproj",
         "projectName": "ExcentOne.EntityFrameworkCore.Publishing",
-        "projectPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Publishing\\ExcentOne.EntityFrameworkCore.Publishing.csproj",
+        "projectPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Publishing\\ExcentOne.EntityFrameworkCore.Publishing.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Publishing\\obj\\",
+        "outputPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Publishing\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -32,11 +32,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj": {
-                "projectPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj"
+              "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj": {
+                "projectPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj"
               },
-              "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\ExcentOne.Reflection.Extensions.csproj": {
-                "projectPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\ExcentOne.Reflection.Extensions.csproj"
+              "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\ExcentOne.Reflection.Extensions.csproj": {
+                "projectPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\ExcentOne.Reflection.Extensions.csproj"
               }
             }
           }
@@ -90,14 +90,14 @@
         }
       }
     },
-    "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\ExcentOne.EntityFrameworkCore.Relational.csproj": {
+    "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\ExcentOne.EntityFrameworkCore.Relational.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\ExcentOne.EntityFrameworkCore.Relational.csproj",
+        "projectUniqueName": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\ExcentOne.EntityFrameworkCore.Relational.csproj",
         "projectName": "ExcentOne.EntityFrameworkCore.Relational",
-        "projectPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\ExcentOne.EntityFrameworkCore.Relational.csproj",
+        "projectPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\ExcentOne.EntityFrameworkCore.Relational.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\obj\\",
+        "outputPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -161,14 +161,14 @@
         }
       }
     },
-    "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj": {
+    "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj",
+        "projectUniqueName": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj",
         "projectName": "ExcentOne.Persistence.Features",
-        "projectPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj",
+        "projectPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\obj\\",
+        "outputPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -189,8 +189,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\ExcentOne.EntityFrameworkCore.Relational.csproj": {
-                "projectPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\ExcentOne.EntityFrameworkCore.Relational.csproj"
+              "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\ExcentOne.EntityFrameworkCore.Relational.csproj": {
+                "projectPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\ExcentOne.EntityFrameworkCore.Relational.csproj"
               }
             }
           }
@@ -230,14 +230,14 @@
         }
       }
     },
-    "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\ExcentOne.Reflection.Extensions.csproj": {
+    "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\ExcentOne.Reflection.Extensions.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\ExcentOne.Reflection.Extensions.csproj",
+        "projectUniqueName": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\ExcentOne.Reflection.Extensions.csproj",
         "projectName": "ExcentOne.Reflection.Extensions",
-        "projectPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\ExcentOne.Reflection.Extensions.csproj",
+        "projectPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\ExcentOne.Reflection.Extensions.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\obj\\",
+        "outputPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

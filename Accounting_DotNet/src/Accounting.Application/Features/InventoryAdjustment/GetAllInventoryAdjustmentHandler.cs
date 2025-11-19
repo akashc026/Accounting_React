@@ -28,13 +28,19 @@ namespace Accounting.Application.Features
 
         protected override Expression<Func<InventoryAdjustment, bool>> ComposeFilter(Expression<Func<InventoryAdjustment, bool>> predicate, GetAllInventoryAdjustment request)
         {
+            // Build the filter expression
+            Expression<Func<InventoryAdjustment, bool>>? filterExpression = null;
+
+            // Add search text filter
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
-                predicate = predicate.And(x => EF.Functions.Like(x.CustomerNavigation!.Name!, $"%{request.SearchText}%")
-                    || EF.Functions.Like(x.LocationNavigation!.Name!, $"%{request.SearchText}%"));
+                filterExpression = x =>
+                    (x.LocationNavigation != null && EF.Functions.Like(x.LocationNavigation.Name!, $"%{request.SearchText}%"))
+                    || EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%");
             }
 
-            return predicate;
+            // Apply the filter if any conditions were added
+            return filterExpression != null ? predicate.Or(filterExpression) : predicate;
         }
 
         protected override IQueryable<InventoryAdjustment> ApplyPagination(IQueryable<InventoryAdjustment> queryable, GetAllInventoryAdjustment request)
@@ -51,7 +57,14 @@ namespace Accounting.Application.Features
 
         protected override PaginatedList<InventoryAdjustmentResultDto> OnQuerySuccess(DbQuerySuccessArgs<GetAllInventoryAdjustment, IEnumerable<InventoryAdjustment>> args)
         {
-            var mappedResults = Mapper.Map<IEnumerable<InventoryAdjustmentResultDto>>(args.Result);
+            var mappedResults = args.Result.Select(entity => {
+                var result = Mapper.Map<InventoryAdjustmentResultDto>(entity);
+                result.LocationName = entity.LocationNavigation?.Name;
+                result.CustomerName = entity.CustomerNavigation?.Name;
+                result.FormName = entity.FormNavigation?.FormName;
+                return result;
+            });
+
             var request = args.Request;
 
             return new PaginatedList<InventoryAdjustmentResultDto>

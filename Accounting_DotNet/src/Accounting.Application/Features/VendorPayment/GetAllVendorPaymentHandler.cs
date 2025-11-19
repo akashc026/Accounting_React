@@ -19,27 +19,48 @@ namespace Accounting.Application.Features
 
         protected override IQueryable<VendorPayment> ApplyFiltering(IQueryable<VendorPayment> queryable, Expression<Func<VendorPayment, bool>> predicate, GetAllVendorPayment request)
         {
-            return queryable
+            var query = queryable
                 .Include(x => x.FormNavigation)
                 .Include(x => x.VendorNavigation)
                 .Include(x => x.LocationNavigation)
                 .Include(x => x.StatusNavigation)
                 .Where(predicate);
+
+            // Apply sorting
+            if (!string.IsNullOrWhiteSpace(request.SortBy) && request.SortBy.Equals("sequenceNumber", StringComparison.OrdinalIgnoreCase))
+            {
+                query = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase)
+                    ? query.OrderBy(x => x.SequenceNumber)
+                    : query.OrderByDescending(x => x.SequenceNumber);
+            }
+
+            return query;
         }
 
         protected override Expression<Func<VendorPayment, bool>> ComposeFilter(Expression<Func<VendorPayment, bool>> predicate, GetAllVendorPayment request)
         {
+            // Build the filter expression
+            Expression<Func<VendorPayment, bool>>? filterExpression = null;
+
+            // Add search text filter
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
-                predicate = predicate.And(x => EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%"));
+                filterExpression = x =>
+                    EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%")
+                    || (x.VendorNavigation != null && EF.Functions.Like(x.VendorNavigation.Name!, $"%{request.SearchText}%"));
             }
 
+            // Add LocationId filter
             if (request.LocationId.HasValue)
             {
-                predicate = predicate.And(x => x.Location == request.LocationId.Value);
+                Expression<Func<VendorPayment, bool>> locationFilter = x => x.Location == request.LocationId.Value;
+                filterExpression = filterExpression == null
+                    ? locationFilter
+                    : filterExpression.And(locationFilter);
             }
 
-            return predicate;
+            // Apply the filter if any conditions were added
+            return filterExpression != null ? predicate.Or(filterExpression) : predicate;
         }
 
         protected override IQueryable<VendorPayment> ApplyPagination(IQueryable<VendorPayment> queryable, GetAllVendorPayment request)

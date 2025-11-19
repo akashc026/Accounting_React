@@ -49,32 +49,16 @@ namespace Accounting.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Create([FromBody] CreateCustomerPaymentLine request)
+        public async Task<List<Guid>> Create(CreateCustomerPaymentLines request)
         {
-            try
-            {
-                var result = await _mediator.Send(request);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error creating CustomerPaymentLine: {ex.Message}");
-            }
+            return await _mediator.Send(request);
         }
 
-        [HttpPut("{id:guid}")]
-        public async Task<ActionResult<Guid>> Update(Guid id, [FromBody] UpdateCustomerPaymentLine request)
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateCustomerPaymentLines request)
         {
-            try
-            {
-                request.Id = id;
-                var result = await _mediator.Send(request);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error updating CustomerPaymentLine: {ex.Message}");
-            }
+            var updatedCount = await _mediator.Send(request);
+            return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} customer payment line(s) updated successfully" });
         }
 
         [HttpGet("by-customer-payment/{customerPaymentId}")]
@@ -106,19 +90,11 @@ namespace Accounting.API.Controllers
             }
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task<ActionResult> Delete(Guid id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(DeleteCustomerPaymentLines request)
         {
-            try
-            {
-                DeleteCustomerPaymentLine request = new() { Id = id };
-                await _mediator.Send(request);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error deleting CustomerPaymentLine: {ex.Message}");
-            }
+            var deletedCount = await _mediator.Send(request);
+            return Ok(new { DeletedCount = deletedCount, Message = $"{deletedCount} customer payment line(s) deleted successfully" });
         }
 
         [HttpGet("by-record-id/{recordId}")]

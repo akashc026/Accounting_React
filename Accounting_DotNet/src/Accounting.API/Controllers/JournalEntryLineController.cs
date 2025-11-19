@@ -68,23 +68,23 @@ namespace Accounting.API.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> Create(CreateJournalEntryLine request)
+        public async Task<List<Guid>> Create(CreateJournalEntryLines request)
         {
             return await mediator.Send(request);
         }
 
-        [HttpPut("{id:guid}")]
-        public async Task<Guid> Update(Guid id, UpdateJournalEntryLine request)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(DeleteJournalEntryLines request)
         {
-            request.Id = id;
-            return await mediator.Send(request);
+            var deletedCount = await mediator.Send(request);
+            return Ok(new { DeletedCount = deletedCount, Message = $"{deletedCount} journal entry line(s) deleted successfully" });
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task Delete(Guid id)
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateJournalEntryLines request)
         {
-            DeleteJournalEntryLine request = new() { Id = id };
-            await mediator.Send(request);
+            var updatedCount = await mediator.Send(request);
+            return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} journal entry line(s) updated successfully" });
         }
     }
 }

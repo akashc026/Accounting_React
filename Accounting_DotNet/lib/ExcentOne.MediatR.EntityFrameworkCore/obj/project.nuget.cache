@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bGRxU5C1Eso=",
+  "dgSpecHash": "PUw0ugkmSRQ=",
   "success": true,
-  "projectFilePath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.MediatR.EntityFrameworkCore\\ExcentOne.MediatR.EntityFrameworkCore.csproj",
+  "projectFilePath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.MediatR.EntityFrameworkCore\\ExcentOne.MediatR.EntityFrameworkCore.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\mediatr\\12.4.1\\mediatr.12.4.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",

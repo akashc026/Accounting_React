@@ -2,6 +2,8 @@ using Accounting.Application.Features;
 using ExcentOne.Application.Features.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace Accounting.API.Controllers
 {
@@ -25,10 +27,10 @@ namespace Accounting.API.Controllers
         [HttpGet("by-type-and-record")]
         public async Task<List<CustomFieldValueResultDto>> GetByTypeAndRecord([FromQuery] Guid typeOfRecord, [FromQuery] string? recordId)
         {
-            GetCustomFieldValuesByTypeAndRecord request = new() 
-            { 
-                TypeOfRecord = typeOfRecord, 
-                RecordID = recordId 
+            GetCustomFieldValuesByTypeAndRecord request = new()
+            {
+                TypeOfRecord = typeOfRecord,
+                RecordID = recordId
             };
             return await mediator.Send(request);
         }
@@ -42,23 +44,23 @@ namespace Accounting.API.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> Create(CreateCustomFieldValue request)
+        public async Task<List<Guid>> Create(CreateCustomFieldValues request)
         {
             return await mediator.Send(request);
         }
 
-        [HttpPut("{id:guid}")]
-        public async Task<Guid> Update(Guid id, UpdateCustomFieldValue request)
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateCustomFieldValues request)
         {
-            request.Id = id;
-            return await mediator.Send(request);
+            var updatedCount = await mediator.Send(request);
+            return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} custom field value(s) updated successfully" });
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task Delete(Guid id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(DeleteCustomFieldValues request)
         {
-            DeleteCustomFieldValue request = new() { Id = id };
-            await mediator.Send(request);
+            var deletedCount = await mediator.Send(request);
+            return Ok(new { DeletedCount = deletedCount, Message = $"{deletedCount} custom field value(s) deleted successfully" });
         }
     }
 } 

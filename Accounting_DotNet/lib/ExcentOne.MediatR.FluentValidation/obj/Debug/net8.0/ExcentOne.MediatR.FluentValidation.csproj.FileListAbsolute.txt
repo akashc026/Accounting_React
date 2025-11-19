@@ -23,3 +23,15 @@ D:\Dot_net backup\Accounting_DotNet\lib\ExcentOne.MediatR.FluentValidation\obj\D
 D:\Dot_net backup\Accounting_DotNet\lib\ExcentOne.MediatR.FluentValidation\obj\Debug\net8.0\refint\ExcentOne.MediatR.FluentValidation.dll
 D:\Dot_net backup\Accounting_DotNet\lib\ExcentOne.MediatR.FluentValidation\obj\Debug\net8.0\ExcentOne.MediatR.FluentValidation.pdb
 D:\Dot_net backup\Accounting_DotNet\lib\ExcentOne.MediatR.FluentValidation\obj\Debug\net8.0\ref\ExcentOne.MediatR.FluentValidation.dll
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.MediatR.FluentValidation\bin\Debug\net8.0\ExcentOne.MediatR.FluentValidation.deps.json
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.MediatR.FluentValidation\bin\Debug\net8.0\ExcentOne.MediatR.FluentValidation.dll
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.MediatR.FluentValidation\bin\Debug\net8.0\ExcentOne.MediatR.FluentValidation.pdb
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.MediatR.FluentValidation\obj\Debug\net8.0\ExcentOne.MediatR.FluentValidation.csproj.AssemblyReference.cache
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.MediatR.FluentValidation\obj\Debug\net8.0\ExcentOne.MediatR.FluentValidation.GeneratedMSBuildEditorConfig.editorconfig
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.MediatR.FluentValidation\obj\Debug\net8.0\ExcentOne.MediatR.FluentValidation.AssemblyInfoInputs.cache
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.MediatR.FluentValidation\obj\Debug\net8.0\ExcentOne.MediatR.FluentValidation.AssemblyInfo.cs
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.MediatR.FluentValidation\obj\Debug\net8.0\ExcentOne.MediatR.FluentValidation.csproj.CoreCompileInputs.cache
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.MediatR.FluentValidation\obj\Debug\net8.0\ExcentOne.MediatR.FluentValidation.dll
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.MediatR.FluentValidation\obj\Debug\net8.0\refint\ExcentOne.MediatR.FluentValidation.dll
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.MediatR.FluentValidation\obj\Debug\net8.0\ExcentOne.MediatR.FluentValidation.pdb
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.MediatR.FluentValidation\obj\Debug\net8.0\ref\ExcentOne.MediatR.FluentValidation.dll

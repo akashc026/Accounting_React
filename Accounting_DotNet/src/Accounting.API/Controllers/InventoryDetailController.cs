@@ -2,6 +2,8 @@ using Accounting.Application.Features;
 using ExcentOne.Application.Features.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace Accounting.API.Controllers
 {
@@ -19,8 +21,6 @@ namespace Accounting.API.Controllers
         [HttpGet]
         public async Task<PaginatedList<InventoryDetailResultDto>> Get([FromQuery] GetAllInventoryDetail request)
         {
-            // Debug: Log the received parameters (remove in production)
-            Console.WriteLine($"CONTROLLER - ItemId: {request.ItemId}, LocationId: {request.LocationId}");
             return await _mediator.Send(request);
         }
 
@@ -34,23 +34,23 @@ namespace Accounting.API.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> Create(CreateInventoryDetail request)
+        public async Task<List<Guid>> Create(CreateInventoryDetails request)
         {
             return await _mediator.Send(request);
         }
 
-        [HttpPut("{id:guid}")]
-        public async Task<Guid> Update(Guid id, UpdateInventoryDetail request)
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateInventoryDetails request)
         {
-            request.Id = id;
-            return await _mediator.Send(request);
+            var updatedCount = await _mediator.Send(request);
+            return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} inventory detail(s) updated successfully" });
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task Delete(Guid id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(DeleteInventoryDetails request)
         {
-            var request = new DeleteInventoryDetail { Id = id };
-            await _mediator.Send(request);
+            var deletedCount = await _mediator.Send(request);
+            return Ok(new { DeletedCount = deletedCount, Message = $"{deletedCount} inventory detail(s) deleted successfully" });
         }
     }
 }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Abstractions\\ExcentOne.EntityFrameworkCore.Abstractions.csproj": {}
+    "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Abstractions\\ExcentOne.EntityFrameworkCore.Abstractions.csproj": {}
   },
   "projects": {
-    "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Abstractions\\ExcentOne.EntityFrameworkCore.Abstractions.csproj": {
+    "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Abstractions\\ExcentOne.EntityFrameworkCore.Abstractions.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Abstractions\\ExcentOne.EntityFrameworkCore.Abstractions.csproj",
+        "projectUniqueName": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Abstractions\\ExcentOne.EntityFrameworkCore.Abstractions.csproj",
         "projectName": "ExcentOne.EntityFrameworkCore.Abstractions",
-        "projectPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Abstractions\\ExcentOne.EntityFrameworkCore.Abstractions.csproj",
+        "projectPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Abstractions\\ExcentOne.EntityFrameworkCore.Abstractions.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Abstractions\\obj\\",
+        "outputPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Abstractions\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

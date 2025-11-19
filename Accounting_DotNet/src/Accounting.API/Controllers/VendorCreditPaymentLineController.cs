@@ -110,7 +110,7 @@ namespace Accounting.API.Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult<Guid>> Create([FromBody] CreateVendorCreditPaymentLine request)
+    public async Task<ActionResult<List<Guid>>> Create([FromBody] CreateVendorCreditPaymentLines request)
     {
         try
         {
@@ -119,37 +119,35 @@ namespace Accounting.API.Controllers
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error creating VendorCreditPaymentLine: {ex.Message}");
+            return BadRequest($"Error creating VendorCreditPaymentLines: {ex.Message}");
         }
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<ActionResult<Guid>> Update(Guid id, [FromBody] UpdateVendorCreditPaymentLine request)
+    [HttpPut]
+    public async Task<IActionResult> Update([FromBody] UpdateVendorCreditPaymentLines request)
     {
         try
         {
-            request.Id = id;
-            var result = await _mediator.Send(request);
-            return Ok(result);
+            var updatedCount = await _mediator.Send(request);
+            return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} vendor credit payment line(s) updated successfully" });
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error updating VendorCreditPaymentLine: {ex.Message}");
+            return BadRequest($"Error updating VendorCreditPaymentLines: {ex.Message}");
         }
     }
 
-    [HttpDelete("{id:guid}")]
-    public async Task<ActionResult> Delete(Guid id)
+    [HttpDelete]
+    public async Task<IActionResult> Delete([FromBody] DeleteVendorCreditPaymentLines request)
     {
         try
         {
-            DeleteVendorCreditPaymentLine request = new() { Id = id };
-            await _mediator.Send(request);
-            return NoContent();
+            var deletedCount = await _mediator.Send(request);
+            return Ok(new { DeletedCount = deletedCount, Message = $"{deletedCount} vendor credit payment line(s) deleted successfully" });
         }
         catch (Exception ex)
         {
-            return BadRequest($"Error deleting VendorCreditPaymentLine: {ex.Message}");
+            return BadRequest($"Error deleting VendorCreditPaymentLines: {ex.Message}");
         }
     }
     }

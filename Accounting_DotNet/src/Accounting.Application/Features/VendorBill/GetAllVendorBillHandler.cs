@@ -19,21 +19,38 @@ namespace Accounting.Application.Features
 
         protected override IQueryable<VendorBill> ApplyFiltering(IQueryable<VendorBill> queryable, Expression<Func<VendorBill, bool>> predicate, GetAllVendorBill request)
         {
-            return queryable
+            var query = queryable
                 .Include(x => x.Vendor)
                 .Include(x => x.Location)
                 .Include(x => x.FormNavigation)
                 .Where(predicate);
+
+            // Apply sorting
+            if (!string.IsNullOrWhiteSpace(request.SortBy) && request.SortBy.Equals("sequenceNumber", StringComparison.OrdinalIgnoreCase))
+            {
+                query = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase)
+                    ? query.OrderBy(x => x.SequenceNumber)
+                    : query.OrderByDescending(x => x.SequenceNumber);
+            }
+
+            return query;
         }
 
         protected override Expression<Func<VendorBill, bool>> ComposeFilter(Expression<Func<VendorBill, bool>> predicate, GetAllVendorBill request)
         {
+            // Build the filter expression
+            Expression<Func<VendorBill, bool>>? filterExpression = null;
+
+            // Add search text filter
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
-                predicate = predicate.And(x => EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%"));
+                filterExpression = x =>
+                    EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%")
+                    || (x.Vendor != null && EF.Functions.Like(x.Vendor.Name!, $"%{request.SearchText}%"));
             }
 
-            return predicate;
+            // Apply the filter if any conditions were added
+            return filterExpression != null ? predicate.Or(filterExpression) : predicate;
         }
 
         protected override IQueryable<VendorBill> ApplyPagination(IQueryable<VendorBill> queryable, GetAllVendorBill request)

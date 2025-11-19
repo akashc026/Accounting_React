@@ -31,27 +31,48 @@ namespace Accounting.Application.Features
 
         protected override IQueryable<SalesOrder> ApplyFiltering(IQueryable<SalesOrder> queryable, Expression<Func<SalesOrder, bool>> predicate, GetAllSalesOrder request)
         {
-            return queryable
+            var query = queryable
                 .Include(x => x.StatusNavigation)
                 .Include(x => x.Customer)
                 .Include(x => x.FormNavigation)
                 .Include(x => x.Location)
                 .Where(predicate);
+
+            // Apply sorting
+            if (!string.IsNullOrWhiteSpace(request.SortBy) && request.SortBy.Equals("sequenceNumber", StringComparison.OrdinalIgnoreCase))
+            {
+                query = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase)
+                    ? query.OrderBy(x => x.SequenceNumber)
+                    : query.OrderByDescending(x => x.SequenceNumber);
+            }
+
+            return query;
         }
 
         protected override Expression<Func<SalesOrder, bool>> ComposeFilter(Expression<Func<SalesOrder, bool>> predicate, GetAllSalesOrder request)
         {
+            // Build the filter expression
+            Expression<Func<SalesOrder, bool>>? filterExpression = null;
+
+            // Add search text filter
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
-                predicate = predicate.And(x => EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%"));
+                filterExpression = x =>
+                    EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%")
+                    || (x.Customer != null && EF.Functions.Like(x.Customer.Name!, $"%{request.SearchText}%"));
             }
 
+            // Add LocationID filter
             if (request.LocationID.HasValue)
             {
-                predicate = predicate.And(x => x.LocationID == request.LocationID.Value);
+                Expression<Func<SalesOrder, bool>> locationFilter = x => x.LocationID == request.LocationID.Value;
+                filterExpression = filterExpression == null
+                    ? locationFilter
+                    : filterExpression.And(locationFilter);
             }
 
-            return predicate;
+            // Apply the filter if any conditions were added
+            return filterExpression != null ? predicate.Or(filterExpression) : predicate;
         }
 
         protected override PaginatedList<SalesOrderResultDto> OnQuerySuccess(DbQuerySuccessArgs<GetAllSalesOrder, IEnumerable<SalesOrder>> args)

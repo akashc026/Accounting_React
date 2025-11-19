@@ -21,3 +21,14 @@ D:\Dot_net backup\Accounting_DotNet\lib\ExcentOne.Linq.Extensions\obj\Debug\net8
 D:\Dot_net backup\Accounting_DotNet\lib\ExcentOne.Linq.Extensions\obj\Debug\net8.0\refint\ExcentOne.Linq.Extensions.dll
 D:\Dot_net backup\Accounting_DotNet\lib\ExcentOne.Linq.Extensions\obj\Debug\net8.0\ExcentOne.Linq.Extensions.pdb
 D:\Dot_net backup\Accounting_DotNet\lib\ExcentOne.Linq.Extensions\obj\Debug\net8.0\ref\ExcentOne.Linq.Extensions.dll
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Linq.Extensions\bin\Debug\net8.0\ExcentOne.Linq.Extensions.deps.json
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Linq.Extensions\bin\Debug\net8.0\ExcentOne.Linq.Extensions.dll
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Linq.Extensions\bin\Debug\net8.0\ExcentOne.Linq.Extensions.pdb
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Linq.Extensions\obj\Debug\net8.0\ExcentOne.Linq.Extensions.GeneratedMSBuildEditorConfig.editorconfig
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Linq.Extensions\obj\Debug\net8.0\ExcentOne.Linq.Extensions.AssemblyInfoInputs.cache
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Linq.Extensions\obj\Debug\net8.0\ExcentOne.Linq.Extensions.AssemblyInfo.cs
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Linq.Extensions\obj\Debug\net8.0\ExcentOne.Linq.Extensions.csproj.CoreCompileInputs.cache
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Linq.Extensions\obj\Debug\net8.0\ExcentOne.Linq.Extensions.dll
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Linq.Extensions\obj\Debug\net8.0\refint\ExcentOne.Linq.Extensions.dll
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Linq.Extensions\obj\Debug\net8.0\ExcentOne.Linq.Extensions.pdb
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Linq.Extensions\obj\Debug\net8.0\ref\ExcentOne.Linq.Extensions.dll

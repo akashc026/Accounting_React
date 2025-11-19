@@ -319,6 +319,48 @@
   },
   {
     "ContainingType": "Accounting.API.Controllers.ChartOfAccountController",
+    "Method": "GetBalances",
+    "RelativePath": "chart-of-account/balances",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.GetChartOfAccountsBalances",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[Accounting.Application.Features.ChartOfAccountBalanceDto, Accounting.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.ChartOfAccountController",
+    "Method": "UpdateBulk",
+    "RelativePath": "chart-of-account/bulk",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateChartOfAccountsBulk",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.ChartOfAccountController",
     "Method": "GetByAccountType",
     "RelativePath": "chart-of-account/by-account-type/{accountTypeId}",
     "HttpMethod": "GET",
@@ -411,6 +453,16 @@
       {
         "Name": "LocationId",
         "Type": "System.Nullable\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
         "IsRequired": false
       },
       {
@@ -513,13 +565,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Accounting.Application.Features.CreateCreditMemoLine",
+        "Type": "Accounting.Application.Features.CreateCreditMemoLines",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -528,6 +580,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.CreditMemoLineController",
+    "Method": "Update",
+    "RelativePath": "credit-memo-line",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateCreditMemoLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.CreditMemoLineController",
+    "Method": "Delete",
+    "RelativePath": "credit-memo-line",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeleteCreditMemoLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.CreditMemoLineController",
@@ -551,59 +635,6 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.CreditMemoLineController",
-    "Method": "Update",
-    "RelativePath": "credit-memo-line/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Accounting.Application.Features.UpdateCreditMemoLine",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.CreditMemoLineController",
-    "Method": "Delete",
-    "RelativePath": "credit-memo-line/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
         "StatusCode": 200
       }
     ]
@@ -670,13 +701,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Accounting.Application.Features.CreateCreditMemoPaymentLine",
+        "Type": "Accounting.Application.Features.CreateCreditMemoPaymentLines",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -685,6 +716,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.CreditMemoPaymentLineController",
+    "Method": "Update",
+    "RelativePath": "credit-memo-payment-line",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateCreditMemoPaymentLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.CreditMemoPaymentLineController",
+    "Method": "Delete",
+    "RelativePath": "credit-memo-payment-line",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeleteCreditMemoPaymentLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.CreditMemoPaymentLineController",
@@ -711,53 +774,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.CreditMemoPaymentLineController",
-    "Method": "Update",
-    "RelativePath": "credit-memo-payment-line/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Accounting.Application.Features.UpdateCreditMemoPaymentLine",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.CreditMemoPaymentLineController",
-    "Method": "Delete",
-    "RelativePath": "credit-memo-payment-line/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.CreditMemoPaymentLineController",
@@ -952,13 +968,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Accounting.Application.Features.CreateCustomFieldValue",
+        "Type": "Accounting.Application.Features.CreateCustomFieldValues",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -967,6 +983,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.CustomFieldValueController",
+    "Method": "Update",
+    "RelativePath": "custom-field-value",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateCustomFieldValues",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.CustomFieldValueController",
+    "Method": "Delete",
+    "RelativePath": "custom-field-value",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeleteCustomFieldValues",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.CustomFieldValueController",
@@ -990,59 +1038,6 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.CustomFieldValueController",
-    "Method": "Update",
-    "RelativePath": "custom-field-value/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Accounting.Application.Features.UpdateCustomFieldValue",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.CustomFieldValueController",
-    "Method": "Delete",
-    "RelativePath": "custom-field-value/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
         "StatusCode": 200
       }
     ]
@@ -1331,6 +1326,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -1425,13 +1430,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Accounting.Application.Features.CreateCustomerPaymentLine",
+        "Type": "Accounting.Application.Features.CreateCustomerPaymentLines",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1440,6 +1445,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.CustomerPaymentLineController",
+    "Method": "Update",
+    "RelativePath": "customer-payment-line",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateCustomerPaymentLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.CustomerPaymentLineController",
+    "Method": "Delete",
+    "RelativePath": "customer-payment-line",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeleteCustomerPaymentLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.CustomerPaymentLineController",
@@ -1466,53 +1503,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.CustomerPaymentLineController",
-    "Method": "Update",
-    "RelativePath": "customer-payment-line/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Accounting.Application.Features.UpdateCustomerPaymentLine",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.CustomerPaymentLineController",
-    "Method": "Delete",
-    "RelativePath": "customer-payment-line/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.CustomerPaymentLineController",
@@ -1753,6 +1743,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -1852,13 +1852,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Accounting.Application.Features.CreateDebitMemoLine",
+        "Type": "Accounting.Application.Features.CreateDebitMemoLines",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1867,6 +1867,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.DebitMemoLineController",
+    "Method": "Update",
+    "RelativePath": "debit-memo-line",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateDebitMemoLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.DebitMemoLineController",
+    "Method": "Delete",
+    "RelativePath": "debit-memo-line",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeleteDebitMemoLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.DebitMemoLineController",
@@ -1890,59 +1922,6 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.DebitMemoLineController",
-    "Method": "Update",
-    "RelativePath": "debit-memo-line/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Accounting.Application.Features.UpdateDebitMemoLine",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.DebitMemoLineController",
-    "Method": "Delete",
-    "RelativePath": "debit-memo-line/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
         "StatusCode": 200
       }
     ]
@@ -2298,6 +2277,32 @@
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.List\u00601[[Accounting.Application.Features.FormSequenceResultDto, Accounting.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.FormSequenceController",
+    "Method": "GenerateNextSequenceNumber",
+    "RelativePath": "form-sequence/generate-next/{formId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "formId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -2717,14 +2722,14 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "command",
-        "Type": "Accounting.Application.Features.CreateInventoryAdjustmentLine",
+        "Name": "request",
+        "Type": "Accounting.Application.Features.CreateInventoryAdjustmentLines",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -2733,6 +2738,22 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.InventoryAdjustmentLineController",
+    "Method": "Update",
+    "RelativePath": "inventory-adjustment-line",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateInventoryAdjustmentLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.InventoryAdjustmentLineController",
@@ -2772,34 +2793,19 @@
   },
   {
     "ContainingType": "Accounting.API.Controllers.InventoryAdjustmentLineController",
-    "Method": "Update",
-    "RelativePath": "inventory-adjustment-line/{id}",
-    "HttpMethod": "PUT",
+    "Method": "Delete",
+    "RelativePath": "inventory-adjustment-line",
+    "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "command",
-        "Type": "Accounting.Application.Features.UpdateInventoryAdjustmentLine",
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeleteInventoryAdjustmentLines",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.InventoryAdjustmentLineController",
@@ -2826,22 +2832,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.InventoryAdjustmentLineController",
-    "Method": "Delete",
-    "RelativePath": "inventory-adjustment-line/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.InventoryAdjustmentLineController",
@@ -2994,13 +2984,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Accounting.Application.Features.CreateInventoryDetail",
+        "Type": "Accounting.Application.Features.CreateInventoryDetails",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -3009,6 +2999,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.InventoryDetailController",
+    "Method": "Update",
+    "RelativePath": "inventory-detail",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateInventoryDetails",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.InventoryDetailController",
+    "Method": "Delete",
+    "RelativePath": "inventory-detail",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeleteInventoryDetails",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.InventoryDetailController",
@@ -3032,59 +3054,6 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.InventoryDetailController",
-    "Method": "Update",
-    "RelativePath": "inventory-detail/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Accounting.Application.Features.UpdateInventoryDetail",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.InventoryDetailController",
-    "Method": "Delete",
-    "RelativePath": "inventory-detail/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
         "StatusCode": 200
       }
     ]
@@ -3301,14 +3270,14 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "command",
-        "Type": "Accounting.Application.Features.CreateInventoryTransferLine",
+        "Name": "request",
+        "Type": "Accounting.Application.Features.CreateInventoryTransferLines",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -3317,6 +3286,22 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.InventoryTransferLineController",
+    "Method": "Update",
+    "RelativePath": "inventory-transfer-line",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateInventoryTransferLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.InventoryTransferLineController",
@@ -3356,34 +3341,19 @@
   },
   {
     "ContainingType": "Accounting.API.Controllers.InventoryTransferLineController",
-    "Method": "Update",
-    "RelativePath": "inventory-transfer-line/{id}",
-    "HttpMethod": "PUT",
+    "Method": "Delete",
+    "RelativePath": "inventory-transfer-line",
+    "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "command",
-        "Type": "Accounting.Application.Features.UpdateInventoryTransferLine",
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeleteInventoryTransferLines",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.InventoryTransferLineController",
@@ -3410,22 +3380,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.InventoryTransferLineController",
-    "Method": "Delete",
-    "RelativePath": "inventory-transfer-line/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.InventoryTransferLineController",
@@ -3536,6 +3490,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -3630,13 +3594,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Accounting.Application.Features.CreateInvoiceLine",
+        "Type": "Accounting.Application.Features.CreateInvoiceLines",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -3645,6 +3609,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.InvoiceLineController",
+    "Method": "Update",
+    "RelativePath": "invoice-line",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateInvoiceLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.InvoiceLineController",
+    "Method": "Delete",
+    "RelativePath": "invoice-line",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeleteInvoiceLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.InvoiceLineController",
@@ -3668,59 +3664,6 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.InvoiceLineController",
-    "Method": "Update",
-    "RelativePath": "invoice-line/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Accounting.Application.Features.UpdateInvoiceLine",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.InvoiceLineController",
-    "Method": "Delete",
-    "RelativePath": "invoice-line/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
         "StatusCode": 200
       }
     ]
@@ -3865,6 +3808,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -3959,13 +3912,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Accounting.Application.Features.CreateItemFulfilmentLine",
+        "Type": "Accounting.Application.Features.CreateItemFulfilmentLines",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -3974,6 +3927,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.ItemFulfilmentLineController",
+    "Method": "Update",
+    "RelativePath": "item-fulfilment-line",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateItemFulfilmentLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.ItemFulfilmentLineController",
+    "Method": "Delete",
+    "RelativePath": "item-fulfilment-line",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeleteItemFulfilmentLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.ItemFulfilmentLineController",
@@ -3997,59 +3982,6 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.ItemFulfilmentLineController",
-    "Method": "Update",
-    "RelativePath": "item-fulfilment-line/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Accounting.Application.Features.UpdateItemFulfilmentLine",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.ItemFulfilmentLineController",
-    "Method": "Delete",
-    "RelativePath": "item-fulfilment-line/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
         "StatusCode": 200
       }
     ]
@@ -4204,6 +4136,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -4298,13 +4240,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Accounting.Application.Features.CreateItemReceiptLine",
+        "Type": "Accounting.Application.Features.CreateItemReceiptLines",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -4313,6 +4255,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.ItemReceiptLineController",
+    "Method": "Update",
+    "RelativePath": "item-receipt-line",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateItemReceiptLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.ItemReceiptLineController",
+    "Method": "Delete",
+    "RelativePath": "item-receipt-line",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeleteItemReceiptLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.ItemReceiptLineController",
@@ -4336,59 +4310,6 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.ItemReceiptLineController",
-    "Method": "Update",
-    "RelativePath": "item-receipt-line/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Accounting.Application.Features.UpdateItemReceiptLine",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.ItemReceiptLineController",
-    "Method": "Delete",
-    "RelativePath": "item-receipt-line/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
         "StatusCode": 200
       }
     ]
@@ -4730,13 +4651,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Accounting.Application.Features.CreateJournalEntryLine",
+        "Type": "Accounting.Application.Features.CreateJournalEntryLines",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -4745,6 +4666,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.JournalEntryLineController",
+    "Method": "Delete",
+    "RelativePath": "journal-entry-line",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeleteJournalEntryLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.JournalEntryLineController",
+    "Method": "Update",
+    "RelativePath": "journal-entry-line",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateJournalEntryLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.JournalEntryLineController",
@@ -4768,59 +4721,6 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.JournalEntryLineController",
-    "Method": "Update",
-    "RelativePath": "journal-entry-line/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Accounting.Application.Features.UpdateJournalEntryLine",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.JournalEntryLineController",
-    "Method": "Delete",
-    "RelativePath": "journal-entry-line/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
         "StatusCode": 200
       }
     ]
@@ -5495,6 +5395,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -5589,13 +5499,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Accounting.Application.Features.CreatePurchaseOrderLine",
+        "Type": "Accounting.Application.Features.CreatePurchaseOrderLines",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -5604,6 +5514,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.PurchaseOrderLineController",
+    "Method": "Update",
+    "RelativePath": "purchase-order-line",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdatePurchaseOrderLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.PurchaseOrderLineController",
+    "Method": "Delete",
+    "RelativePath": "purchase-order-line",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeletePurchaseOrderLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.PurchaseOrderLineController",
@@ -5627,59 +5569,6 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.PurchaseOrderLineController",
-    "Method": "Update",
-    "RelativePath": "purchase-order-line/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Accounting.Application.Features.UpdatePurchaseOrderLine",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.PurchaseOrderLineController",
-    "Method": "Delete",
-    "RelativePath": "purchase-order-line/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
         "StatusCode": 200
       }
     ]
@@ -6022,6 +5911,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -6190,13 +6089,13 @@
     "Parameters": [
       {
         "Name": "command",
-        "Type": "Accounting.Application.Features.CreateSalesOrderLine",
+        "Type": "Accounting.Application.Features.CreateSalesOrderLines",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -6205,6 +6104,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.SalesOrderLineController",
+    "Method": "Update",
+    "RelativePath": "salesorderline",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "Accounting.Application.Features.UpdateSalesOrderLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.SalesOrderLineController",
+    "Method": "Delete",
+    "RelativePath": "salesorderline",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "Accounting.Application.Features.DeleteSalesOrderLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.SalesOrderLineController",
@@ -6244,37 +6175,6 @@
   },
   {
     "ContainingType": "Accounting.API.Controllers.SalesOrderLineController",
-    "Method": "Update",
-    "RelativePath": "salesorderline/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "command",
-        "Type": "Accounting.Application.Features.UpdateSalesOrderLine",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.SalesOrderLineController",
     "Method": "Get",
     "RelativePath": "salesorderline/{id}",
     "HttpMethod": "GET",
@@ -6298,22 +6198,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.SalesOrderLineController",
-    "Method": "Delete",
-    "RelativePath": "salesorderline/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.SalesOrderLineController",
@@ -7104,6 +6988,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -7198,13 +7092,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Accounting.Application.Features.CreateVendorBillLine",
+        "Type": "Accounting.Application.Features.CreateVendorBillLines",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -7213,6 +7107,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.VendorBillLineController",
+    "Method": "Update",
+    "RelativePath": "vendor-bill-line",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateVendorBillLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.VendorBillLineController",
+    "Method": "Delete",
+    "RelativePath": "vendor-bill-line",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeleteVendorBillLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.VendorBillLineController",
@@ -7236,59 +7162,6 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.VendorBillLineController",
-    "Method": "Update",
-    "RelativePath": "vendor-bill-line/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Accounting.Application.Features.UpdateVendorBillLine",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.VendorBillLineController",
-    "Method": "Delete",
-    "RelativePath": "vendor-bill-line/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
         "StatusCode": 200
       }
     ]
@@ -7464,6 +7337,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -7563,13 +7446,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Accounting.Application.Features.CreateVendorCreditLine",
+        "Type": "Accounting.Application.Features.CreateVendorCreditLines",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -7578,6 +7461,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.VendorCreditLineController",
+    "Method": "Update",
+    "RelativePath": "vendor-credit-line",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateVendorCreditLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.VendorCreditLineController",
+    "Method": "Delete",
+    "RelativePath": "vendor-credit-line",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeleteVendorCreditLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.VendorCreditLineController",
@@ -7601,59 +7516,6 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.VendorCreditLineController",
-    "Method": "Update",
-    "RelativePath": "vendor-credit-line/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Accounting.Application.Features.UpdateVendorCreditLine",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.VendorCreditLineController",
-    "Method": "Delete",
-    "RelativePath": "vendor-credit-line/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
         "StatusCode": 200
       }
     ]
@@ -7720,13 +7582,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Accounting.Application.Features.CreateVendorCreditPaymentLine",
+        "Type": "Accounting.Application.Features.CreateVendorCreditPaymentLines",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -7735,6 +7597,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.VendorCreditPaymentLineController",
+    "Method": "Update",
+    "RelativePath": "vendor-credit-payment-line",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateVendorCreditPaymentLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.VendorCreditPaymentLineController",
+    "Method": "Delete",
+    "RelativePath": "vendor-credit-payment-line",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeleteVendorCreditPaymentLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.VendorCreditPaymentLineController",
@@ -7761,53 +7655,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.VendorCreditPaymentLineController",
-    "Method": "Update",
-    "RelativePath": "vendor-credit-payment-line/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Accounting.Application.Features.UpdateVendorCreditPaymentLine",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.VendorCreditPaymentLineController",
-    "Method": "Delete",
-    "RelativePath": "vendor-credit-payment-line/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.VendorCreditPaymentLineController",
@@ -8001,6 +7848,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -8095,13 +7952,13 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Accounting.Application.Features.CreateVendorPaymentLine",
+        "Type": "Accounting.Application.Features.CreateVendorPaymentLines",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Guid",
+        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -8110,6 +7967,38 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.VendorPaymentLineController",
+    "Method": "Update",
+    "RelativePath": "vendor-payment-line",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.UpdateVendorPaymentLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.VendorPaymentLineController",
+    "Method": "Delete",
+    "RelativePath": "vendor-payment-line",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Features.DeleteVendorPaymentLines",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.VendorPaymentLineController",
@@ -8136,53 +8025,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.VendorPaymentLineController",
-    "Method": "Update",
-    "RelativePath": "vendor-payment-line/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Accounting.Application.Features.UpdateVendorPaymentLine",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Guid",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Accounting.API.Controllers.VendorPaymentLineController",
-    "Method": "Delete",
-    "RelativePath": "vendor-payment-line/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.VendorPaymentLineController",

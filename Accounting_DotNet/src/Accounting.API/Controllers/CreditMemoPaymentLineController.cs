@@ -49,7 +49,7 @@ namespace Accounting.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Create([FromBody] CreateCreditMemoPaymentLine request)
+        public async Task<ActionResult<List<Guid>>> Create([FromBody] CreateCreditMemoPaymentLines request)
         {
             try
             {
@@ -62,14 +62,13 @@ namespace Accounting.API.Controllers
             }
         }
 
-        [HttpPut("{id:guid}")]
-        public async Task<ActionResult<Guid>> Update(Guid id, [FromBody] UpdateCreditMemoPaymentLine request)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] UpdateCreditMemoPaymentLines request)
         {
             try
             {
-                request.Id = id;
-                var result = await _mediator.Send(request);
-                return Ok(result);
+                var updatedCount = await _mediator.Send(request);
+                return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} credit memo payment line(s) updated successfully" });
             }
             catch (Exception ex)
             {
@@ -77,14 +76,13 @@ namespace Accounting.API.Controllers
             }
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task<ActionResult> Delete(Guid id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] DeleteCreditMemoPaymentLines request)
         {
             try
             {
-                DeleteCreditMemoPaymentLine request = new() { Id = id };
-                await _mediator.Send(request);
-                return NoContent();
+                var deletedCount = await _mediator.Send(request);
+                return Ok(new { DeletedCount = deletedCount, Message = $"{deletedCount} credit memo payment line(s) deleted successfully" });
             }
             catch (Exception ex)
             {

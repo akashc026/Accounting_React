@@ -2,6 +2,8 @@ using Accounting.Application.Features;
 using ExcentOne.Application.Features.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 
 namespace Accounting.API.Controllers
 {
@@ -17,18 +19,16 @@ namespace Accounting.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Create([FromBody] CreateInventoryAdjustmentLine command)
+        public async Task<List<Guid>> Create(CreateInventoryAdjustmentLines request)
         {
-            var result = await _mediator.Send(command);
-            return Ok(result);
+            return await _mediator.Send(request);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Guid>> Update(Guid id, [FromBody] UpdateInventoryAdjustmentLine command)
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateInventoryAdjustmentLines request)
         {
-            command.Id = id;
-            var result = await _mediator.Send(command);
-            return Ok(result);
+            var updatedCount = await _mediator.Send(request);
+            return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} inventory adjustment line(s) updated successfully" });
         }
 
         [HttpGet("{id}")]
@@ -73,12 +73,11 @@ namespace Accounting.API.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(DeleteInventoryAdjustmentLines request)
         {
-            var command = new DeleteInventoryAdjustmentLine { Id = id };
-            await _mediator.Send(command);
-            return NoContent();
+            var deletedCount = await _mediator.Send(request);
+            return Ok(new { DeletedCount = deletedCount, Message = $"{deletedCount} inventory adjustment line(s) deleted successfully" });
         }
     }
 }

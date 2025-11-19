@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zMWtSzYDQY4=",
+  "dgSpecHash": "Qr4sEssorD0=",
   "success": true,
-  "projectFilePath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Auditing\\ExcentOne.EntityFrameworkCore.Auditing.csproj",
+  "projectFilePath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Auditing\\ExcentOne.EntityFrameworkCore.Auditing.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.entityframeworkcore\\9.0.5\\microsoft.entityframeworkcore.9.0.5.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.5\\microsoft.entityframeworkcore.abstractions.9.0.5.nupkg.sha512",

@@ -41,19 +41,33 @@ namespace Accounting.Application.Features
 
         protected override Expression<Func<InventoryTransfer, bool>> ComposeFilter(Expression<Func<InventoryTransfer, bool>> predicate, GetAllInventoryTransfer request)
         {
+            // Build the filter expression
+            Expression<Func<InventoryTransfer, bool>>? filterExpression = null;
+
+            // Add search text filter
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
-                predicate = predicate.And(x => EF.Functions.Like(x.Customer!.Name!, $"%{request.SearchText}%")
-                    || EF.Functions.Like(x.FromLocationNavigation!.Name!, $"%{request.SearchText}%")
-                    || EF.Functions.Like(x.ToLocationNavigation!.Name!, $"%{request.SearchText}%"));
+                filterExpression = x =>
+                    (x.FromLocationNavigation != null && EF.Functions.Like(x.FromLocationNavigation.Name!, $"%{request.SearchText}%"))
+                    || (x.ToLocationNavigation != null && EF.Functions.Like(x.ToLocationNavigation.Name!, $"%{request.SearchText}%"))
+                    || EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%");
             }
 
-            return predicate;
+            // Apply the filter if any conditions were added
+            return filterExpression != null ? predicate.Or(filterExpression) : predicate;
         }
 
         protected override PaginatedList<InventoryTransferResultDto> OnQuerySuccess(DbQuerySuccessArgs<GetAllInventoryTransfer, IEnumerable<InventoryTransfer>> args)
         {
-            var mappedResults = Mapper.Map<IEnumerable<InventoryTransferResultDto>>(args.Result);
+            var mappedResults = args.Result.Select(entity => {
+                var result = Mapper.Map<InventoryTransferResultDto>(entity);
+                result.FromLocationName = entity.FromLocationNavigation?.Name;
+                result.ToLocationName = entity.ToLocationNavigation?.Name;
+                result.CustomerName = entity.Customer?.Name;
+                result.FormName = entity.FormNavigation?.FormName;
+                return result;
+            });
+
             var request = args.Request;
 
             return new PaginatedList<InventoryTransferResultDto>

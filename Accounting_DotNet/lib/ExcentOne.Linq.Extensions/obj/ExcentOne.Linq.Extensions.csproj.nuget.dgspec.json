@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Linq.Extensions\\ExcentOne.Linq.Extensions.csproj": {}
+    "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Linq.Extensions\\ExcentOne.Linq.Extensions.csproj": {}
   },
   "projects": {
-    "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Linq.Extensions\\ExcentOne.Linq.Extensions.csproj": {
+    "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Linq.Extensions\\ExcentOne.Linq.Extensions.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Linq.Extensions\\ExcentOne.Linq.Extensions.csproj",
+        "projectUniqueName": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Linq.Extensions\\ExcentOne.Linq.Extensions.csproj",
         "projectName": "ExcentOne.Linq.Extensions",
-        "projectPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Linq.Extensions\\ExcentOne.Linq.Extensions.csproj",
+        "projectPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Linq.Extensions\\ExcentOne.Linq.Extensions.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Linq.Extensions\\obj\\",
+        "outputPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Linq.Extensions\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

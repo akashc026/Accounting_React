@@ -1,57 +1,57 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Dot_net backup\\Accounting_DotNet\\",
+  "WorkspaceRootPath": "D:\\Organise Dotnet\\Accounting_DotNet\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\dot_net backup\\accounting_dotnet\\src\\accounting.persistence\\codetemplates\\efcore\\entitytype.t4||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|solutionrelative:src\\accounting.persistence\\codetemplates\\efcore\\entitytype.t4||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\dot_net backup\\accounting_dotnet\\src\\accounting.persistence\\codetemplates\\efcore\\dbcontext.t4||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|solutionrelative:src\\accounting.persistence\\codetemplates\\efcore\\dbcontext.t4||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\dot_net backup\\accounting_dotnet\\src\\accounting.persistence\\accountingdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|solutionrelative:src\\accounting.persistence\\accountingdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E54CF8B7-B81F-4949-A0D1-B7C24A49F02A}|src\\Accounting.Application\\Accounting.Application.csproj|d:\\dot_net backup\\accounting_dotnet\\src\\accounting.application\\features\\product\\getproductsbyitemtypehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{E54CF8B7-B81F-4949-A0D1-B7C24A49F02A}|src\\Accounting.Application\\Accounting.Application.csproj|d:\\organise dotnet\\accounting_dotnet\\src\\accounting.application\\features\\product\\getproductsbyitemtypehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E54CF8B7-B81F-4949-A0D1-B7C24A49F02A}|src\\Accounting.Application\\Accounting.Application.csproj|solutionrelative:src\\accounting.application\\features\\product\\getproductsbyitemtypehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\dot_net backup\\accounting_dotnet\\src\\accounting.persistence\\models\\salesorder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\organise dotnet\\accounting_dotnet\\src\\accounting.persistence\\codetemplates\\efcore\\entitytype.t4||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|solutionrelative:src\\accounting.persistence\\codetemplates\\efcore\\entitytype.t4||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\organise dotnet\\accounting_dotnet\\src\\accounting.persistence\\codetemplates\\efcore\\dbcontext.t4||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|solutionrelative:src\\accounting.persistence\\codetemplates\\efcore\\dbcontext.t4||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\organise dotnet\\accounting_dotnet\\src\\accounting.persistence\\accountingdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|solutionrelative:src\\accounting.persistence\\accountingdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\organise dotnet\\accounting_dotnet\\src\\accounting.persistence\\models\\salesorder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|solutionrelative:src\\accounting.persistence\\models\\salesorder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\dot_net backup\\accounting_dotnet\\src\\accounting.persistence\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\organise dotnet\\accounting_dotnet\\src\\accounting.persistence\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|solutionrelative:src\\accounting.persistence\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{48EFBD4D-73AB-823E-11D5-4C1374F2528C}|src\\Accounting.API\\Accounting.API.csproj|d:\\dot_net backup\\accounting_dotnet\\src\\accounting.api\\controllers\\statuscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{48EFBD4D-73AB-823E-11D5-4C1374F2528C}|src\\Accounting.API\\Accounting.API.csproj|d:\\organise dotnet\\accounting_dotnet\\src\\accounting.api\\controllers\\statuscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{48EFBD4D-73AB-823E-11D5-4C1374F2528C}|src\\Accounting.API\\Accounting.API.csproj|solutionrelative:src\\accounting.api\\controllers\\statuscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E54CF8B7-B81F-4949-A0D1-B7C24A49F02A}|src\\Accounting.Application\\Accounting.Application.csproj|d:\\dot_net backup\\accounting_dotnet\\src\\accounting.application\\features\\status\\getallstatushandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{E54CF8B7-B81F-4949-A0D1-B7C24A49F02A}|src\\Accounting.Application\\Accounting.Application.csproj|d:\\organise dotnet\\accounting_dotnet\\src\\accounting.application\\features\\status\\getallstatushandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E54CF8B7-B81F-4949-A0D1-B7C24A49F02A}|src\\Accounting.Application\\Accounting.Application.csproj|solutionrelative:src\\accounting.application\\features\\status\\getallstatushandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\dot_net backup\\accounting_dotnet\\src\\accounting.persistence\\models\\itemfulfilment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\organise dotnet\\accounting_dotnet\\src\\accounting.persistence\\models\\itemfulfilment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|solutionrelative:src\\accounting.persistence\\models\\itemfulfilment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C5B7AF92-14C3-F426-4EE8-49AC0E607B78}|lib\\ExcentOne.EntityFrameworkCore.SqlServer\\ExcentOne.EntityFrameworkCore.SqlServer.csproj|d:\\dot_net backup\\accounting_dotnet\\lib\\excentone.entityframeworkcore.sqlserver\\sqlserverdbconnectionprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{C5B7AF92-14C3-F426-4EE8-49AC0E607B78}|lib\\ExcentOne.EntityFrameworkCore.SqlServer\\ExcentOne.EntityFrameworkCore.SqlServer.csproj|d:\\organise dotnet\\accounting_dotnet\\lib\\excentone.entityframeworkcore.sqlserver\\sqlserverdbconnectionprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C5B7AF92-14C3-F426-4EE8-49AC0E607B78}|lib\\ExcentOne.EntityFrameworkCore.SqlServer\\ExcentOne.EntityFrameworkCore.SqlServer.csproj|solutionrelative:lib\\excentone.entityframeworkcore.sqlserver\\sqlserverdbconnectionprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E54CF8B7-B81F-4949-A0D1-B7C24A49F02A}|src\\Accounting.Application\\Accounting.Application.csproj|d:\\dot_net backup\\accounting_dotnet\\src\\accounting.application\\accountingapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{E54CF8B7-B81F-4949-A0D1-B7C24A49F02A}|src\\Accounting.Application\\Accounting.Application.csproj|d:\\organise dotnet\\accounting_dotnet\\src\\accounting.application\\accountingapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E54CF8B7-B81F-4949-A0D1-B7C24A49F02A}|src\\Accounting.Application\\Accounting.Application.csproj|solutionrelative:src\\accounting.application\\accountingapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\dot_net backup\\accounting_dotnet\\src\\accounting.persistence\\models\\purchaseorderline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\organise dotnet\\accounting_dotnet\\src\\accounting.persistence\\models\\purchaseorderline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|solutionrelative:src\\accounting.persistence\\models\\purchaseorderline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E54CF8B7-B81F-4949-A0D1-B7C24A49F02A}|src\\Accounting.Application\\Accounting.Application.csproj|d:\\dot_net backup\\accounting_dotnet\\src\\accounting.application\\features\\itemreceiptline\\getuninvoiceditemreceiptlineshandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{E54CF8B7-B81F-4949-A0D1-B7C24A49F02A}|src\\Accounting.Application\\Accounting.Application.csproj|d:\\organise dotnet\\accounting_dotnet\\src\\accounting.application\\features\\itemreceiptline\\getuninvoiceditemreceiptlineshandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E54CF8B7-B81F-4949-A0D1-B7C24A49F02A}|src\\Accounting.Application\\Accounting.Application.csproj|solutionrelative:src\\accounting.application\\features\\itemreceiptline\\getuninvoiceditemreceiptlineshandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -62,15 +62,15 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 13,
+          "SelectedChildIndex": 10,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 10,
               "Title": "AccountingApplication.cs",
-              "DocumentMoniker": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Application\\AccountingApplication.cs",
+              "DocumentMoniker": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Application\\AccountingApplication.cs",
               "RelativeDocumentMoniker": "src\\Accounting.Application\\AccountingApplication.cs",
-              "ToolTip": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Application\\AccountingApplication.cs",
+              "ToolTip": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Application\\AccountingApplication.cs",
               "RelativeToolTip": "src\\Accounting.Application\\AccountingApplication.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -115,23 +115,24 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "GetProductsByItemTypeHandler.cs",
-              "DocumentMoniker": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Application\\Features\\Product\\GetProductsByItemTypeHandler.cs",
+              "DocumentMoniker": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Application\\Features\\Product\\GetProductsByItemTypeHandler.cs",
               "RelativeDocumentMoniker": "src\\Accounting.Application\\Features\\Product\\GetProductsByItemTypeHandler.cs",
-              "ToolTip": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Application\\Features\\Product\\GetProductsByItemTypeHandler.cs",
+              "ToolTip": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Application\\Features\\Product\\GetProductsByItemTypeHandler.cs",
               "RelativeToolTip": "src\\Accounting.Application\\Features\\Product\\GetProductsByItemTypeHandler.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAAkwBsAAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-07T20:11:15.461Z"
+              "WhenOpened": "2025-11-07T20:11:15.461Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "AccountingDbContext.cs",
-              "DocumentMoniker": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Persistence\\AccountingDbContext.cs",
+              "DocumentMoniker": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Persistence\\AccountingDbContext.cs",
               "RelativeDocumentMoniker": "src\\Accounting.Persistence\\AccountingDbContext.cs",
-              "ToolTip": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Persistence\\AccountingDbContext.cs",
+              "ToolTip": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Persistence\\AccountingDbContext.cs",
               "RelativeToolTip": "src\\Accounting.Persistence\\AccountingDbContext.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -139,11 +140,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "DbContext.t4",
-              "DocumentMoniker": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
+              "DocumentMoniker": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
               "RelativeDocumentMoniker": "src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
-              "ToolTip": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
+              "ToolTip": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
               "RelativeToolTip": "src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
               "ViewState": "AgIAAFEBAAAAAAAAAAAuwGMBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
@@ -151,24 +152,23 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "EntityType.t4",
-              "DocumentMoniker": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Persistence\\CodeTemplates\\EFCore\\EntityType.t4",
+              "DocumentMoniker": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Persistence\\CodeTemplates\\EFCore\\EntityType.t4",
               "RelativeDocumentMoniker": "src\\Accounting.Persistence\\CodeTemplates\\EFCore\\EntityType.t4",
-              "ToolTip": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Persistence\\CodeTemplates\\EFCore\\EntityType.t4",
+              "ToolTip": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Persistence\\CodeTemplates\\EFCore\\EntityType.t4",
               "RelativeToolTip": "src\\Accounting.Persistence\\CodeTemplates\\EFCore\\EntityType.t4",
-              "ViewState": "AgIAAMYAAAAAAAAAAAAuwNgAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAJwAAAAAAAAAAAAuwKMAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-10-25T16:08:32.071Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-25T16:08:32.071Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
               "Title": "Product.cs",
-              "DocumentMoniker": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\Product.cs",
+              "DocumentMoniker": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\Product.cs",
               "RelativeDocumentMoniker": "src\\Accounting.Persistence\\Models\\Product.cs",
-              "ToolTip": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\Product.cs",
+              "ToolTip": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\Product.cs",
               "RelativeToolTip": "src\\Accounting.Persistence\\Models\\Product.cs",
               "ViewState": "AgIAAC8AAAAAAAAAAAAawCoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -178,9 +178,9 @@
               "$type": "Document",
               "DocumentIndex": 4,
               "Title": "SalesOrder.cs",
-              "DocumentMoniker": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\SalesOrder.cs",
+              "DocumentMoniker": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\SalesOrder.cs",
               "RelativeDocumentMoniker": "src\\Accounting.Persistence\\Models\\SalesOrder.cs",
-              "ToolTip": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\SalesOrder.cs",
+              "ToolTip": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\SalesOrder.cs",
               "RelativeToolTip": "src\\Accounting.Persistence\\Models\\SalesOrder.cs",
               "ViewState": "AgIAABYAAAAAAAAAAAA/wAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -190,9 +190,9 @@
               "$type": "Document",
               "DocumentIndex": 6,
               "Title": "StatusController.cs",
-              "DocumentMoniker": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.API\\Controllers\\StatusController.cs",
+              "DocumentMoniker": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.API\\Controllers\\StatusController.cs",
               "RelativeDocumentMoniker": "src\\Accounting.API\\Controllers\\StatusController.cs",
-              "ToolTip": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.API\\Controllers\\StatusController.cs",
+              "ToolTip": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.API\\Controllers\\StatusController.cs",
               "RelativeToolTip": "src\\Accounting.API\\Controllers\\StatusController.cs",
               "ViewState": "AgIAAA0AAAAAAAAAAAA3wBYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -202,9 +202,9 @@
               "$type": "Document",
               "DocumentIndex": 8,
               "Title": "ItemFulfilment.cs",
-              "DocumentMoniker": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\ItemFulfilment.cs",
+              "DocumentMoniker": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\ItemFulfilment.cs",
               "RelativeDocumentMoniker": "src\\Accounting.Persistence\\Models\\ItemFulfilment.cs",
-              "ToolTip": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\ItemFulfilment.cs",
+              "ToolTip": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\ItemFulfilment.cs",
               "RelativeToolTip": "src\\Accounting.Persistence\\Models\\ItemFulfilment.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAAoAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -214,9 +214,9 @@
               "$type": "Document",
               "DocumentIndex": 7,
               "Title": "GetAllStatusHandler.cs",
-              "DocumentMoniker": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Application\\Features\\Status\\GetAllStatusHandler.cs",
+              "DocumentMoniker": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Application\\Features\\Status\\GetAllStatusHandler.cs",
               "RelativeDocumentMoniker": "src\\Accounting.Application\\Features\\Status\\GetAllStatusHandler.cs",
-              "ToolTip": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Application\\Features\\Status\\GetAllStatusHandler.cs",
+              "ToolTip": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Application\\Features\\Status\\GetAllStatusHandler.cs",
               "RelativeToolTip": "src\\Accounting.Application\\Features\\Status\\GetAllStatusHandler.cs",
               "ViewState": "AgIAADAAAAAAAAAAAAAkwDkAAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -226,9 +226,9 @@
               "$type": "Document",
               "DocumentIndex": 9,
               "Title": "SqlServerDbConnectionProvider.cs",
-              "DocumentMoniker": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.SqlServer\\SqlServerDbConnectionProvider.cs",
+              "DocumentMoniker": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.SqlServer\\SqlServerDbConnectionProvider.cs",
               "RelativeDocumentMoniker": "lib\\ExcentOne.EntityFrameworkCore.SqlServer\\SqlServerDbConnectionProvider.cs",
-              "ToolTip": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.SqlServer\\SqlServerDbConnectionProvider.cs",
+              "ToolTip": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.SqlServer\\SqlServerDbConnectionProvider.cs",
               "RelativeToolTip": "lib\\ExcentOne.EntityFrameworkCore.SqlServer\\SqlServerDbConnectionProvider.cs",
               "ViewState": "AgIAAAEAAAAAAAAAAAAAAAcAAABgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -238,9 +238,9 @@
               "$type": "Document",
               "DocumentIndex": 12,
               "Title": "GetUninvoicedItemReceiptLinesHandler.cs",
-              "DocumentMoniker": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Application\\Features\\ItemReceiptLine\\GetUninvoicedItemReceiptLinesHandler.cs",
+              "DocumentMoniker": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Application\\Features\\ItemReceiptLine\\GetUninvoicedItemReceiptLinesHandler.cs",
               "RelativeDocumentMoniker": "src\\Accounting.Application\\Features\\ItemReceiptLine\\GetUninvoicedItemReceiptLinesHandler.cs",
-              "ToolTip": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Application\\Features\\ItemReceiptLine\\GetUninvoicedItemReceiptLinesHandler.cs",
+              "ToolTip": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Application\\Features\\ItemReceiptLine\\GetUninvoicedItemReceiptLinesHandler.cs",
               "RelativeToolTip": "src\\Accounting.Application\\Features\\ItemReceiptLine\\GetUninvoicedItemReceiptLinesHandler.cs",
               "ViewState": "AgIAABUAAAAAAAAAAAAAwBoAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -250,9 +250,9 @@
               "$type": "Document",
               "DocumentIndex": 11,
               "Title": "PurchaseOrderLine.cs",
-              "DocumentMoniker": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\PurchaseOrderLine.cs",
+              "DocumentMoniker": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\PurchaseOrderLine.cs",
               "RelativeDocumentMoniker": "src\\Accounting.Persistence\\Models\\PurchaseOrderLine.cs",
-              "ToolTip": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\PurchaseOrderLine.cs",
+              "ToolTip": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\PurchaseOrderLine.cs",
               "RelativeToolTip": "src\\Accounting.Persistence\\Models\\PurchaseOrderLine.cs",
               "ViewState": "AgIAABYAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",

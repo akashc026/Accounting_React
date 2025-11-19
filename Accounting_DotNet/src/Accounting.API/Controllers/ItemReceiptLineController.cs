@@ -49,16 +49,16 @@ namespace Accounting.API.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> Create(CreateItemReceiptLine request)
+        public async Task<List<Guid>> Create(CreateItemReceiptLines request)
         {
             return await _mediator.Send(request);
         }
 
-        [HttpPut("{id:guid}")]
-        public async Task<Guid> Update(Guid id, UpdateItemReceiptLine request)
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateItemReceiptLines request)
         {
-            request.Id = id;
-            return await _mediator.Send(request);
+            var updatedCount = await _mediator.Send(request);
+            return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} item receipt line(s) updated successfully" });
         }
 
         [HttpGet("by-item-receipt/{itemReceiptId}")]
@@ -90,11 +90,11 @@ namespace Accounting.API.Controllers
             }
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task Delete(Guid id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(DeleteItemReceiptLines request)
         {
-            DeleteItemReceiptLine request = new() { Id = id };
-            await _mediator.Send(request);
+            var deletedCount = await _mediator.Send(request);
+            return Ok(new { DeletedCount = deletedCount, Message = $"{deletedCount} item receipt line(s) deleted successfully" });
         }
 
         [HttpGet("uninvoiced")]

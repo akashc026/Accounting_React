@@ -1,0 +1,28 @@
+using MediatR;
+using System;
+using System.Collections.Generic;
+
+namespace Accounting.Application.Features
+{
+    public class CreateInventoryAdjustmentLines : IRequest<List<Guid>>
+    {
+        public List<InventoryAdjustmentLineCreateDto> Lines { get; set; } = new();
+    }
+
+    public class InventoryAdjustmentLineCreateDto
+    {
+        public Guid InventoryAdjustmentID { get; set; }
+
+        public Guid ItemID { get; set; }
+
+        public decimal QuantityInHand { get; set; }
+
+        public decimal QuantityAdjusted { get; set; }
+
+        public decimal? Rate { get; set; }
+
+        public decimal? TotalAmount { get; set; }
+
+        public string? Reason { get; set; }
+    }
+}

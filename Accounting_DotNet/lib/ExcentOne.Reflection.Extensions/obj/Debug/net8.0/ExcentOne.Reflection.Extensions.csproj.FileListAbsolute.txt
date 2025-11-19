@@ -21,3 +21,14 @@ D:\Dot_net backup\Accounting_DotNet\lib\ExcentOne.Reflection.Extensions\obj\Debu
 D:\Dot_net backup\Accounting_DotNet\lib\ExcentOne.Reflection.Extensions\obj\Debug\net8.0\refint\ExcentOne.Reflection.Extensions.dll
 D:\Dot_net backup\Accounting_DotNet\lib\ExcentOne.Reflection.Extensions\obj\Debug\net8.0\ExcentOne.Reflection.Extensions.pdb
 D:\Dot_net backup\Accounting_DotNet\lib\ExcentOne.Reflection.Extensions\obj\Debug\net8.0\ref\ExcentOne.Reflection.Extensions.dll
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Reflection.Extensions\bin\Debug\net8.0\ExcentOne.Reflection.Extensions.deps.json
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Reflection.Extensions\bin\Debug\net8.0\ExcentOne.Reflection.Extensions.dll
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Reflection.Extensions\bin\Debug\net8.0\ExcentOne.Reflection.Extensions.pdb
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Reflection.Extensions\obj\Debug\net8.0\ExcentOne.Reflection.Extensions.GeneratedMSBuildEditorConfig.editorconfig
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Reflection.Extensions\obj\Debug\net8.0\ExcentOne.Reflection.Extensions.AssemblyInfoInputs.cache
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Reflection.Extensions\obj\Debug\net8.0\ExcentOne.Reflection.Extensions.AssemblyInfo.cs
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Reflection.Extensions\obj\Debug\net8.0\ExcentOne.Reflection.Extensions.csproj.CoreCompileInputs.cache
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Reflection.Extensions\obj\Debug\net8.0\ExcentOne.Reflection.Extensions.dll
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Reflection.Extensions\obj\Debug\net8.0\refint\ExcentOne.Reflection.Extensions.dll
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Reflection.Extensions\obj\Debug\net8.0\ExcentOne.Reflection.Extensions.pdb
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.Reflection.Extensions\obj\Debug\net8.0\ref\ExcentOne.Reflection.Extensions.dll

@@ -20,6 +20,9 @@ builder.Services.AddMediatR(config =>
 });
 builder.Services.AddMapster();
 
+// Register application services
+builder.Services.AddScoped<IFormSequenceService, FormSequenceService>();
+
 builder.Services.AddExceptionHandlersFromAssemblyOf<ValidationExceptionHandler>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

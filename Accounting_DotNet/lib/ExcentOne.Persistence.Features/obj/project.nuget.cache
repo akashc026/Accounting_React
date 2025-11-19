@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "p81UHITJcaM=",
+  "dgSpecHash": "poOoh6C+exE=",
   "success": true,
-  "projectFilePath": "D:\\Dot_net backup\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj",
+  "projectFilePath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.entityframeworkcore\\8.0.13\\microsoft.entityframeworkcore.8.0.13.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\8.0.13\\microsoft.entityframeworkcore.abstractions.8.0.13.nupkg.sha512",

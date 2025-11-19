@@ -78,23 +78,23 @@ namespace Accounting.API.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> Create(CreateVendorCreditLine request)
+        public async Task<List<Guid>> Create(CreateVendorCreditLines request)
         {
             return await _mediator.Send(request);
         }
 
-        [HttpPut("{id:guid}")]
-        public async Task<Guid> Update(Guid id, UpdateVendorCreditLine request)
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateVendorCreditLines request)
         {
-            request.Id = id;
-            return await _mediator.Send(request);
+            var updatedCount = await _mediator.Send(request);
+            return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} vendor credit line(s) updated successfully" });
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task Delete(Guid id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(DeleteVendorCreditLines request)
         {
-            DeleteVendorCreditLine request = new() { Id = id };
-            await _mediator.Send(request);
+            var deletedCount = await _mediator.Send(request);
+            return Ok(new { DeletedCount = deletedCount, Message = $"{deletedCount} vendor credit line(s) deleted successfully" });
         }
     }
 }

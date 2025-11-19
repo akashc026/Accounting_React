@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "itXGJ17rcG4=",
+  "dgSpecHash": "P73GJuOMpWk=",
   "success": true,
-  "projectFilePath": "D:\\Dot_net backup\\Accounting_DotNet\\src\\Accounting.Persistence\\Accounting.Persistence.csproj",
+  "projectFilePath": "D:\\Organise Dotnet\\Accounting_DotNet\\src\\Accounting.Persistence\\Accounting.Persistence.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

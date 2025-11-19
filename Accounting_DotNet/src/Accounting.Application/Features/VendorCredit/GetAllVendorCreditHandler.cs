@@ -19,27 +19,48 @@ namespace Accounting.Application.Features
 
         protected override IQueryable<VendorCredit> ApplyFiltering(IQueryable<VendorCredit> queryable, Expression<Func<VendorCredit, bool>> predicate, GetAllVendorCredit request)
         {
-            return queryable
+            var query = queryable
                 .Include(x => x.FormNavigation)
                 .Include(x => x.Vendor)
                 .Include(x => x.Location)
                 .Include(x => x.StatusNavigation)
                 .Where(predicate);
+
+            // Apply sorting
+            if (!string.IsNullOrWhiteSpace(request.SortBy) && request.SortBy.Equals("sequenceNumber", StringComparison.OrdinalIgnoreCase))
+            {
+                query = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase)
+                    ? query.OrderBy(x => x.SequenceNumber)
+                    : query.OrderByDescending(x => x.SequenceNumber);
+            }
+
+            return query;
         }
 
         protected override Expression<Func<VendorCredit, bool>> ComposeFilter(Expression<Func<VendorCredit, bool>> predicate, GetAllVendorCredit request)
         {
+            // Build the filter expression
+            Expression<Func<VendorCredit, bool>>? filterExpression = null;
+
+            // Add search text filter
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
-                predicate = predicate.And(x => EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%"));
+                filterExpression = x =>
+                    EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%")
+                    || (x.Vendor != null && EF.Functions.Like(x.Vendor.Name!, $"%{request.SearchText}%"));
             }
 
+            // Add LocationId filter
             if (request.LocationId.HasValue)
             {
-                predicate = predicate.And(x => x.LocationID == request.LocationId.Value);
+                Expression<Func<VendorCredit, bool>> locationFilter = x => x.LocationID == request.LocationId.Value;
+                filterExpression = filterExpression == null
+                    ? locationFilter
+                    : filterExpression.And(locationFilter);
             }
 
-            return predicate;
+            // Apply the filter if any conditions were added
+            return filterExpression != null ? predicate.Or(filterExpression) : predicate;
         }
 
         protected override IQueryable<VendorCredit> ApplyPagination(IQueryable<VendorCredit> queryable, GetAllVendorCredit request)

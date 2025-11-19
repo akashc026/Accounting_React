@@ -22,18 +22,24 @@ namespace Accounting.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Create([FromBody] CreateSalesOrderLine command)
+        public async Task<ActionResult<List<Guid>>> Create([FromBody] CreateSalesOrderLines command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Guid>> Update(Guid id, [FromBody] UpdateSalesOrderLine command)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] UpdateSalesOrderLines command)
         {
-            command.Id = id;
-            var result = await _mediator.Send(command);
-            return Ok(result);
+            var updatedCount = await _mediator.Send(command);
+            return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} sales order line(s) updated successfully" });
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] DeleteSalesOrderLines command)
+        {
+            var deletedCount = await _mediator.Send(command);
+            return Ok(new { DeletedCount = deletedCount, Message = $"{deletedCount} sales order line(s) deleted successfully" });
         }
 
         [HttpGet("{id}")]
@@ -78,14 +84,6 @@ namespace Accounting.API.Controllers
             {
                 return BadRequest($"Error: {ex.Message}");
             }
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
-        {
-            var command = new DeleteSalesOrderLine { Id = id };
-            await _mediator.Send(command);
-            return NoContent();
         }
 
         [HttpGet("unfulfilled")]

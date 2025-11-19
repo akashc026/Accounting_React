@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Accounting.Application.Features
 {
-    public class CreateChartOfAccount : ICreateEntity<Guid,Guid>
+    public class CreateChartOfAccount : ICreateEntity<Guid, Guid>
     {
         public Guid Id => Guid.NewGuid();
 
-        public string Name { get; set; } = null!;
+        public string? Name { get; set; }
 
-        public string AccountNumber { get; set; } = null!;
+        public string? AccountNumber { get; set; }
 
         public Guid? AccountType { get; set; }
 

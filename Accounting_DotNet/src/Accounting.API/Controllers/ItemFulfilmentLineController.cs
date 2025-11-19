@@ -36,23 +36,23 @@ namespace Accounting.API.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> Create(CreateItemFulfilmentLine request)
+        public async Task<List<Guid>> Create(CreateItemFulfilmentLines request)
         {
             return await mediator.Send(request);
         }
 
-        [HttpPut("{id:guid}")]
-        public async Task<Guid> Update(Guid id, UpdateItemFulfilmentLine request)
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateItemFulfilmentLines request)
         {
-            request.Id = id;
-            return await mediator.Send(request);
+            var updatedCount = await mediator.Send(request);
+            return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} item fulfilment line(s) updated successfully" });
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task Delete(Guid id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(DeleteItemFulfilmentLines request)
         {
-            DeleteItemFulfilmentLine request = new() { Id = id };
-            await mediator.Send(request);
+            var deletedCount = await mediator.Send(request);
+            return Ok(new { DeletedCount = deletedCount, Message = $"{deletedCount} item fulfilment line(s) deleted successfully" });
         }
 
         [HttpGet("by-item-fulfilment/{itemFulfilmentId}")]

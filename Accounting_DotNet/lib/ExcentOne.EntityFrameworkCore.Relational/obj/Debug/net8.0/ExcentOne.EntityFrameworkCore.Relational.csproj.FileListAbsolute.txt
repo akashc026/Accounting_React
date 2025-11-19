@@ -23,3 +23,15 @@ D:\Dot_net backup\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Relational
 D:\Dot_net backup\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Relational\obj\Debug\net8.0\refint\ExcentOne.EntityFrameworkCore.Relational.dll
 D:\Dot_net backup\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Relational\obj\Debug\net8.0\ExcentOne.EntityFrameworkCore.Relational.pdb
 D:\Dot_net backup\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Relational\obj\Debug\net8.0\ref\ExcentOne.EntityFrameworkCore.Relational.dll
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Relational\bin\Debug\net8.0\ExcentOne.EntityFrameworkCore.Relational.deps.json
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Relational\bin\Debug\net8.0\ExcentOne.EntityFrameworkCore.Relational.dll
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Relational\bin\Debug\net8.0\ExcentOne.EntityFrameworkCore.Relational.pdb
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Relational\obj\Debug\net8.0\ExcentOne.EntityFrameworkCore.Relational.csproj.AssemblyReference.cache
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Relational\obj\Debug\net8.0\ExcentOne.EntityFrameworkCore.Relational.GeneratedMSBuildEditorConfig.editorconfig
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Relational\obj\Debug\net8.0\ExcentOne.EntityFrameworkCore.Relational.AssemblyInfoInputs.cache
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Relational\obj\Debug\net8.0\ExcentOne.EntityFrameworkCore.Relational.AssemblyInfo.cs
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Relational\obj\Debug\net8.0\ExcentOne.EntityFrameworkCore.Relational.csproj.CoreCompileInputs.cache
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Relational\obj\Debug\net8.0\ExcentOne.EntityFrameworkCore.Relational.dll
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Relational\obj\Debug\net8.0\refint\ExcentOne.EntityFrameworkCore.Relational.dll
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Relational\obj\Debug\net8.0\ExcentOne.EntityFrameworkCore.Relational.pdb
+D:\Organise Dotnet\Accounting_DotNet\lib\ExcentOne.EntityFrameworkCore.Relational\obj\Debug\net8.0\ref\ExcentOne.EntityFrameworkCore.Relational.dll

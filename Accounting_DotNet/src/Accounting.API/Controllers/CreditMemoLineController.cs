@@ -78,23 +78,23 @@ namespace Accounting.API.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> Create(CreateCreditMemoLine request)
+        public async Task<List<Guid>> Create(CreateCreditMemoLines request)
         {
             return await _mediator.Send(request);
         }
 
-        [HttpPut("{id:guid}")]
-        public async Task<Guid> Update(Guid id, UpdateCreditMemoLine request)
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateCreditMemoLines request)
         {
-            request.Id = id;
-            return await _mediator.Send(request);
+            var updatedCount = await _mediator.Send(request);
+            return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} credit memo line(s) updated successfully" });
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task Delete(Guid id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(DeleteCreditMemoLines request)
         {
-            DeleteCreditMemoLine request = new() { Id = id };
-            await _mediator.Send(request);
+            var deletedCount = await _mediator.Send(request);
+            return Ok(new { DeletedCount = deletedCount, Message = $"{deletedCount} credit memo line(s) deleted successfully" });
         }
     }
 }

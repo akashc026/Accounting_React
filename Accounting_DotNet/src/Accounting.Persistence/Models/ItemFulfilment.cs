@@ -42,6 +42,8 @@ public partial class ItemFulfilment : IEntity<System.Guid>
 
     public virtual Form? FormNavigation { get; set; }
 
+    public virtual ICollection<InvoiceFulFillMentLink> InvoiceFulFillMentLinks { get; set; } = new List<InvoiceFulFillMentLink>();
+
     public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 
     public virtual ICollection<ItemFulfilmentLine> ItemFulfilmentLines { get; set; } = new List<ItemFulfilmentLine>();

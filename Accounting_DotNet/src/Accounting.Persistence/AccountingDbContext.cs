@@ -58,6 +58,8 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
 
     public virtual DbSet<Invoice> Invoices { get; set; }
 
+    public virtual DbSet<InvoiceFulFillMentLink> InvoiceFulFillMentLinks { get; set; }
+
     public virtual DbSet<InvoiceLine> InvoiceLines { get; set; }
 
     public virtual DbSet<ItemFulfilment> ItemFulfilments { get; set; }
@@ -673,6 +675,25 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasOne(d => d.StatusNavigation).WithMany(p => p.Invoices)
                 .HasForeignKey(d => d.Status)
                 .HasConstraintName("FK_Invoice_Status");
+        });
+
+        modelBuilder.Entity<InvoiceFulFillMentLink>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__InvoiceF__3214EC077102E509");
+
+            entity.HasIndex(e => new { e.InvoiceID, e.ItemFulFillmentID }, "UQ_InvoiceFulFillMent_ItemFulFillMent").IsUnique();
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+
+            entity.HasOne(d => d.Invoice).WithMany(p => p.InvoiceFulFillMentLinks)
+                .HasForeignKey(d => d.InvoiceID)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_InvoiceFulFillMentLinks_Invoice");
+
+            entity.HasOne(d => d.ItemFulFillment).WithMany(p => p.InvoiceFulFillMentLinks)
+                .HasForeignKey(d => d.ItemFulFillmentID)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_InvoiceFulFillMentLinks_ItemFulFillMent");
         });
 
         modelBuilder.Entity<InvoiceLine>(entity =>

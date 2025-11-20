@@ -46,6 +46,8 @@ public partial class Invoice : IEntity<System.Guid>
 
     public virtual Form? FormNavigation { get; set; }
 
+    public virtual ICollection<InvoiceFulFillMentLink> InvoiceFulFillMentLinks { get; set; } = new List<InvoiceFulFillMentLink>();
+
     public virtual ICollection<InvoiceLine> InvoiceLines { get; set; } = new List<InvoiceLine>();
 
     public virtual Location Location { get; set; } = null!;

@@ -22,6 +22,8 @@ public partial class JournalEntryLine : IEntity<System.Guid>
 
     public Guid? JEID { get; set; }
 
+    public int? Display { get; set; }
+
     public virtual ChartOfAccount? AccountNavigation { get; set; }
 
     public virtual JournalEntry? JE { get; set; }

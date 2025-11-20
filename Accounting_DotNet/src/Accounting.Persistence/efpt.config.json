@@ -103,6 +103,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[InvoiceFulFillMentLinks]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[InvoiceLines]",
          "ObjectType": 0
       },

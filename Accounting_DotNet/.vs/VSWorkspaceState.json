@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\Accounting.Application",
+    "\\src\\Accounting.Application\\Features",
+    "\\src\\Accounting.Application\\Features\\Product",
+    "\\src\\Accounting.Persistence"
+  ],
+  "SelectedNode": "\\src\\Accounting.Application\\Features\\Product\\GetProductsByItemTypeHandler.cs",
+  "PreviewInSolutionExplorer": false
+}

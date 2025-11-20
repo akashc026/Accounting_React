@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Grid, GridColumn } from '@progress/kendo-react-grid';
 import { Button } from '@progress/kendo-react-buttons';
-import { process } from '@progress/kendo-data-query';
 import { Input } from '@progress/kendo-react-inputs';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
 import { Dialog, DialogActionsBar } from '@progress/kendo-react-dialogs';
@@ -10,6 +9,7 @@ import { Notification } from '@progress/kendo-react-notification';
 import { Fade } from '@progress/kendo-react-animation';
 import { FaPlus, FaSearch, FaEye, FaPencilAlt, FaTrash, FaFilter, FaSync } from 'react-icons/fa';
 import { apiConfig, buildUrl } from '../../config/api';
+import { STATUS_FILTER_OPTIONS, appendInactiveFilter } from '../../utils/statusFilters';
 
 const LocationList = () => {
   const navigate = useNavigate();
@@ -19,6 +19,7 @@ const LocationList = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState('');
+  const [debouncedSearchText, setDebouncedSearchText] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
 
@@ -32,13 +33,31 @@ const LocationList = () => {
   });
 
   // Fetch locations from API with pagination
-  const fetchData = useCallback(async (pageNumber = 1, pageSize = 10) => {
+  const fetchData = useCallback(async (
+    pageNumber = 1,
+    pageSize = 10,
+    search = '',
+    status = 'All',
+    sortField = null,
+    sortDir = null
+  ) => {
     try {
       setLoading(true);
       setError(null);
 
-      // Build URL with pagination parameters
-      const url = buildUrl(`/location?PageNumber=${pageNumber}&PageSize=${pageSize}`);
+      let queryParams = `PageNumber=${pageNumber}&PageSize=${pageSize}`;
+
+      if (search && search.trim() !== '') {
+        queryParams += `&SearchText=${encodeURIComponent(search.trim())}`;
+      }
+
+      queryParams = appendInactiveFilter(status, queryParams);
+
+      if (sortField && sortDir) {
+        queryParams += `&SortBy=${encodeURIComponent(sortField)}&SortOrder=${sortDir === 'asc' ? 'asc' : 'desc'}`;
+      }
+
+      const url = buildUrl(`/location?${queryParams}`);
       const response = await fetch(url);
 
       if (!response.ok) {
@@ -74,21 +93,37 @@ const LocationList = () => {
   }, []);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    const timer = setTimeout(() => {
+      setDebouncedSearchText(searchText);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [searchText]);
+
+  useEffect(() => {
+    setGridData(prev => prev.skip === 0 ? prev : { ...prev, skip: 0 });
+    const sortField = gridData.sort?.[0]?.field || null;
+    const sortDir = gridData.sort?.[0]?.dir || null;
+    fetchData(1, gridData.take, debouncedSearchText, statusFilter, sortField, sortDir);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearchText, statusFilter]);
 
   // Handle grid data state changes (sorting, filtering, paging)
   const dataStateChange = (e) => {
     const newDataState = e.dataState;
     setGridData(newDataState);
 
-    // Calculate page number from skip and take values
     const pageNumber = Math.floor(newDataState.skip / newDataState.take) + 1;
     const pageSize = newDataState.take;
+    const sortField = newDataState.sort?.[0]?.field || null;
+    const sortDir = newDataState.sort?.[0]?.dir || null;
 
-    // Fetch new data if pagination changed
-    if (pageNumber !== currentPage || pageSize !== gridData.take) {
-      fetchData(pageNumber, pageSize);
+    const oldSortField = gridData.sort?.[0]?.field || null;
+    const oldSortDir = gridData.sort?.[0]?.dir || null;
+    const sortChanged = sortField !== oldSortField || sortDir !== oldSortDir;
+
+    if (pageNumber !== currentPage || pageSize !== gridData.take || sortChanged) {
+      fetchData(pageNumber, pageSize, debouncedSearchText, statusFilter, sortField, sortDir);
     }
   };
 
@@ -115,16 +150,6 @@ const LocationList = () => {
 
     let filteredData = [...data.results];
 
-    // Apply search filter
-    if (searchText) {
-      filteredData = filteredData.filter(location =>
-        Object.values(location)
-          .join(' ')
-          .toLowerCase()
-          .includes(searchText.toLowerCase())
-      );
-    }
-
     // Apply status filter
     if (statusFilter !== 'All') {
       filteredData = filteredData.filter(location =>
@@ -133,7 +158,7 @@ const LocationList = () => {
     }
 
     return filteredData;
-  }, [data, searchText, statusFilter]);
+  }, [data, statusFilter]);
 
   // Handle View button click
   const handleView = (id) => {
@@ -212,7 +237,9 @@ const LocationList = () => {
   const handleRefresh = () => {
     const pageNumber = Math.floor(gridData.skip / gridData.take) + 1;
     const pageSize = gridData.take;
-    fetchData(pageNumber, pageSize);
+    const sortField = gridData.sort?.[0]?.field || null;
+    const sortDir = gridData.sort?.[0]?.dir || null;
+    fetchData(pageNumber, pageSize, debouncedSearchText, statusFilter, sortField, sortDir);
     showNotification('Locations refreshed successfully', 'success');
   };
 
@@ -288,7 +315,7 @@ const LocationList = () => {
           <div className="filter-bar">
             <FaFilter className="filter-icon" />
             <DropDownList
-              data={['All', 'Active', 'Inactive']}
+              data={STATUS_FILTER_OPTIONS}
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               style={{ width: '100%' }}
@@ -329,11 +356,11 @@ const LocationList = () => {
               minHeight: '400px'
             }}
           >
-            <GridColumn title="No" width="70px" cell={SerialNumberCell} />
+            <GridColumn title="No" width="70px" cell={SerialNumberCell} sortable={false} />
             <GridColumn field="name" title="Location Name" width="250px" />
-            <GridColumn field="address" title="Address" width="250px" />
-            <GridColumn field="inactive" title="Status" width="150px" cell={StatusCell} />
-            <GridColumn title="Actions" width="180px" cell={ActionCell} locked={true} lockable={false} />
+            <GridColumn field="address" title="Address" width="250px" sortable={false} />
+            <GridColumn field="inactive" title="Status" width="150px" cell={StatusCell} sortable={false} />
+            <GridColumn title="Actions" width="180px" cell={ActionCell} locked={true} lockable={false} sortable={false} />
           </Grid>
         )}
 

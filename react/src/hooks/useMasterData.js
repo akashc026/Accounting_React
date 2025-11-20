@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { apiConfig, buildUrl } from '../config/api';
 
 // Helper function to remove empty, null, or undefined fields from payload
@@ -138,7 +138,8 @@ const FETCH_OPTIONS = {
 };
 
 // Main dynamic hook
-export const useMasterData = (entityType) => {
+export const useMasterData = (entityType, options = {}) => {
+  const { autoFetch = true } = options;
   const config = generateEntityConfig(entityType);
   
   if (!config) {
@@ -148,6 +149,7 @@ export const useMasterData = (entityType) => {
   const [data, setData] = useState({ results: [], totalItems: 0, pageSize: 10, currentPage: 1 });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const hasAutoFetchedRef = useRef(false);
 
   // Fetch all entities
   const fetchAll = useCallback(async () => {
@@ -471,8 +473,11 @@ export const useMasterData = (entityType) => {
 
   // Load data on mount
   useEffect(() => {
-    fetchAll();
-  }, [fetchAll]);
+    if (autoFetch && !hasAutoFetchedRef.current) {
+      fetchAll();
+      hasAutoFetchedRef.current = true;
+    }
+  }, [autoFetch, fetchAll]);
 
   // Return the hook's state and functions with dynamic naming
   // Convert kebab-case to PascalCase for function names
@@ -514,44 +519,44 @@ export const useMasterData = (entityType) => {
 
 // Convenience hooks for each entity type
 // Dynamic exports - no need for hardcoded entity-specific hooks
-export const useCustomers = () => useMasterData('customer');
-export const useVendors = () => useMasterData('vendor');
-export const useChartOfAccount = () => useMasterData('chart-of-account');
-export const useProducts = () => useMasterData('product');
-export const useSalesOrders = () => useMasterData('sales-order');
-export const useTaxes = () => useMasterData('tax');
-export const useItemFulfillments = () => useMasterData('item-fulfillment');
-export const useInvoices = () => useMasterData('invoice');
+export const useCustomers = (options) => useMasterData('customer', options);
+export const useVendors = (options) => useMasterData('vendor', options);
+export const useChartOfAccount = (options) => useMasterData('chart-of-account', options);
+export const useProducts = (options) => useMasterData('product', options);
+export const useSalesOrders = (options) => useMasterData('sales-order', options);
+export const useTaxes = (options) => useMasterData('tax', options);
+export const useItemFulfillments = (options) => useMasterData('item-fulfillment', options);
+export const useInvoices = (options) => useMasterData('invoice', options);
 
 // Inventory Management hooks
-export const useInventoryAdjustments = () => useMasterData('inventory-adjustment');
-export const useInventoryTransfers = () => useMasterData('inventory-transfer');
+export const useInventoryAdjustments = (options) => useMasterData('inventory-adjustment', options);
+export const useInventoryTransfers = (options) => useMasterData('inventory-transfer', options);
 
 // Purchase Management hooks
-export const usePurchaseOrders = () => useMasterData('purchase-order');
-export const useItemReceipts = () => useMasterData('item-receipt');
-export const useVendorBills = () => useMasterData('vendor-bill');
+export const usePurchaseOrders = (options) => useMasterData('purchase-order', options);
+export const useItemReceipts = (options) => useMasterData('item-receipt', options);
+export const useVendorBills = (options) => useMasterData('vendor-bill', options);
 
 // Credit/Debit Memo hooks
-export const useCreditMemos = () => useMasterData('credit-memo');
-export const useDebitMemos = () => useMasterData('debit-memo');
+export const useCreditMemos = (options) => useMasterData('credit-memo', options);
+export const useDebitMemos = (options) => useMasterData('debit-memo', options);
 
 // Payment hooks
-export const useCustomerPayments = () => useMasterData('customer-payment');
-export const useVendorPayments = () => useMasterData('vendor-payment');
+export const useCustomerPayments = (options) => useMasterData('customer-payment', options);
+export const useVendorPayments = (options) => useMasterData('vendor-payment', options);
 
 // Helper function to create dynamic hooks for any entity type
 export const createMasterDataHook = (entityType) => {
-  return () => useMasterData(entityType);
+  return (options) => useMasterData(entityType, options);
 };
 
 // Dynamic location hook using the main useMasterData hook
-export const useLocations = () => useMasterData('location');
+export const useLocations = (options) => useMasterData('location', options);
 
 // Item types hook
-export const useItemTypes = () => useMasterData('item-type');
-export const useVendorCredits = () => useMasterData('vendor-credit');
-export const useStatus = () => useMasterData('status');
+export const useItemTypes = (options) => useMasterData('item-type', options);
+export const useVendorCredits = (options) => useMasterData('vendor-credit', options);
+export const useStatus = (options) => useMasterData('status', options);
 
 /**
  * BENEFITS OF THIS DYNAMIC APPROACH:

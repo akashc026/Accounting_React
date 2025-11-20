@@ -32,21 +32,42 @@ namespace Accounting.Application.Features
             // Apply search filter
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
-                query = query.Where(x => EF.Functions.Like(x.Name, $"%{request.SearchText}%"));
+                var likePattern = $"%{request.SearchText}%";
+                Expression<Func<Tax, bool>> searchExpression = x => EF.Functions.Like(x.Name!, likePattern);
+
+                if (decimal.TryParse(request.SearchText, out var taxRateSearch))
+                {
+                    Expression<Func<Tax, bool>> rateExpression = x => x.TaxRate == taxRateSearch;
+                    searchExpression = searchExpression.Or(rateExpression);
+                }
+
+                query = query.Where(searchExpression);
             }
 
-            // Apply IsActive filter
-            if (request.IsActive == true)
+            // Apply inactive filter (supports legacy IsActive parameter as fallback)
+            var inactiveFilterValue = request.Inactive;
+            if (!inactiveFilterValue.HasValue && request.IsActive.HasValue)
             {
-                query = query.Where(x => x.Inactive != true);
-            }
-            else if (request.IsActive == false)
-            {
-                query = query.Where(x => x.Inactive == true);
+                inactiveFilterValue = request.IsActive.Value ? false : true;
             }
 
-            // Apply default sorting by Id
-            query = query.OrderBy(x => x.Id);
+            if (inactiveFilterValue.HasValue)
+            {
+                query = inactiveFilterValue.Value
+                    ? query.Where(x => x.Inactive == true)
+                    : query.Where(x => x.Inactive != true);
+            }
+
+            // Apply sorting (default to Id when sort not specified)
+            if (!string.IsNullOrWhiteSpace(request.SortBy) && request.SortBy.Equals("name", StringComparison.OrdinalIgnoreCase))
+            {
+                var ascending = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase);
+                query = ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name);
+            }
+            else
+            {
+                query = query.OrderBy(x => x.Id);
+            }
 
             var totalItems = await query.CountAsync(cancellationToken);
 

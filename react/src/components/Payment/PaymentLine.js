@@ -402,27 +402,78 @@ export default function PaymentLine({ customerId, vendorId, locationId, recordTy
       console.log('Edit mode record map created:', recordMap);
 
       // Step 6: Apply payment line data to the processed records
+      const validTypes = recordType === 'CustomerPayment'
+        ? ['Invoice', 'Debit Memo']
+        : ['Vendor Bill'];
+
+      const existingRecordIds = new Set(processedInvoices.map(inv => inv.id));
+
       paymentLinesData.lines.forEach(line => {
-        const validTypes = recordType === 'CustomerPayment' 
-          ? ['Invoice', 'Debit Memo'] 
-          : ['Vendor Bill'];
-          
-        if (validTypes.includes(line.recordType)) {
-          const invoice = processedInvoices.find(inv => inv.id === line.recordID);
-          if (invoice) {
-            const paymentAmount = line.paymentAmount || 0;
-            invoice.displayAmount = paymentAmount;
-            invoice.originalDisplayAmount = paymentAmount; // Store original payment amount for edit mode limits
-            invoice.checked = line.isApplied !== undefined ? line.isApplied : true;
-            invoice.userTyped = true;
-            // Preserve originalAmount from the record map if available
-            const recordFromMap = recordMap.get(line.recordID);
-            if (recordFromMap && recordFromMap.totalAmount) {
-              invoice.originalAmount = parseAmount(recordFromMap.totalAmount);
-            }
-          }
+        if (!validTypes.includes(line.recordType)) {
+          return;
         }
+
+        const paymentAmount = line.paymentAmount || 0;
+        const recordFromMap = recordMap.get(line.recordID) || {};
+
+        const updateInvoiceValues = (invoice) => {
+          invoice.displayAmount = paymentAmount;
+          invoice.originalDisplayAmount = paymentAmount;
+          invoice.checked = line.isApplied !== undefined ? line.isApplied : true;
+          invoice.userTyped = true;
+          if (recordFromMap && (recordFromMap.totalAmount || recordFromMap.amount || recordFromMap.amountDue)) {
+            invoice.originalAmount = parseAmount(
+              recordFromMap.totalAmount ?? recordFromMap.amount ?? recordFromMap.amountDue
+            );
+          }
+        };
+
+        const existingInvoice = processedInvoices.find(inv => inv.id === line.recordID);
+        if (existingInvoice) {
+          updateInvoiceValues(existingInvoice);
+          return;
+        }
+
+        // Build a synthetic record for closed transactions that no longer appear in API filters
+        const dateSource = recordFromMap.invoiceDate ||
+          recordFromMap.billDate ||
+          recordFromMap.tranDate ||
+          recordFromMap.paymentDate ||
+          new Date().toISOString();
+
+        const dateObj = new Date(dateSource);
+        const formattedDate = `${dateObj.getDate().toString().padStart(2, '0')}/${(dateObj.getMonth() + 1)
+          .toString()
+          .padStart(2, '0')}/${dateObj.getFullYear()}`;
+
+        const fallbackAmount = parseAmount(
+          recordFromMap.amountDue ??
+          recordFromMap.totalAmount ??
+          recordFromMap.amount ??
+          paymentAmount
+        );
+
+        const syntheticRecord = {
+          id: line.recordID,
+          date: formattedDate,
+          dateKey: dateObj.getTime(),
+          type: line.recordType,
+          refNo: recordFromMap.sequenceNumber || recordFromMap.referenceNumber || line.refNo || '',
+          dueAmount: fallbackAmount,
+          originalAmount: fallbackAmount,
+          displayAmount: paymentAmount,
+          originalDisplayAmount: paymentAmount,
+          checked: line.isApplied !== undefined ? line.isApplied : true,
+          userTyped: true,
+          lockedSeq: null,
+          disabled: false
+        };
+
+        processedInvoices.push(syntheticRecord);
+        existingRecordIds.add(line.recordID);
       });
+
+      processedInvoices.sort((a, b) => a.dateKey - b.dateKey);
 
       return { recordMap, invoices: processedInvoices, paymentData: paymentLinesData };
     } catch (err) {

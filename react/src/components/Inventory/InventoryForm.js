@@ -7,7 +7,7 @@ import { DatePicker } from '@progress/kendo-react-dateinputs';
 import { Button } from '@progress/kendo-react-buttons';
 import { Notification } from '@progress/kendo-react-notification';
 import { Fade } from '@progress/kendo-react-animation';
-import ConfirmDialog from '../shared/ConfirmDialog';
+import ConfirmDialog from '../../shared/components/ConfirmDialog';
 import { FaSave, FaTimes, FaTrash, FaPlus, FaBoxes, FaChartBar } from 'react-icons/fa';
 import { useDynamicForm } from '../../hooks/useDynamicForm';
 import useInventoryDetail from '../../hooks/useInventoryDetail';

@@ -9,6 +9,7 @@ import { Notification } from '@progress/kendo-react-notification';
 import { Fade } from '@progress/kendo-react-animation';
 import { FaPlus, FaSearch, FaEye, FaPencilAlt, FaTrash, FaFilter, FaSync } from 'react-icons/fa';
 import { apiConfig, buildUrl } from '../../config/api';
+import { STATUS_FILTER_OPTIONS, appendInactiveFilter } from '../../utils/statusFilters';
 
 const ProductList = () => {
   const navigate = useNavigate();
@@ -50,7 +51,15 @@ const ProductList = () => {
   }, [searchText]);
 
   // Fetch products from API with pagination and filters
-  const fetchData = useCallback(async (pageNumber = 1, pageSize = 10, search = '', itemType = 'All', activeStatus = 'All') => {
+  const fetchData = useCallback(async (
+    pageNumber = 1,
+    pageSize = 10,
+    search = '',
+    itemType = 'All',
+    activeStatus = 'All',
+    sortField = null,
+    sortDir = null
+  ) => {
     try {
       setLoading(true);
       setError(null);
@@ -60,7 +69,8 @@ const ProductList = () => {
 
       // Add search parameter if provided
       if (search && search.trim() !== '') {
-        queryParams += `&search=${encodeURIComponent(search.trim())}`;
+        const encodedSearch = encodeURIComponent(search.trim());
+        queryParams += `&SearchText=${encodedSearch}&search=${encodedSearch}`;
       }
 
       // Add item type filter if not 'All'
@@ -75,9 +85,10 @@ const ProductList = () => {
       }
 
       // Add active status filter if not 'All'
-      if (activeStatus !== 'All') {
-        const isInactive = activeStatus === 'Inactive';
-        queryParams += `&inactive=${isInactive}`;
+      queryParams = appendInactiveFilter(activeStatus, queryParams);
+
+      if (sortField && sortDir) {
+        queryParams += `&SortBy=${encodeURIComponent(sortField)}&SortOrder=${sortDir === 'asc' ? 'asc' : 'desc'}`;
       }
 
       const url = buildUrl(`/product?${queryParams}`);
@@ -116,14 +127,20 @@ const ProductList = () => {
 
   // Initial data load
   useEffect(() => {
-    fetchData(1, gridData.take, debouncedSearchText, itemTypeFilter, activeStatusFilter);
+    const sortField = gridData.sort?.[0]?.field || null;
+    const sortDir = gridData.sort?.[0]?.dir || null;
+    fetchData(1, gridData.take, debouncedSearchText, itemTypeFilter, activeStatusFilter, sortField, sortDir);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Trigger search when debounced search text or filters change
   useEffect(() => {
     // Reset to first page when search or filters change
-    setGridData(prev => ({ ...prev, skip: 0 }));
-    fetchData(1, gridData.take, debouncedSearchText, itemTypeFilter, activeStatusFilter);
+    setGridData(prev => prev.skip === 0 ? prev : ({ ...prev, skip: 0 }));
+    const sortField = gridData.sort?.[0]?.field || null;
+    const sortDir = gridData.sort?.[0]?.dir || null;
+    fetchData(1, gridData.take, debouncedSearchText, itemTypeFilter, activeStatusFilter, sortField, sortDir);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchText, itemTypeFilter, activeStatusFilter]);
 
   // Handle grid data state changes (sorting, filtering, paging)
@@ -133,9 +150,15 @@ const ProductList = () => {
 
     const pageNumber = Math.floor(newDataState.skip / newDataState.take) + 1;
     const pageSize = newDataState.take;
+    const sortField = newDataState.sort?.[0]?.field || null;
+    const sortDir = newDataState.sort?.[0]?.dir || null;
 
-    if (pageNumber !== currentPage || pageSize !== gridData.take) {
-      fetchData(pageNumber, pageSize, debouncedSearchText, itemTypeFilter, activeStatusFilter);
+    const oldSortField = gridData.sort?.[0]?.field || null;
+    const oldSortDir = gridData.sort?.[0]?.dir || null;
+    const sortChanged = sortField !== oldSortField || sortDir !== oldSortDir;
+
+    if (pageNumber !== currentPage || pageSize !== gridData.take || sortChanged) {
+      fetchData(pageNumber, pageSize, debouncedSearchText, itemTypeFilter, activeStatusFilter, sortField, sortDir);
     }
   };
 
@@ -175,7 +198,9 @@ const ProductList = () => {
   const handleRefresh = () => {
     const pageNumber = Math.floor(gridData.skip / gridData.take) + 1;
     const pageSize = gridData.take;
-    fetchData(pageNumber, pageSize, debouncedSearchText, itemTypeFilter, activeStatusFilter);
+    const sortField = gridData.sort?.[0]?.field || null;
+    const sortDir = gridData.sort?.[0]?.dir || null;
+    fetchData(pageNumber, pageSize, debouncedSearchText, itemTypeFilter, activeStatusFilter, sortField, sortDir);
     showNotification('Products refreshed successfully', 'success');
   };
 
@@ -324,7 +349,7 @@ const ProductList = () => {
           <div className="filter-bar">
             <FaFilter className="filter-icon" />
             <DropDownList
-              data={['All', 'Active', 'Inactive']}
+              data={STATUS_FILTER_OPTIONS}
               value={activeStatusFilter}
               onChange={(e) => setActiveStatusFilter(e.target.value)}
               style={{ width: '100%' }}
@@ -365,12 +390,12 @@ const ProductList = () => {
               minHeight: '400px'
             }}
           >
-            <GridColumn title="No" width="70px" cell={SerialNumberCell} />
+            <GridColumn title="No" width="70px" cell={SerialNumberCell} sortable={false} />
             <GridColumn field="itemCode" title="Item Code" width="150px" />
             <GridColumn field="itemName" title="Item Name" width="200px" />
-            <GridColumn field="itemType" title="Item Type" width="170px" cell={ItemTypeCell} />
-            <GridColumn field="inactive" title="Status" width="140px" cell={ActiveStatusCell} />
-            <GridColumn title="Actions" width="180px" cell={ActionCell} locked={true} lockable={false} />
+            <GridColumn field="itemType" title="Item Type" width="170px" cell={ItemTypeCell} sortable={false} />
+            <GridColumn field="inactive" title="Status" width="140px" cell={ActiveStatusCell} sortable={false} />
+            <GridColumn title="Actions" width="180px" cell={ActionCell} locked={true} lockable={false} sortable={false} />
           </Grid>
         )}
       </div>

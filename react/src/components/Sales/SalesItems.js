@@ -14,27 +14,31 @@ import { clone } from '@progress/kendo-react-common';
 import { FaSave, FaTimes, FaPlus, FaTrash, FaEdit, FaCheck, FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
 import { useDynamicForm } from '../../hooks/useDynamicForm';
 import useInventoryDetail from '../../hooks/useInventoryDetail';
+import cleanPayload from '../../utils/cleanPayload';
+import CreditMemoApplyTab from './components/CreditMemoApplyTab';
+import ApplyTabSwitcher from '../../shared/components/ApplyTabSwitcher';
 import '../../shared/styles/DynamicFormCSS.css';
-
-// Helper function to remove empty, null, or undefined fields from payload
-const cleanPayload = (payload) => {
-  const cleaned = {};
-  Object.keys(payload).forEach(key => {
-    const value = payload[key];
-    // Only include non-empty values (excluding empty strings, null, undefined)
-    if (value !== '' && value !== null && value !== undefined) {
-      cleaned[key] = value;
-    }
-  });
-  return cleaned;
-};
 
 // Create React Context for editing
 const ItemGridEditContext = React.createContext({});
 const ITEM_DATA_INDEX = 'itemDataIndex';
 const DATA_ITEM_KEY = 'id';
 
-const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onTotalAmountChange, headerDiscount = 0, selectedLocation, soid = null, dnid = null, onUnfulfilledLinesLoaded = null, customerId = null, onCreditApplicationChange = null, originalRecordLineItems = [] }) => {
+const SalesItems = React.memo(({
+  recordType,
+  mode = 'new',
+  embedded = false,
+  onTotalAmountChange,
+  headerDiscount = 0,
+  selectedLocation,
+  soid = null,
+  dnid = null,
+  onUnfulfilledLinesLoaded = null,
+  customerId = null,
+  onCreditApplicationChange = null,
+  originalRecordLineItems = [],
+  creditMemoTotalAmount = 0
+}) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -64,6 +68,9 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
 
   // Credit Memo Apply functionality states
   const [itemsActiveTab, setItemsActiveTab] = useState('items');
+  const handleItemsTabChange = useCallback((nextTab) => {
+    setItemsActiveTab(nextTab);
+  }, []);
 
   // Listen for parent form tab changes to reset SalesItems tab
   useEffect(() => {
@@ -128,6 +135,8 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
   const editCtxRef = useRef(new Map());
   const isInitialLoadRef = useRef(true);
   const originalPaymentLinesRef = useRef(null);
+  const creditMemoAutoSyncRef = useRef(false);
+  const autoPopulateRunningRef = useRef(false);
 
   // Transaction items navigation
   const navigationPaths = {
@@ -544,8 +553,13 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
   // Fetch credit application data when customerId and location change
   useEffect(() => {
     const fetchCreditData = async () => {
+      if (recordType !== 'CreditMemo') {
+        setInvoices([]);
+        return;
+      }
+
       // Require BOTH customer AND location for Credit Memo
-      if (recordType !== 'CreditMemo' || !customerId || !selectedLocation) {
+      if (!customerId || !selectedLocation) {
         console.log('⚠️ Credit Memo: Missing required parameters', {
           recordType,
           customerId,
@@ -769,6 +783,43 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
     setUnapplied(nextUnapplied);
   };
 
+  useEffect(() => {
+    if (recordType !== 'CreditMemo') {
+      creditMemoAutoSyncRef.current = false;
+      return;
+    }
+
+    if (!invoices || invoices.length === 0) {
+      creditMemoAutoSyncRef.current = false;
+    }
+
+    const normalizedAmount = parseAmount(creditMemoTotalAmount || 0).toString();
+
+    if (creditAmountStr !== normalizedAmount) {
+      setCreditAmountStr(normalizedAmount);
+      creditMemoAutoSyncRef.current = false;
+
+      if (invoices && invoices.length > 0) {
+        recalc({ creditAmountStr: normalizedAmount, invoices });
+        creditMemoAutoSyncRef.current = true;
+      }
+      return;
+    }
+
+    if ((mode === 'edit' || mode === 'view') &&
+        invoices && invoices.length > 0 &&
+        !creditMemoAutoSyncRef.current) {
+      recalc({ invoices });
+      creditMemoAutoSyncRef.current = true;
+    }
+  }, [
+    recordType,
+    creditMemoTotalAmount,
+    creditAmountStr,
+    invoices,
+    mode
+  ]);
+
   // Handlers
   const onCreditAmountChange = (e) => {
     const value = e.target ? e.target.value : (e.value?.toString() || '');
@@ -944,38 +995,93 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
   // Auto-save was causing unwanted saves when adding items or switching to Apply tab
 
   // Fetch uninvoiced ItemFulfillment lines for Invoice
+  const normalizeIdList = useCallback((value) => {
+    if (!value) return [];
+    if (Array.isArray(value)) {
+      return value.filter(v => v !== null && v !== undefined && v !== '');
+    }
+    if (typeof value === 'string') {
+      const trimmed = value.trim();
+      if (!trimmed) return [];
+      if ((trimmed.startsWith('[') && trimmed.endsWith(']')) || trimmed.startsWith('{')) {
+        try {
+          const parsed = JSON.parse(trimmed);
+          if (Array.isArray(parsed)) {
+            return parsed.filter(Boolean);
+          }
+        } catch (err) {
+          // Ignore JSON parse errors - fall back to comma or single value handling
+        }
+      }
+      if (trimmed.includes(',')) {
+        return trimmed.split(',').map(id => id.trim()).filter(Boolean);
+      }
+      return [trimmed];
+    }
+    return [value];
+  }, []);
+
+  const getIdSignature = useCallback((value) => {
+    const ids = normalizeIdList(value);
+    if (!ids.length) return null;
+    return ids.slice().sort().join('|');
+  }, [normalizeIdList]);
+
+  // Fetch uninvoiced ItemFulfillment lines for Invoice
   const fetchUninvoicedItemFulfillmentLines = useCallback(async (itemFulfillmentId) => {
-    if (!itemFulfillmentId || recordType !== 'Invoice') {
+    if (recordType !== 'Invoice') {
+      return [];
+    }
+
+    const fulfillmentIds = normalizeIdList(itemFulfillmentId);
+
+    if (fulfillmentIds.length === 0) {
+      setUninvoicedItems([]);
+      setRawItemFulfillmentLines([]);
       return [];
     }
 
     try {
       setUninvoicedLoading(true);
-      const url = buildUrl(`/item-fulfilment-line/by-item-fulfilment/${itemFulfillmentId}`);
-      console.log('[SalesItems] Fetching uninvoiced lines from:', url);
+      let combinedUninvoicedLines = [];
+      let combinedRawLines = [];
 
-      const response = await fetch(url, {
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-      });
+      for (const fulfillmentId of fulfillmentIds) {
+        const url = buildUrl(`/item-fulfilment-line/by-item-fulfilment/${fulfillmentId}`);
+        console.log('[SalesItems] Fetching uninvoiced lines from:', url);
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch uninvoiced item fulfillment lines: ${response.status}`);
+        const response = await fetch(url, {
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch uninvoiced item fulfillment lines: ${response.status}`);
+        }
+
+        const data = await response.json();
+        let uninvoicedLines = Array.isArray(data) ? data : (data.lines || data.results || []);
+        uninvoicedLines = uninvoicedLines.map(line => ({
+          ...line,
+          dnid: line.dnid || line.itemFulfillmentId || fulfillmentId,
+          itemFulfillmentId: line.itemFulfillmentId || fulfillmentId,
+          _parentItemFulfillmentId: fulfillmentId
+        }));
+
+        console.log('[SalesItems] Fetched uninvoiced lines from API:', uninvoicedLines);
+        console.log('[SalesItems] ===== RAW IF LINES DETAIL =====');
+        uninvoicedLines.forEach(line => {
+          console.log(`[SalesItems] IF Line ${line.id}: parentDnId=${line.dnid}, itemID=${line.itemID}, qty=${line.quantity}, invoicedQty=${line.invoicedQty}, remaining=${(line.quantity || 0) - (line.invoicedQty || 0)}`);
+        });
+
+        combinedRawLines = combinedRawLines.concat(uninvoicedLines);
+        combinedUninvoicedLines = combinedUninvoicedLines.concat(uninvoicedLines);
       }
-
-      const data = await response.json();
-      // Handle both new format (direct array) and old format (lines/results property)
-      let uninvoicedLines = Array.isArray(data) ? data : (data.lines || data.results || []);
-      console.log('[SalesItems] Fetched uninvoiced lines from API:', uninvoicedLines);
-      console.log('[SalesItems] ===== RAW IF LINES DETAIL =====');
-      uninvoicedLines.forEach(line => {
-        console.log(`[SalesItems] IF Line ${line.id}: itemID=${line.itemID}, qty=${line.quantity}, invoicedQty=${line.invoicedQty}, remaining=${(line.quantity || 0) - (line.invoicedQty || 0)}`);
-      });
 
       // Store the RAW item fulfillment lines for RemQty calculation (without any modifications)
       // CRITICAL: This must be stored BEFORE any edit mode modifications
       // The raw data is used to calculate the true remaining quantity from the database
-      setRawItemFulfillmentLines(uninvoicedLines);
-      console.log('[SalesItems] ✅ Stored raw item fulfillment lines for RemQty. Count:', uninvoicedLines.length);
+      setRawItemFulfillmentLines(combinedRawLines);
+      console.log('[SalesItems] ✅ Stored raw item fulfillment lines for RemQty. Count:', combinedRawLines.length);
 
       // In EDIT mode: Replace API data with record data where itemFulfillmentLineId matches
       // NOTE: This modifies uninvoicedLines for display, but rawItemFulfillmentLines stays unmodified for RemQty calculation
@@ -983,7 +1089,7 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
         console.log('[SalesItems] EDIT MODE - Merging API data with record data for Invoice');
         console.log('[SalesItems] Original record line items:', originalRecordLineItems);
 
-        uninvoicedLines = uninvoicedLines.map(apiLine => {
+        combinedUninvoicedLines = combinedUninvoicedLines.map(apiLine => {
           // Find matching record line by itemFulfillmentLineId
           const recordLine = originalRecordLineItems.find(recLine =>
             recLine.itemFulfillmentLineId === apiLine.id
@@ -1024,11 +1130,11 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
           return apiLine;
         });
 
-        console.log('[SalesItems] Merged uninvoiced lines:', uninvoicedLines);
+        console.log('[SalesItems] Merged uninvoiced lines:', combinedUninvoicedLines);
       }
 
-      setUninvoicedItems(uninvoicedLines);
-      return uninvoicedLines;
+      setUninvoicedItems(combinedUninvoicedLines);
+      return combinedUninvoicedLines;
     } catch (err) {
       console.error('Error fetching uninvoiced item fulfillment lines:', err);
       showNotification(`Error fetching uninvoiced lines: ${err.message}`, 'error');
@@ -1037,7 +1143,7 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
     } finally {
       setUninvoicedLoading(false);
     }
-  }, [recordType, showNotification, mode, originalRecordLineItems]);
+  }, [recordType, showNotification, mode, originalRecordLineItems, normalizeIdList]);
   // Fetch unfulfilled sales order lines for ItemFulfillment
   const fetchUnfulfilledSalesOrderLines = useCallback(async (salesOrderId) => {
     if (!salesOrderId || recordType !== 'ItemFulfillment') {
@@ -1131,29 +1237,49 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
 
   // Fetch uninvoiced items when DNID changes for Invoice
   useEffect(() => {
-    if (recordType === 'Invoice' && dnid && (mode === 'new' || mode === 'edit')) {
-      console.log('[SalesItems] DNID changed, fetching uninvoiced items. Mode:', mode);
+    if (recordType === 'Invoice' && (mode === 'new' || mode === 'edit')) {
+      const dnidList = normalizeIdList(dnid);
+      const dnidSignature = getIdSignature(dnidList);
+
+      if (!dnidSignature) {
+        if (mode === 'new') {
+          itemsLoadedFromSessionStorage.current = false;
+        }
+        setUninvoicedItems([]);
+        return;
+      }
+
+      console.log('[SalesItems] DNID changed, fetching uninvoiced items. Mode:', mode, 'IDs:', dnidList);
 
       // Check if this is a bill button scenario
       const sessionStorageData = sessionStorage.getItem('itemFulfillmentDataForBilling');
-      if (mode === 'new' && sessionStorageData) {
-        try {
-          const parsedData = JSON.parse(sessionStorageData);
-          // Only set flag if the dnid matches - this confirms we're on the invoice created from bill button
-          if (parsedData.dnid === dnid) {
-            console.log('[SalesItems] ✅ Detected Bill button scenario - will fetch data for RemQty but not populate dropdown');
-            itemsLoadedFromSessionStorage.current = true;
+      if (mode === 'new') {
+        if (sessionStorageData) {
+          try {
+            const parsedData = JSON.parse(sessionStorageData);
+            const storedFulfillmentId = parsedData?.dnid || parsedData?.itemFulfillmentId || parsedData?.IFID || parsedData?.itemFulfillment;
+            const storedList = normalizeIdList(storedFulfillmentId);
+            const matchesSession = getIdSignature(storedList) === dnidSignature;
+            itemsLoadedFromSessionStorage.current = !!matchesSession;
+            if (matchesSession) {
+              console.log('[SalesItems] ✅ Detected Bill button scenario - will fetch data for RemQty but not populate dropdown');
+            }
+          } catch (e) {
+            console.error('[SalesItems] Error parsing sessionStorage:', e);
+            itemsLoadedFromSessionStorage.current = false;
           }
-        } catch (e) {
-          console.error('[SalesItems] Error parsing sessionStorage:', e);
+        } else {
+          itemsLoadedFromSessionStorage.current = false;
         }
       }
 
       // ALWAYS fetch - we need rawItemFulfillmentLines for RemQty calculations
       // The itemsLoadedFromSessionStorage flag will prevent quantity recalculation in onUpdateField
-      fetchUninvoicedItemFulfillmentLines(dnid);
+      fetchUninvoicedItemFulfillmentLines(dnidList);
+    } else if (mode === 'new') {
+      itemsLoadedFromSessionStorage.current = false;
     }
-  }, [dnid, recordType, mode, fetchUninvoicedItemFulfillmentLines]);
+  }, [dnid, recordType, mode, fetchUninvoicedItemFulfillmentLines, normalizeIdList, getIdSignature]);
 
 
 
@@ -1970,36 +2096,17 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
       const itemFulfillmentLineId = props.dataItem.itemFulfillmentLineId || props.dataItem.ifLineId;
       const currentInvoiceLineQty = parseFloat(props.dataItem.quantityDelivered || props.dataItem.quantity || 0);
 
-      console.log(`[RemQtyCell INVOICE] Processing invoice line:`, {
-        mode: mode,
-        dataItemId: props.dataItem.id,
-        dataItemTempId: props.dataItem.tempId,
-        itemID: props.dataItem.itemID,
-        itemFulfillmentLineId: itemFulfillmentLineId,
-        currentQuantity: currentInvoiceLineQty,
-        hasRawData: !!(rawItemFulfillmentLines && rawItemFulfillmentLines.length > 0),
-        rawDataCount: rawItemFulfillmentLines?.length || 0,
-        hasUninvoicedItems: !!(uninvoicedItems && uninvoicedItems.length > 0)
-      });
-
       if (itemFulfillmentLineId && rawItemFulfillmentLines && rawItemFulfillmentLines.length > 0) {
         // FETCH REAL REMAINING QTY FROM RAW ITEM FULFILLMENT LINE DATA (not from modified uninvoicedItems)
         // This shows the actual remaining quantity from the database ItemFulfillmentLine table
         // EXACTLY THE SAME LOGIC AS ITEMFULFILLMENT: Just IF.quantity - IF.invoicedQty
-        console.log(`[RemQtyCell INVOICE] Looking for IF line ${itemFulfillmentLineId} in rawItemFulfillmentLines:`, rawItemFulfillmentLines.map(l => ({ id: l.id, itemID: l.itemID, qty: l.quantity, invoicedQty: l.invoicedQty })));
-
+    
         const rawItemFulfillmentLine = rawItemFulfillmentLines.find(line => line.id === itemFulfillmentLineId);
         if (rawItemFulfillmentLine) {
           // Real remaining qty = IF quantity - invoicedQty (from database)
           // IMPORTANT: Ensure remainingQty is never negative (Math.max ensures floor of 0)
           // SAME AS ITEMFULFILLMENT: No adding back, just show what's in the database
           remainingQty = Math.max(0, (rawItemFulfillmentLine.quantity || 0) - (rawItemFulfillmentLine.invoicedQty || 0));
-
-          console.log(`[RemQtyCell INVOICE] ✅ FOUND RAW IF Line ${itemFulfillmentLineId}:`, {
-            ifQuantity: rawItemFulfillmentLine.quantity,
-            ifInvoicedQty: rawItemFulfillmentLine.invoicedQty,
-            remaining: remainingQty
-          });
         } else {
           console.log(`[RemQtyCell INVOICE] ❌ NOT FOUND in rawItemFulfillmentLines (itemFulfillmentLineId: ${itemFulfillmentLineId})`);
         }
@@ -2050,8 +2157,6 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
         remainingQty = Math.max(0, props.dataItem.quantity || props.dataItem.quantityInvoiced || props.dataItem.quantityDelivered || 0);
         console.log(`[RemQtyCell INVOICE] ⚠️ FALLBACK: No itemFulfillmentLineId or no raw data. Using dataItem quantity:`, remainingQty);
       }
-
-      console.log(`[RemQtyCell INVOICE] FINAL remainingQty: ${remainingQty}`);
     }
     return (
       <td {...props.tdProps} style={{ textAlign: 'right' }}>
@@ -2531,7 +2636,7 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
     }, [fieldArrayRenderProps, recordType, showNotification, selectedLocation, getProductSalesPriceTaxCode, editIndex]);
 
     // Function to calculate totals
-    const calculateTotals = (items) => {
+    const calculateTotals = React.useCallback((items) => {
       if (!items || items.length === 0) {
         return { totalAmount: 0, totalQuantity: 0 };
       }
@@ -2539,10 +2644,11 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
       const quantityField = recordType === 'Invoice' ? 'quantityDelivered' : 'quantity';
       const totalQuantity = items.reduce((sum, item) => sum + (item[quantityField] || 0), 0);
       return { totalAmount, totalQuantity };
-    };
+    }, [recordType]);
 
     // State-based totals that only update on button actions (Add, Edit, Discard, Delete)
     const [totals, setTotals] = useState(() => calculateTotals(fieldArrayRenderProps.value));
+  const autoPopulateStateRef = useRef({ dnid: null, soid: null });
 
 
     // Initialize parent component with initial total amount
@@ -2565,7 +2671,219 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
 
     // REMOVED: Auto-population logic for SOID changes
 
-    // REMOVED: Auto-population logic for DNID changes
+    useEffect(() => {
+      if (recordType !== 'Invoice' || mode !== 'new') {
+        return;
+      }
+
+      const dnidSignature = getIdSignature(dnid);
+      if (!dnidSignature) {
+        autoPopulateStateRef.current = { ...autoPopulateStateRef.current, dnid: null };
+
+        const currentItems = Array.isArray(fieldArrayRenderProps.value) ? fieldArrayRenderProps.value : [];
+        if (currentItems.length > 0) {
+          for (let i = currentItems.length - 1; i >= 0; i--) {
+            fieldArrayRenderProps.onRemove({ index: i });
+          }
+          const clearedTotals = calculateTotals([]);
+          setTotals(clearedTotals);
+          if (onTotalAmountChange) {
+            onTotalAmountChange(clearedTotals.totalAmount);
+          }
+        }
+        return;
+      }
+
+      if (itemsLoadedFromSessionStorage.current) {
+        return;
+      }
+
+      if (uninvoicedLoading || !Array.isArray(uninvoicedItems) || uninvoicedItems.length === 0) {
+        return;
+      }
+
+      const availableLines = uninvoicedItems.filter(line => {
+        const quantity = line.quantityDelivered ?? line.quantity ?? 0;
+        const alreadyInvoiced = line.invoicedQty ?? line.invoiceQty ?? 0;
+        return (quantity - alreadyInvoiced) > 0;
+      });
+
+      if (availableLines.length === 0) {
+        return;
+      }
+
+      const currentItems = Array.isArray(fieldArrayRenderProps.value) ? fieldArrayRenderProps.value : [];
+      const previousState = autoPopulateStateRef.current;
+      const shouldPopulate = previousState.dnid !== dnidSignature;
+
+      if (!shouldPopulate || autoPopulateRunningRef.current) {
+        return;
+      }
+
+      console.log('[SalesItems] Auto-populating invoice items from ItemFulfillment:', dnid);
+
+      autoPopulateRunningRef.current = true;
+      try {
+        // Remove all current rows before auto-populating
+        for (let i = currentItems.length - 1; i >= 0; i--) {
+          fieldArrayRenderProps.onRemove({ index: i });
+        }
+
+        const timestamp = Date.now();
+        const newItems = availableLines.map((line, index) => {
+          const quantity = line.quantityDelivered ?? line.quantity ?? 0;
+          const alreadyInvoiced = line.invoicedQty ?? line.invoiceQty ?? 0;
+          const remainingQty = Math.max(0, quantity - alreadyInvoiced);
+          const rate = parseFloat(line.rate || 0);
+          const taxPercent = parseFloat(line.taxPercent || 0);
+          const lineTotal = Math.round(remainingQty * rate * 10000000000) / 10000000000;
+          const taxAmount = Math.round(lineTotal * taxPercent / 100 * 100) / 100;
+          const totalAmount = Math.round(lineTotal * (1 + (taxPercent / 100)) * 100) / 100;
+
+          return {
+            tempId: `auto-${line.id || index}-${timestamp}`,
+            itemID: line.itemID,
+            itemFulfillmentLineId: line.id || line.itemFulfillmentLineId,
+            quantityDelivered: remainingQty,
+            rate,
+            taxID: line.taxID || '',
+            taxPercent,
+            taxAmount,
+            taxRate: taxAmount,
+            totalAmount,
+            dnid: line.dnid || (Array.isArray(dnid) ? dnid[0] : dnid)
+          };
+        });
+
+        newItems.forEach(item => {
+          fieldArrayRenderProps.onPush({ value: item });
+        });
+
+        autoPopulateStateRef.current = { ...autoPopulateStateRef.current, dnid: dnidSignature };
+
+        setEditIndex(undefined);
+        editItemCloneRef.current = undefined;
+
+        const updatedTotals = calculateTotals(newItems);
+        setTotals(updatedTotals);
+        if (onTotalAmountChange) {
+          onTotalAmountChange(updatedTotals.totalAmount);
+        }
+      } finally {
+        autoPopulateRunningRef.current = false;
+      }
+    }, [
+      recordType,
+      mode,
+      dnid,
+      uninvoicedItems,
+      uninvoicedLoading,
+      fieldArrayRenderProps.value,
+      fieldArrayRenderProps.onRemove,
+      fieldArrayRenderProps.onPush,
+      calculateTotals,
+      onTotalAmountChange,
+      getIdSignature
+    ]);
+
+    useEffect(() => {
+      if (recordType !== 'ItemFulfillment' || mode !== 'new') {
+        return;
+      }
+
+      if (!soid) {
+        autoPopulateStateRef.current = { ...autoPopulateStateRef.current, soid: null };
+        return;
+      }
+
+      // Skip auto population if this record was opened via Fulfill button (session data already applied)
+      const sessionData = sessionStorage.getItem('salesOrderDataForFulfillment');
+      if (sessionData) {
+        try {
+          const parsed = JSON.parse(sessionData);
+          const storedSoid = parsed?.soid || parsed?.salesOrderId;
+          if (storedSoid && storedSoid === soid) {
+            return;
+          }
+        } catch (err) {
+          console.error('[SalesItems] Error parsing session storage for fulfillment:', err);
+        }
+      }
+
+      if (unfulfilledLoading || !Array.isArray(unfulfilledItems) || unfulfilledItems.length === 0) {
+        return;
+      }
+
+      const previousState = autoPopulateStateRef.current;
+      const shouldPopulate = previousState.soid !== soid;
+      if (!shouldPopulate || autoPopulateRunningRef.current) {
+        return;
+      }
+
+      console.log('[SalesItems] Auto-populating fulfillment items from SalesOrder:', soid);
+      autoPopulateRunningRef.current = true;
+      try {
+        const currentItems = Array.isArray(fieldArrayRenderProps.value) ? fieldArrayRenderProps.value : [];
+        for (let i = currentItems.length - 1; i >= 0; i--) {
+          fieldArrayRenderProps.onRemove({ index: i });
+        }
+
+        const timestamp = Date.now();
+        const newItems = unfulfilledItems
+          .filter(line => {
+            const orderedQty = line.quantity || 0;
+            const fulfilledQty = line.fulFillQty || 0;
+            return (orderedQty - fulfilledQty) > 0;
+          })
+          .map((line, index) => {
+            const orderedQty = line.quantity || 0;
+            const fulfilledQty = line.fulFillQty || 0;
+            const remainingQty = Math.max(0, orderedQty - fulfilledQty);
+            const rate = parseFloat(line.rate || 0);
+            const taxPercent = parseFloat(line.taxPercent || 0);
+            const lineTotal = Math.round(remainingQty * rate * 10000000000) / 10000000000;
+            const taxAmount = Math.round(lineTotal * taxPercent / 100 * 100) / 100;
+            const totalAmount = Math.round(lineTotal * (1 + (taxPercent / 100)) * 100) / 100;
+
+            return {
+              tempId: `auto-so-${line.id || index}-${timestamp}`,
+              itemID: line.itemID,
+              salesOrderLineId: line.id || line.salesOrderLineId,
+              quantity: remainingQty,
+              rate,
+              taxID: line.taxID || '',
+              taxPercent,
+              taxAmount,
+              totalAmount
+            };
+          });
+
+        newItems.forEach(item => fieldArrayRenderProps.onPush({ value: item }));
+        autoPopulateStateRef.current = { ...autoPopulateStateRef.current, soid };
+
+        setEditIndex(undefined);
+        editItemCloneRef.current = undefined;
+
+        const updatedTotals = calculateTotals(newItems);
+        setTotals(updatedTotals);
+        if (onTotalAmountChange) {
+          onTotalAmountChange(updatedTotals.totalAmount);
+        }
+      } finally {
+        autoPopulateRunningRef.current = false;
+      }
+    }, [
+      recordType,
+      mode,
+      soid,
+      unfulfilledItems,
+      unfulfilledLoading,
+      fieldArrayRenderProps.value,
+      fieldArrayRenderProps.onRemove,
+      fieldArrayRenderProps.onPush,
+      calculateTotals,
+      onTotalAmountChange
+    ]);
 
     // Add a new item
     const onAdd = useCallback((e) => {
@@ -2644,116 +2962,6 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
 
     const onRemove = useCallback(async (dataItem) => {
       const index = dataItem[ITEM_DATA_INDEX];
-
-      // // For ItemFulfillment delete operation, reverse the fulfillQty on salesorderline
-      // if (recordType === 'ItemFulfillment' && dataItem.itemID && soid) {
-      //   try {
-      //     // Use salesOrderLineId for exact match (handles duplicate items correctly)
-      //     let salesOrderLineId = dataItem.salesOrderLineId || dataItem.soLineId;
-
-      //     // If we don't have salesOrderLineId and this is an existing item from DB, try to fetch it
-      //     if (!salesOrderLineId && dataItem.id) {
-      //       try {
-      //         const ifLineResponse = await fetch(buildUrl(`/item-fulfilment-line/${dataItem.id}`), {
-      //           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-      //         });
-      //         if (ifLineResponse.ok) {
-      //           const ifLineData = await ifLineResponse.json();
-      //           salesOrderLineId = ifLineData.salesOrderLineId || ifLineData.soLineId || ifLineData.soid;
-      //         }
-      //       } catch (err) {
-      //         console.warn('Could not fetch salesOrderLineId from ItemFulfillmentLine:', err);
-      //       }
-      //     }
-
-      //     if (salesOrderLineId) {
-      //       // Direct update using the parent line ID
-      //       const response = await fetch(buildUrl(`/salesorderline/${salesOrderLineId}`), {
-      //         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-      //       });
-
-      //       if (response.ok) {
-      //         const salesOrderLine = await response.json();
-      //         const quantityToReverse = dataItem.quantity || dataItem.quantityDelivered || 0;
-      //         const currentFulfillQty = salesOrderLine.fulFillQty || 0;
-      //         const newFulfillQty = Math.max(0, currentFulfillQty - quantityToReverse);
-
-      //         // Update the sales order line
-      //         const updateResponse = await fetch(buildUrl(`/salesorderline/${salesOrderLine.id}`), {
-      //           method: 'PUT',
-      //           headers: { 'Content-Type': 'application/json' },
-      //           body: JSON.stringify({
-      //             ...salesOrderLine,
-      //             fulFillQty: newFulfillQty
-      //           })
-      //         });
-
-      //         if (!updateResponse.ok) {
-      //           console.error('Failed to update sales order line quantity');
-      //         }
-      //       }
-      //     } else {
-      //       console.warn('Cannot update parent SalesOrderLine: salesOrderLineId not found. This may cause issues with duplicate items.');
-      //     }
-      //   } catch (error) {
-      //     console.error('Error reversing sales order line quantity:', error);
-      //   }
-      // }
-
-      // // For Invoice delete operation, reverse the invoicedQty on itemfulfillmentline
-      // if (recordType === 'Invoice' && dataItem.itemID && dnid) {
-      //   try {
-      //     // Use itemFulfillmentLineId for exact match (handles duplicate items correctly)
-      //     let itemFulfillmentLineId = dataItem.itemFulfillmentLineId || dataItem.ifLineId;
-
-      //     // If we don't have itemFulfillmentLineId and this is an existing item from DB, try to fetch it
-      //     if (!itemFulfillmentLineId && dataItem.id) {
-      //       try {
-      //         const invoiceLineResponse = await fetch(buildUrl(`/invoice-line/${dataItem.id}`), {
-      //           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-      //         });
-      //         if (invoiceLineResponse.ok) {
-      //           const invoiceLineData = await invoiceLineResponse.json();
-      //           itemFulfillmentLineId = invoiceLineData.itemFulfillmentLineId || invoiceLineData.ifLineId || invoiceLineData.dnid;
-      //         }
-      //       } catch (err) {
-      //         console.warn('Could not fetch itemFulfillmentLineId from InvoiceLine:', err);
-      //       }
-      //     }
-
-      //     if (itemFulfillmentLineId) {
-      //       // Direct update using the parent line ID
-      //       const response = await fetch(buildUrl(`/item-fulfilment-line/${itemFulfillmentLineId}`), {
-      //         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-      //       });
-
-      //       if (response.ok) {
-      //         const itemFulfillmentLine = await response.json();
-      //         const quantityToReverse = dataItem.quantityDelivered || dataItem.quantity || 0;
-      //         const currentInvoicedQty = itemFulfillmentLine.invoicedQty || 0;
-      //         const newInvoicedQty = Math.max(0, currentInvoicedQty - quantityToReverse);
-
-      //         // Update the item fulfillment line
-      //         const updateResponse = await fetch(buildUrl(`/item-fulfilment-line/${itemFulfillmentLine.id}`), {
-      //           method: 'PUT',
-      //           headers: { 'Content-Type': 'application/json' },
-      //           body: JSON.stringify({
-      //             ...itemFulfillmentLine,
-      //             invoicedQty: newInvoicedQty
-      //           })
-      //         });
-
-      //         if (!updateResponse.ok) {
-      //           console.error('Failed to update item fulfillment line quantity');
-      //         }
-      //       }
-      //     } else {
-      //       console.warn('Cannot update parent ItemFulfillmentLine: itemFulfillmentLineId not found. This may cause issues with duplicate items.');
-      //     }
-      //   } catch (error) {
-      //     console.error('Error reversing item fulfillment line quantity:', error);
-      //   }
-      // }
 
       fieldArrayRenderProps.onRemove({
         index: index
@@ -3076,7 +3284,17 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
         )}
 
         {mode !== 'view' && (
-          <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '8px', paddingRight: '8px' }}>
+          <div
+            style={{
+              margin: '12px 0 16px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '12px',
+              padding: '0 8px'
+            }}
+          >
             <Button
               onClick={onAdd}
               themeColor="success"
@@ -3209,196 +3427,7 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
     );
   }
 
-  // Credit Memo Apply Tab Content
-  const renderApplyTab = () => {
-    if (recordType !== 'CreditMemo') return null;
-
-    const headerInvChecked = invoices.length > 0 && invoices.every((r) => r.checked);
-
-    return (
-      <div className="payment-container apply-invoice-tab-container">
-        <style>{`
-          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f0f2f5; color: #333; padding: 20px; }
-          .payment-container { max-width: 1200px; margin: 0 auto; background-color: #fff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow: hidden; }
-          .header-bar { background-color: #f7f9fa; padding: 15px 20px; border-bottom: 1px solid #ddd; display: flex; align-items: center; gap: 20px; }
-          .header-bar label { font-weight: 600; margin-right: 5px; font-size: 14px; }
-          .header-bar .k-numerictextbox { width: 140px; }
-          .header-bar .k-numerictextbox .k-input { font-size: 14px; }
-          .main-controls-area { padding: 20px 20px 0 20px; }
-          .controls-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-          .k-button { margin-right: 5px; }
-          .subtab-nav { border-bottom: 2px solid #dee2e6; display: flex; }
-          .subtab-link { background: none; border: none; padding: 10px 15px; cursor: pointer; font-size: 14px; font-weight: 600; color: #007bff; margin-bottom: -2px; }
-          .subtab-link.active { border-bottom: 2px solid #007bff; }
-          .subtab-header { background-color: #f7f9fa; padding: 10px 20px; border-bottom: 1px solid #ddd; display: flex; gap: 30px; font-size: 14px; font-weight: bold; }
-          .subtab-header strong { color: #000; }
-          .subtab-content { display: block; padding: 20px; }
-          table { width: 100%; border-collapse: collapse; font-size: 13px; }
-          th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #e0e0e0; }
-          thead { background-color: #f7f9fa; }
-          th { font-weight: 600; color: #555; }
-          tr:hover { background-color: #f5f5f5; }
-          .text-right { text-align: right; }
-          .k-checkbox { width: 16px; height: 16px; cursor: pointer; }
-          .k-checkbox-wrapper .k-checkbox {
-            border: 3px solid #000 !important;
-            background-color: #fff !important;
-            box-shadow: 0 0 0 1px #000 !important;
-          }
-          .k-checkbox-wrapper .k-checkbox:checked {
-            background-color: #000 !important;
-            border-color: #000 !important;
-            box-shadow: 0 0 0 1px #000 !important;
-          }
-          .k-checkbox-wrapper .k-checkbox:checked::after {
-            color: #fff !important;
-            font-weight: bold !important;
-            font-size: 12px !important;
-          }
-          .k-checkbox-wrapper .k-checkbox:hover {
-            border-color: #000 !important;
-            box-shadow: 0 0 0 2px rgba(0,0,0,0.3) !important;
-          }
-          .payment-input .k-numerictextbox { width: 90%; }
-          .payment-input .k-numerictextbox .k-input { text-align: right; }
-        `}</style>
-
-        <div className="header-bar">
-          <div>
-            <label htmlFor="creditAmountLimit">CREDIT AMOUNT *</label>
-            <NumericTextBox
-              id="creditAmountLimit"
-              placeholder="0.00"
-              min={0}
-              step={0}
-              format="n2"
-              decimals={2}
-              spinners={false}
-              value={parseAmount(creditAmountStr)}
-              disabled={true}
-            />
-          </div>
-        </div>
-
-        <div className="main-controls-area">
-          <div className="controls-top-row">
-            <div>
-              <Button
-                type="button"
-                disabled={mode === 'view'}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onClearAll();
-                }}
-              >
-                Clear All
-              </Button>
-            </div>
-          </div>
-
-          <div className="subtab-nav">
-           
-            <Button
-              type="button"
-              className="subtab-link active"
-              hidden = {mode == "view"}
-            >
-              Invoices/Debitmemos
-            </Button>
-          </div>
-        </div>
-
-        <div className="subtab-header">
-          <span>
-            Applied : <strong id="appliedToTotalDisplay">{appliedTo.toFixed(2)}</strong>
-          </span>
-          <span>&bull;</span>
-          <span>
-            Unapplied Amount : <strong id="unappliedAmountDisplay">{unapplied.toFixed(2)}</strong>
-          </span>
-        </div>
-
-        <div className="subtab-content">
-          {creditLoading ? (
-            <div style={{ padding: '20px', textAlign: 'center' }}>
-              <p>Loading invoices and debit memos...</p>
-            </div>
-          ) : false ? (
-            <div style={{ padding: '20px', textAlign: 'center', color: '#d32f2f' }}>
-              <p>Error loading invoices and debit memos</p>
-            </div>
-          ) : invoices.length === 0 ? (
-            <div style={{ padding: '20px', textAlign: 'center' }}>
-              <p>No invoices or debit memos found for this customer.</p>
-            </div>
-          ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>
-                    <Checkbox
-                      className="header-checkbox"
-                      checked={headerInvChecked}
-                      disabled={mode === 'view'}
-                      onChange={(e) => {
-                        onHeaderInvToggle();
-                      }}
-                    />
-                  </th>
-                  <th>DATE</th>
-                  <th>TYPE</th>
-                  <th>REF NO.</th>
-                  <th className="text-right">ORG AMT</th>
-                  <th className="text-right">AMT. DUE</th>
-                  <th className="k-text-center">CREDIT</th>
-                </tr>
-              </thead>
-              <tbody id="invoiceTableBody">
-                {invoices.map((row) => {
-                  const displayValue = row.displayAmount === 0 ? '' : row.displayAmount.toFixed(2);
-                  return (
-                    <tr key={row.id}>
-                      <td>
-                        <Checkbox
-                          className="invoice-checkbox"
-                          checked={row.checked}
-                          disabled={mode === 'view' || row.disabled}
-                          onChange={(e) => {
-                            const isChecked = e.value !== undefined ? e.value : (e.target ? e.target.checked : false);
-                            onInvCheckChange(row.id, isChecked);
-                          }}
-                        />
-                      </td>
-                      <td>{row.date}</td>
-                      <td>{row.type}</td>
-                      <td>{row.refNo}</td>
-                      <td className="text-right">{(row.originalAmount || 0).toFixed(2)}</td>
-                      <td className="text-right">{row.dueAmount.toFixed(2)}</td>
-                      <td className="text-right payment-input">
-                        <NumericTextBox
-                          value={displayValue}
-                          disabled={mode === 'view'}
-                          onChange={(e) => {
-                            onInvApplyChange(row.id, e.target.value);
-                          }}
-                          onFocus={() => onInvApplyFocus(row.id)}
-                          onBlur={() => onInvApplyBlur(row.id)}
-                          format="n2"
-                          step={0}
-                          spinners={false}
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          )}
-        </div>
-      </div>
-    );
-  };
+  const creditMemoHeaderChecked = invoices.length > 0 && invoices.every((row) => row.checked);
 
   // If embedded, return just the FieldArray component to integrate with parent form
   if (embedded) {
@@ -3420,78 +3449,12 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
 
         {/* Tab Navigation for Credit Memo */}
         {recordType === 'CreditMemo' && (
-          <>
-            <style>{`
-              .credit-memo-tabs {
-                display: flex;
-                gap: 8px;
-                border-bottom: 2px solid #e8eaed;
-                margin-bottom: 0;
-                background: transparent;
-                padding: 0;
-                margin-top: 20px;
-              }
-              .credit-memo-tab {
-                padding: 8px 16px;
-                background: #f8f9fa;
-                border: 1px solid #e8eaed;
-                border-bottom: none;
-                cursor: pointer;
-                font-size: 13px;
-                font-weight: 600;
-                color: #5f6368;
-                transition: all 0.2s ease;
-                display: inline-flex;
-                align-items: center;
-                gap: 6px;
-                position: relative;
-                border-radius: 6px 6px 0 0;
-                white-space: nowrap;
-              }
-              .credit-memo-tab:hover {
-                background: #e8f0fe;
-                color: #1a73e8;
-              }
-              .credit-memo-tab.active {
-                background: white;
-                color: #1a73e8;
-                border-bottom: 2px solid white;
-                margin-bottom: -2px;
-                font-weight: 700;
-              }
-              .credit-memo-tab-content {
-                background: white;
-                border: 1px solid #e8eaed;
-                border-top: none;
-                padding: 0;
-                min-height: 300px;
-              }
-            `}</style>
-            <div className="credit-memo-tabs">
-                <button
-                  type="button"
-                  className={`credit-memo-tab ${itemsActiveTab === 'items' ? 'active' : ''}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setItemsActiveTab('items');
-                  }}
-                >
-                  📋 Add Items
-                </button>
-                <button
-                  type="button"
-                  className={`credit-memo-tab ${itemsActiveTab === 'apply' ? 'active' : ''}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setItemsActiveTab('apply');
-                  }}
-                >
-                  💳 Apply Invoice/DebitMemo
-                </button>
-            </div>
-          </>
+          <ApplyTabSwitcher
+            activeTab={itemsActiveTab}
+            onTabChange={handleItemsTabChange}
+            itemsLabel="Add Items"
+            applyLabel="Apply Invoice/DebitMemo"
+          />
         )}
 
         {/* Tab Content */}
@@ -3509,7 +3472,21 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
             onUnfulfilledLinesLoaded={onUnfulfilledLinesLoaded}
           />
         ) : (
-          renderApplyTab()
+          <CreditMemoApplyTab
+            mode={mode}
+            invoices={invoices}
+            creditAmount={parseAmount(creditAmountStr)}
+            appliedTo={appliedTo}
+            unapplied={unapplied}
+            loading={creditLoading}
+            onClearAll={onClearAll}
+            onHeaderToggle={onHeaderInvToggle}
+            onInvoiceCheck={onInvCheckChange}
+            onInvoiceApplyChange={onInvApplyChange}
+            onInvoiceApplyFocus={onInvApplyFocus}
+            onInvoiceApplyBlur={onInvApplyBlur}
+            headerChecked={creditMemoHeaderChecked}
+          />
         )}
       </div>
     );
@@ -3538,34 +3515,12 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
         </h2>
       </div>
 
-      {/* Tab Navigation for Credit Memo */}
       {recordType === 'CreditMemo' && (
-        <div className="tab-navigation">
-          <div className="tab-buttons">
-            <button
-              type="button"
-              className={`tab-button ${itemsActiveTab === 'items' ? 'active' : ''}`}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setItemsActiveTab('items');
-              }}
-            >
-              Items
-            </button>
-            <button
-              type="button"
-              className={`tab-button ${itemsActiveTab === 'apply' ? 'active' : ''}`}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setItemsActiveTab('apply');
-              }}
-            >
-              Apply
-            </button>
-          </div>
-        </div>
+        <ApplyTabSwitcher
+          activeTab={itemsActiveTab}
+          onTabChange={handleItemsTabChange}
+          applyLabel="Apply Invoice/DebitMemo"
+        />
       )}
 
       <Form
@@ -3591,7 +3546,21 @@ const SalesItems = React.memo(({ recordType, mode = 'new', embedded = false, onT
                     onUnfulfilledLinesLoaded={onUnfulfilledLinesLoaded}
                   />
                 ) : (
-                  renderApplyTab()
+                  <CreditMemoApplyTab
+                    mode={mode}
+                    invoices={invoices}
+                    creditAmount={parseAmount(creditAmountStr)}
+                    appliedTo={appliedTo}
+                    unapplied={unapplied}
+                    loading={creditLoading}
+                    onClearAll={onClearAll}
+                    onHeaderToggle={onHeaderInvToggle}
+                    onInvoiceCheck={onInvCheckChange}
+                    onInvoiceApplyChange={onInvApplyChange}
+                    onInvoiceApplyFocus={onInvApplyFocus}
+                    onInvoiceApplyBlur={onInvApplyBlur}
+                    headerChecked={creditMemoHeaderChecked}
+                  />
                 )}
               </div>
             </div>

@@ -7,7 +7,7 @@ import { DatePicker } from '@progress/kendo-react-dateinputs';
 import { Button } from '@progress/kendo-react-buttons';
 import { Notification } from '@progress/kendo-react-notification';
 import { Fade } from '@progress/kendo-react-animation';
-import ConfirmDialog from '../shared/ConfirmDialog';
+import ConfirmDialog from '../../shared/components/ConfirmDialog';
 import { FaSave, FaTimes, FaTrash, FaBoxes, FaClipboardList, FaEdit } from 'react-icons/fa';
 import { useCustomers, useVendors, useLocations, useChartOfAccount, useProducts, useTaxes } from '../../hooks/useMasterData';
 import { useDynamicForm } from '../../hooks/useDynamicForm';
@@ -340,17 +340,19 @@ const cleanPayload = (payload) => {
   return cleaned;
 };
 
+const MASTER_DATA_NO_FETCH = { autoFetch: false };
+
 const MasterDataForm = React.memo(({ recordType, mode = 'new' }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   
   // Call all hooks at the top level
-  const customerHooks = useCustomers();
-  const vendorHooks = useVendors();
-  const locationHooks = useLocations();
-  const chartOfAccountHooks = useChartOfAccount();
-  const productHooks = useProducts();
-  const taxHooks = useTaxes();
+  const customerHooks = useCustomers(MASTER_DATA_NO_FETCH);
+  const vendorHooks = useVendors(MASTER_DATA_NO_FETCH);
+  const locationHooks = useLocations(MASTER_DATA_NO_FETCH);
+  const chartOfAccountHooks = useChartOfAccount(MASTER_DATA_NO_FETCH);
+  const productHooks = useProducts(MASTER_DATA_NO_FETCH);
+  const taxHooks = useTaxes(MASTER_DATA_NO_FETCH);
   
   // Select appropriate hooks using useMemo
   const hooks = useMemo(() => {

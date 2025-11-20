@@ -14,20 +14,10 @@ import { clone } from '@progress/kendo-react-common';
 import { FaSave, FaTimes, FaPlus, FaTrash, FaEdit, FaCheck, FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
 import { useDynamicForm } from '../../hooks/useDynamicForm';
 import useInventoryDetail from '../../hooks/useInventoryDetail';
+import cleanPayload from '../../utils/cleanPayload';
+import VendorCreditApplyTab from './components/VendorCreditApplyTab';
+import ApplyTabSwitcher from '../../shared/components/ApplyTabSwitcher';
 import '../../shared/styles/DynamicFormCSS.css';
-
-// Helper function to remove empty, null, or undefined fields from payload
-const cleanPayload = (payload) => {
-  const cleaned = {};
-  Object.keys(payload).forEach(key => {
-    const value = payload[key];
-    // Only include non-empty values (excluding empty strings, null, undefined)
-    if (value !== '' && value !== null && value !== undefined) {
-      cleaned[key] = value;
-    }
-  });
-  return cleaned;
-};
 
 // Create React Context for editing
 const ItemGridEditContext = React.createContext({});
@@ -52,15 +42,22 @@ const PurchaseItems = React.memo(({ recordType, mode = 'new', embedded = false, 
 
   // Vendor Credit Apply functionality states
   const [activeTab, setActiveTab] = useState('items');
+  const handleVendorCreditTabChange = useCallback((nextTab) => {
+    setActiveTab(nextTab);
+  }, []);
   const [creditAmountStr, setCreditAmountStr] = useState('');
   const [vendorBills, setVendorBills] = useState([]);
   const [appliedTo, setAppliedTo] = useState(0);
   const [unapplied, setUnapplied] = useState(0);
   const [creditLoading, setCreditLoading] = useState(false);
+  const vendorCreditHeaderChecked = vendorBills.length > 0 && vendorBills.every((row) => row.checked);
   const lockSeqRef = useRef(1);
   const editCtxRef = useRef(new Map());
   const isInitialLoadRef = useRef(true);
   const originalPaymentLinesRef = useRef(null);
+  const itemsLoadedFromSessionStorage = useRef({ itemReceipt: false, vendorBill: false });
+  const autoPopulateStateRef = useRef({ poid: null, irid: null });
+  const autoPopulateRunningRef = useRef(false);
 
   // Purchase Order selection state for ItemReceipt
   const [unreceivedLines, setUnreceivedLines] = useState([]);
@@ -949,6 +946,8 @@ const PurchaseItems = React.memo(({ recordType, mode = 'new', embedded = false, 
 
         // Initialize form data
         const initialFormData = initializeFormData(itemConfig);
+        itemsLoadedFromSessionStorage.current.itemReceipt = false;
+        itemsLoadedFromSessionStorage.current.vendorBill = false;
 
         // FOR ITEM RECEIPT: Check sessionStorage for purchase order data
         if (recordType === 'ItemReceipt' && mode === 'new') {
@@ -960,6 +959,7 @@ const PurchaseItems = React.memo(({ recordType, mode = 'new', embedded = false, 
               if (itemsArray.length > 0) {
                 console.log('[PurchaseItems] Loading items from sessionStorage for ItemReceipt:', itemsArray);
                 initialFormData.items = itemsArray;
+                itemsLoadedFromSessionStorage.current.itemReceipt = true;
               }
             } catch (error) {
               console.error('Error parsing purchase order data from sessionStorage:', error);
@@ -977,6 +977,7 @@ const PurchaseItems = React.memo(({ recordType, mode = 'new', embedded = false, 
               if (itemsArray.length > 0) {
                 console.log('[PurchaseItems] Loading items from sessionStorage for VendorBill:', itemsArray);
                 initialFormData.items = itemsArray;
+                itemsLoadedFromSessionStorage.current.vendorBill = true;
               }
             } catch (error) {
               console.error('Error parsing item receipt data from sessionStorage:', error);
@@ -1020,16 +1021,58 @@ const PurchaseItems = React.memo(({ recordType, mode = 'new', embedded = false, 
   useEffect(() => {
     console.log('[PurchaseItems] useEffect for PO lines - recordType:', recordType, 'poid:', poid, 'mode:', mode);
     if (recordType === 'ItemReceipt' && poid && (mode === 'new' || mode === 'edit')) {
+      if (mode === 'new') {
+        const sessionData = sessionStorage.getItem('purchaseOrderDataForReceiving');
+        if (sessionData) {
+          try {
+            const parsed = JSON.parse(sessionData);
+            const storedPoid = parsed?.poid || parsed?.purchaseOrderId || parsed?.purchaseOrder;
+            const matchesSession = storedPoid && storedPoid === poid;
+            itemsLoadedFromSessionStorage.current.itemReceipt = !!matchesSession;
+            if (matchesSession) {
+              console.log('[PurchaseItems] ✅ Detected Receive button scenario - preserving session-loaded items');
+            }
+          } catch (e) {
+            console.error('[PurchaseItems] Error parsing purchase order session data:', e);
+            itemsLoadedFromSessionStorage.current.itemReceipt = false;
+          }
+        } else {
+          itemsLoadedFromSessionStorage.current.itemReceipt = false;
+        }
+      }
       console.log('[PurchaseItems] Calling fetchUnreceivedPurchaseOrderLines with poid:', poid);
       fetchUnreceivedPurchaseOrderLines(poid);
+    } else if (mode === 'new') {
+      itemsLoadedFromSessionStorage.current.itemReceipt = false;
     }
   }, [poid, recordType, mode, fetchUnreceivedPurchaseOrderLines]);
 
   // Fetch unbilled items when IRID changes for VendorBill
   useEffect(() => {
     if (recordType === 'VendorBill' && irid && (mode === 'new' || mode === 'edit')) {
+      if (mode === 'new') {
+        const sessionData = sessionStorage.getItem('itemReceiptDataForBilling');
+        if (sessionData) {
+          try {
+            const parsed = JSON.parse(sessionData);
+            const storedIrid = parsed?.irid || parsed?.itemReceiptId || parsed?.itemReceipt;
+            const matchesSession = storedIrid && storedIrid === irid;
+            itemsLoadedFromSessionStorage.current.vendorBill = !!matchesSession;
+            if (matchesSession) {
+              console.log('[PurchaseItems] ✅ Detected Bill button scenario - preserving session-loaded items');
+            }
+          } catch (e) {
+            console.error('[PurchaseItems] Error parsing item receipt session data:', e);
+            itemsLoadedFromSessionStorage.current.vendorBill = false;
+          }
+        } else {
+          itemsLoadedFromSessionStorage.current.vendorBill = false;
+        }
+      }
       console.log('[PurchaseItems] IRID changed, fetching unbilled items:', irid);
       fetchUnbilledItemReceiptLines(irid);
+    } else if (mode === 'new') {
+      itemsLoadedFromSessionStorage.current.vendorBill = false;
     }
   }, [irid, recordType, mode, fetchUnbilledItemReceiptLines]);
 
@@ -2096,6 +2139,185 @@ const PurchaseItems = React.memo(({ recordType, mode = 'new', embedded = false, 
     }, [fieldArrayRenderProps.value, recordType, onTotalAmountChange]);
 
 
+    useEffect(() => {
+      if (recordType !== 'ItemReceipt' || mode !== 'new') return;
+
+      if (!poid) {
+        autoPopulateStateRef.current = { ...autoPopulateStateRef.current, poid: null };
+        return;
+      }
+
+      if (itemsLoadedFromSessionStorage.current.itemReceipt) {
+        return;
+      }
+
+      if (!Array.isArray(unreceivedLines) || unreceivedLines.length === 0) {
+        return;
+      }
+
+      const availableLines = unreceivedLines.filter(line => {
+        const orderedQty = Number(line.quantity || 0);
+        const receivedQty = Number(line.receivedQty || 0);
+        return (orderedQty - receivedQty) > 0;
+      });
+
+      if (availableLines.length === 0) {
+        return;
+      }
+
+      const previousState = autoPopulateStateRef.current;
+      if (previousState.poid === poid || autoPopulateRunningRef.current) {
+        return;
+      }
+
+      console.log('[PurchaseItems] Auto-populating item receipt lines from PurchaseOrder:', poid);
+      autoPopulateRunningRef.current = true;
+      try {
+        const currentItems = Array.isArray(fieldArrayRenderProps.value) ? fieldArrayRenderProps.value : [];
+        for (let i = currentItems.length - 1; i >= 0; i--) {
+          fieldArrayRenderProps.onRemove({ index: i });
+        }
+
+        const timestamp = Date.now();
+        const newItems = availableLines.map((line, index) => {
+          const orderedQty = Number(line.quantity || 0);
+          const receivedQty = Number(line.receivedQty || 0);
+          const remainingQty = Math.max(0, orderedQty - receivedQty);
+          const rate = parseFloat(line.rate || 0);
+          const taxPercent = parseFloat(line.taxPercent || 0);
+          const lineTotal = Math.round(remainingQty * rate * 10000000000) / 10000000000;
+          const taxAmount = Math.round(lineTotal * taxPercent / 100 * 100) / 100;
+          const totalAmount = Math.round(lineTotal * (1 + (taxPercent / 100)) * 100) / 100;
+
+          return {
+            tempId: `auto-po-${line.id || index}-${timestamp}`,
+            itemID: line.itemID,
+            purchaseOrderLineId: line.id || line.purchaseOrderLineId,
+            quantityReceived: remainingQty,
+            rate,
+            taxID: line.taxID || '',
+            taxPercent,
+            taxAmount,
+            totalAmount,
+            poid: line.poid || poid
+          };
+        });
+
+        newItems.forEach(item => fieldArrayRenderProps.onPush({ value: item }));
+        autoPopulateStateRef.current = { ...autoPopulateStateRef.current, poid };
+        setEditIndex(undefined);
+        editItemCloneRef.current = undefined;
+
+        const updatedTotals = calculateTotals(newItems);
+        setTotals(updatedTotals);
+        if (onTotalAmountChange) {
+          onTotalAmountChange(updatedTotals.totalAmount);
+        }
+      } finally {
+        autoPopulateRunningRef.current = false;
+      }
+    }, [
+      recordType,
+      mode,
+      poid,
+      unreceivedLines,
+      fieldArrayRenderProps.value,
+      fieldArrayRenderProps.onRemove,
+      fieldArrayRenderProps.onPush,
+      calculateTotals,
+      onTotalAmountChange
+    ]);
+
+    useEffect(() => {
+      if (recordType !== 'VendorBill' || mode !== 'new') return;
+
+      if (!irid) {
+        autoPopulateStateRef.current = { ...autoPopulateStateRef.current, irid: null };
+        return;
+      }
+
+      if (itemsLoadedFromSessionStorage.current.vendorBill) {
+        return;
+      }
+
+      if (unbilledLoading || !Array.isArray(unbilledItems) || unbilledItems.length === 0) {
+        return;
+      }
+
+      const availableLines = unbilledItems.filter(line => {
+        const receivedQty = Number(line.quantity || 0);
+        const billedQty = Number(line.invoicedQty || line.invoiceQty || 0);
+        return (receivedQty - billedQty) > 0;
+      });
+
+      if (availableLines.length === 0) {
+        return;
+      }
+
+      const previousState = autoPopulateStateRef.current;
+      if (previousState.irid === irid || autoPopulateRunningRef.current) {
+        return;
+      }
+
+      console.log('[PurchaseItems] Auto-populating vendor bill lines from ItemReceipt:', irid);
+      autoPopulateRunningRef.current = true;
+      try {
+        const currentItems = Array.isArray(fieldArrayRenderProps.value) ? fieldArrayRenderProps.value : [];
+        for (let i = currentItems.length - 1; i >= 0; i--) {
+          fieldArrayRenderProps.onRemove({ index: i });
+        }
+
+        const timestamp = Date.now();
+        const newItems = availableLines.map((line, index) => {
+          const receivedQty = Number(line.quantity || 0);
+          const billedQty = Number(line.invoicedQty || line.invoiceQty || 0);
+          const remainingQty = Math.max(0, receivedQty - billedQty);
+          const rate = parseFloat(line.rate || 0);
+          const taxPercent = parseFloat(line.taxPercent || 0);
+          const lineTotal = Math.round(remainingQty * rate * 10000000000) / 10000000000;
+          const taxAmount = Math.round(lineTotal * taxPercent / 100 * 100) / 100;
+          const totalAmount = Math.round(lineTotal * (1 + (taxPercent / 100)) * 100) / 100;
+
+          return {
+            tempId: `auto-ir-${line.id || index}-${timestamp}`,
+            itemID: line.itemID,
+            itemReceiptLineId: line.id || line.itemReceiptLineId,
+            quantity: remainingQty,
+            rate,
+            taxID: line.taxID || '',
+            taxPercent,
+            taxAmount,
+            totalAmount,
+            irid: line.irid || irid
+          };
+        });
+
+        newItems.forEach(item => fieldArrayRenderProps.onPush({ value: item }));
+        autoPopulateStateRef.current = { ...autoPopulateStateRef.current, irid };
+        setEditIndex(undefined);
+        editItemCloneRef.current = undefined;
+
+        const updatedTotals = calculateTotals(newItems);
+        setTotals(updatedTotals);
+        if (onTotalAmountChange) {
+          onTotalAmountChange(updatedTotals.totalAmount);
+        }
+      } finally {
+        autoPopulateRunningRef.current = false;
+      }
+    }, [
+      recordType,
+      mode,
+      irid,
+      unbilledItems,
+      unbilledLoading,
+      fieldArrayRenderProps.value,
+      fieldArrayRenderProps.onRemove,
+      fieldArrayRenderProps.onPush,
+      calculateTotals,
+      onTotalAmountChange
+    ]);
+
     // Add a new item
     const onAdd = useCallback((e) => {
 
@@ -2507,7 +2729,17 @@ const PurchaseItems = React.memo(({ recordType, mode = 'new', embedded = false, 
         )}
 
         {mode !== 'view' && (
-          <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '8px', paddingRight: '8px' }}>
+          <div
+            style={{
+              margin: '12px 0 16px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '12px',
+              padding: '0 8px'
+            }}
+          >
             <Button
               onClick={onAdd}
               themeColor="success"
@@ -2639,167 +2871,6 @@ const PurchaseItems = React.memo(({ recordType, mode = 'new', embedded = false, 
     );
   }
 
-  // Vendor Credit Apply Tab Content
-  const renderApplyTab = () => {
-    if (recordType !== 'VendorCredit') return null;
-
-    const headerBillChecked = vendorBills.length > 0 && vendorBills.every((r) => r.checked);
-
-    return (
-      <div className="payment-container">
-        <style>{`
-          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f0f2f5; color: #333; padding: 20px; }
-          .payment-container { max-width: 1200px; margin: 0 auto; background-color: #fff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow: hidden; }
-          .header-bar { background-color: #f7f9fa; padding: 15px 20px; border-bottom: 1px solid #ddd; display: flex; align-items: center; gap: 20px; }
-          .header-bar label { font-weight: 600; margin-right: 5px; font-size: 14px; }
-          .header-bar .k-numerictextbox { width: 140px; }
-          .header-bar .k-numerictextbox .k-input { font-size: 14px; }
-          .main-controls-area { padding: 20px 20px 0 20px; }
-          .controls-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-          .k-button { margin-right: 5px; }
-          .subtab-nav { border-bottom: 2px solid #dee2e6; display: flex; }
-          .subtab-link { background: none; border: none; padding: 10px 15px; cursor: pointer; font-size: 14px; font-weight: 600; color: #007bff; margin-bottom: -2px; }
-          .subtab-link.active { border-bottom: 2px solid #007bff; }
-          .subtab-header { background-color: #f7f9fa; padding: 10px 20px; border-bottom: 1px solid #ddd; display: flex; gap: 30px; font-size: 14px; font-weight: bold; }
-          .subtab-header strong { color: #000; }
-          .subtab-content { display: block; padding: 20px; }
-          table { width: 100%; border-collapse: collapse; font-size: 13px; }
-          th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #e0e0e0; }
-          thead { background-color: #f7f9fa; }
-          th { font-weight: 600; color: #555; }
-          tr:hover { background-color: #f5f5f5; }
-          .text-right { text-align: right; }
-          .k-checkbox { width: 16px; height: 16px; cursor: pointer; }
-          .payment-input .k-numerictextbox { width: 90%; }
-          .payment-input .k-numerictextbox .k-input { text-align: right; }
-        `}</style>
-
-        <div className="header-bar">
-          <div>
-            <label htmlFor="creditAmountLimit">CREDIT AMOUNT *</label>
-            <NumericTextBox
-              id="creditAmountLimit"
-              placeholder="0.00"
-              min={0}
-              step={0}
-              format="n2"
-              decimals={2}
-              spinners={false}
-              value={parseAmount(creditAmountStr)}
-              disabled={true}
-            />
-          </div>
-        </div>
-
-        <div className="main-controls-area">
-          <div className="controls-top-row">
-            <div>
-              <Button
-                type="button"
-                disabled={mode === 'view'}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onClearAll();
-                }}
-              >
-                Clear All
-              </Button>
-            </div>
-          </div>
-
-          <div className="subtab-nav">
-            <button
-              type="button"
-              className="subtab-link active"
-            >
-              Vendor Bills
-            </button>
-          </div>
-        </div>
-
-        <div className="subtab-header">
-          <span>
-            Applied : <strong>{appliedTo.toFixed(2)}</strong>
-          </span>
-          <span>&bull;</span>
-          <span>
-            Unapplied Amount : <strong>{unapplied.toFixed(2)}</strong>
-          </span>
-        </div>
-
-        <div className="subtab-content">
-          {creditLoading ? (
-            <div style={{ padding: '20px', textAlign: 'center' }}>
-              <p>Loading vendor bills...</p>
-            </div>
-          ) : vendorBills.length === 0 ? (
-            <div style={{ padding: '20px', textAlign: 'center' }}>
-              <p>No vendor bills found for this vendor.</p>
-            </div>
-          ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>
-                    <Checkbox
-                      checked={headerBillChecked}
-                      disabled={mode === 'view'}
-                      onChange={(e) => {
-                        onHeaderBillToggle();
-                      }}
-                    />
-                  </th>
-                  <th>DATE</th>
-                  <th>TYPE</th>
-                  <th>REF NO.</th>
-                  <th className="text-right">AMT. DUE</th>
-                  <th className="text-right">CREDIT</th>
-                </tr>
-              </thead>
-              <tbody>
-                {vendorBills.map((row) => {
-                  const displayValue = row.displayAmount === 0 ? '' : row.displayAmount.toFixed(2);
-                  return (
-                    <tr key={row.id}>
-                      <td>
-                        <Checkbox
-                          checked={row.checked}
-                          disabled={mode === 'view' || row.disabled}
-                          onChange={(e) => {
-                            const isChecked = e.value !== undefined ? e.value : (e.target ? e.target.checked : false);
-                            onBillCheckChange(row.id, isChecked);
-                          }}
-                        />
-                      </td>
-                      <td>{row.date}</td>
-                      <td>{row.type}</td>
-                      <td>{row.refNo}</td>
-                      <td className="text-right">{row.dueAmount.toFixed(2)}</td>
-                      <td className="text-right payment-input">
-                        <NumericTextBox
-                          value={displayValue}
-                          disabled={mode === 'view'}
-                          onChange={(e) => {
-                            onBillApplyChange(row.id, e.target.value);
-                          }}
-                          onFocus={() => onBillApplyFocus(row.id)}
-                          onBlur={() => onBillApplyBlur(row.id)}
-                          format="n2"
-                          step={0}
-                          spinners={false}
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          )}
-        </div>
-      </div>
-    );
-  };
 
   // If embedded, return just the FieldArray component to integrate with parent form
   if (embedded) {
@@ -2821,74 +2892,11 @@ const PurchaseItems = React.memo(({ recordType, mode = 'new', embedded = false, 
 
         {/* Tab Navigation for Vendor Credit */}
         {recordType === 'VendorCredit' && (
-          <>
-            <style>{`
-              .modern-tab-navigation {
-                margin: 20px 0;
-                border-bottom: 2px solid #e8eaed;
-              }
-              .modern-tab-buttons {
-                display: flex;
-                gap: 0;
-                background: #f8f9fa;
-                border-radius: 8px 8px 0 0;
-                padding: 4px;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-              }
-              .modern-tab-button {
-                background: transparent;
-                border: none;
-                padding: 12px 24px;
-                font-size: 14px;
-                font-weight: 500;
-                color: #5f6368;
-                cursor: pointer;
-                border-radius: 6px;
-                transition: all 0.2s ease;
-                position: relative;
-                min-width: 100px;
-              }
-              .modern-tab-button:hover {
-                background: #e8f0fe;
-                color: #1a73e8;
-              }
-              .modern-tab-button.active {
-                background: #1a73e8;
-                color: white;
-                box-shadow: 0 2px 8px rgba(26, 115, 232, 0.3);
-              }
-              .modern-tab-button:focus {
-                outline: 2px solid #1a73e8;
-                outline-offset: 2px;
-              }
-            `}</style>
-            <div className="modern-tab-navigation">
-              <div className="modern-tab-buttons">
-                <button
-                  type="button"
-                  className={`modern-tab-button ${activeTab === 'items' ? 'active' : ''}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setActiveTab('items');
-                  }}
-                >
-                  📋 Items
-                </button>
-                <button
-                  type="button"
-                  className={`modern-tab-button ${activeTab === 'apply' ? 'active' : ''}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setActiveTab('apply');
-                  }}
-                >
-                  💳 Apply
-                </button>
-              </div>
-            </div>
-          </>
+          <ApplyTabSwitcher
+            activeTab={activeTab}
+            onTabChange={handleVendorCreditTabChange}
+            applyLabel="Apply"
+          />
         )}
 
         {/* Tab Content */}
@@ -2906,7 +2914,21 @@ const PurchaseItems = React.memo(({ recordType, mode = 'new', embedded = false, 
             onUnreceivedLinesLoaded={onUnreceivedLinesLoaded}
           />
         ) : (
-          renderApplyTab()
+          <VendorCreditApplyTab
+            mode={mode}
+            vendorBills={vendorBills}
+            creditAmount={parseAmount(creditAmountStr)}
+            appliedTo={appliedTo}
+            unapplied={unapplied}
+            loading={creditLoading}
+            onClearAll={onClearAll}
+            onHeaderToggle={onHeaderBillToggle}
+            onBillCheck={onBillCheckChange}
+            onBillApplyChange={onBillApplyChange}
+            onBillApplyFocus={onBillApplyFocus}
+            onBillApplyBlur={onBillApplyBlur}
+            headerChecked={vendorCreditHeaderChecked}
+          />
         )}
       </div>
     );
@@ -2935,34 +2957,12 @@ const PurchaseItems = React.memo(({ recordType, mode = 'new', embedded = false, 
         </h2>
       </div>
 
-      {/* Tab Navigation for Vendor Credit */}
       {recordType === 'VendorCredit' && (
-        <div className="tab-navigation">
-          <div className="tab-buttons">
-            <button
-              type="button"
-              className={`tab-button ${activeTab === 'items' ? 'active' : ''}`}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setActiveTab('items');
-              }}
-            >
-              Items
-            </button>
-            <button
-              type="button"
-              className={`tab-button ${activeTab === 'apply' ? 'active' : ''}`}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setActiveTab('apply');
-              }}
-            >
-              Apply
-            </button>
-          </div>
-        </div>
+        <ApplyTabSwitcher
+          activeTab={activeTab}
+          onTabChange={handleVendorCreditTabChange}
+          applyLabel="Apply"
+        />
       )}
 
       <Form
@@ -2987,7 +2987,21 @@ const PurchaseItems = React.memo(({ recordType, mode = 'new', embedded = false, 
                     onUnreceivedLinesLoaded={onUnreceivedLinesLoaded}
                   />
                 ) : (
-                  renderApplyTab()
+                  <VendorCreditApplyTab
+                    mode={mode}
+                    vendorBills={vendorBills}
+                    creditAmount={parseAmount(creditAmountStr)}
+                    appliedTo={appliedTo}
+                    unapplied={unapplied}
+                    loading={creditLoading}
+                    onClearAll={onClearAll}
+                    onHeaderToggle={onHeaderBillToggle}
+                    onBillCheck={onBillCheckChange}
+                    onBillApplyChange={onBillApplyChange}
+                    onBillApplyFocus={onBillApplyFocus}
+                    onBillApplyBlur={onBillApplyBlur}
+                    headerChecked={vendorCreditHeaderChecked}
+                  />
                 )}
               </div>
             </div>

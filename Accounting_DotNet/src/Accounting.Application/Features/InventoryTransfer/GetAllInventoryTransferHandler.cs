@@ -31,12 +31,20 @@ namespace Accounting.Application.Features
 
         protected override IQueryable<InventoryTransfer> ApplyFiltering(IQueryable<InventoryTransfer> queryable, Expression<Func<InventoryTransfer, bool>> predicate, GetAllInventoryTransfer request)
         {
-            return queryable
+            var query = queryable
                 .Include(x => x.Customer)
                 .Include(x => x.FromLocationNavigation)
                 .Include(x => x.ToLocationNavigation)
                 .Include(x => x.FormNavigation)
                 .Where(predicate);
+
+            if (!string.IsNullOrWhiteSpace(request.SortBy) && request.SortBy.Equals("sequenceNumber", StringComparison.OrdinalIgnoreCase))
+            {
+                var ascending = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase);
+                query = ascending ? query.OrderBy(x => x.SequenceNumber) : query.OrderByDescending(x => x.SequenceNumber);
+            }
+
+            return query;
         }
 
         protected override Expression<Func<InventoryTransfer, bool>> ComposeFilter(Expression<Func<InventoryTransfer, bool>> predicate, GetAllInventoryTransfer request)
@@ -80,4 +88,3 @@ namespace Accounting.Application.Features
         }
     }
 }
-

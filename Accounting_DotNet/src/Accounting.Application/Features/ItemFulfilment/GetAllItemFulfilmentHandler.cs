@@ -42,6 +42,20 @@ namespace Accounting.Application.Features
                     || (x.Customer != null && EF.Functions.Like(x.Customer.Name!, $"%{request.SearchText}%"));
             }
 
+            // Add status filter (open/closed) if provided
+            if (!string.IsNullOrWhiteSpace(request.Status) && !request.Status.Equals("all", StringComparison.OrdinalIgnoreCase))
+            {
+                var normalizedStatus = request.Status.Trim().ToLowerInvariant();
+                Expression<Func<ItemFulfilment, bool>> statusFilter = x =>
+                    x.StatusNavigation != null &&
+                    x.StatusNavigation.Name != null &&
+                    x.StatusNavigation.Name.ToLower() == normalizedStatus;
+
+                filterExpression = filterExpression == null
+                    ? statusFilter
+                    : filterExpression.And(statusFilter);
+            }
+
             // Apply the filter if any conditions were added
             return filterExpression != null ? predicate.Or(filterExpression) : predicate;
         }

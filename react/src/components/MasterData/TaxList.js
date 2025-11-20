@@ -2,13 +2,14 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Grid, GridColumn } from '@progress/kendo-react-grid';
 import { Button } from '@progress/kendo-react-buttons';
-import { process } from '@progress/kendo-data-query';
 import { Input } from '@progress/kendo-react-inputs';
+import { DropDownList } from '@progress/kendo-react-dropdowns';
 import { Dialog, DialogActionsBar } from '@progress/kendo-react-dialogs';
 import { Notification } from '@progress/kendo-react-notification';
 import { Fade } from '@progress/kendo-react-animation';
-import { FaPlus, FaSearch, FaSync } from 'react-icons/fa';
+import { FaPlus, FaSearch, FaSync, FaFilter } from 'react-icons/fa';
 import { apiConfig, buildUrl } from '../../config/api';
+import { STATUS_FILTER_OPTIONS, appendInactiveFilter } from '../../utils/statusFilters';
 
 const TaxList = () => {
   const navigate = useNavigate();
@@ -18,7 +19,9 @@ const TaxList = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState('');
+  const [debouncedSearchText, setDebouncedSearchText] = useState('');
   const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
+  const [statusFilter, setStatusFilter] = useState('All');
 
   // State for grid data and filtering/sorting
   const [gridData, setGridData] = useState({
@@ -29,12 +32,31 @@ const TaxList = () => {
     ]
   });
 
-  const fetchData = useCallback(async (pageNumber = 1, pageSize = 10) => {
+  const fetchData = useCallback(async (
+    pageNumber = 1,
+    pageSize = 10,
+    search = '',
+    status = 'All',
+    sortField = null,
+    sortDir = null
+  ) => {
     try {
       setLoading(true);
       setError(null);
 
-      const url = buildUrl(`/tax?PageNumber=${pageNumber}&PageSize=${pageSize}`);
+      let queryParams = `PageNumber=${pageNumber}&PageSize=${pageSize}`;
+
+      if (search && search.trim() !== '') {
+        queryParams += `&SearchText=${encodeURIComponent(search.trim())}`;
+      }
+
+      queryParams = appendInactiveFilter(status, queryParams);
+
+      if (sortField && sortDir) {
+        queryParams += `&SortBy=${encodeURIComponent(sortField)}&SortOrder=${sortDir === 'asc' ? 'asc' : 'desc'}`;
+      }
+
+      const url = buildUrl(`/tax?${queryParams}`);
       const response = await fetch(url);
 
       if (!response.ok) {
@@ -69,8 +91,20 @@ const TaxList = () => {
   }, []);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    const timer = setTimeout(() => {
+      setDebouncedSearchText(searchText);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [searchText]);
+
+  useEffect(() => {
+    setGridData(prev => prev.skip === 0 ? prev : { ...prev, skip: 0 });
+    const sortField = gridData.sort?.[0]?.field || null;
+    const sortDir = gridData.sort?.[0]?.dir || null;
+    fetchData(1, gridData.take, debouncedSearchText, statusFilter, sortField, sortDir);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearchText, statusFilter]);
 
   const dataStateChange = (e) => {
     const newDataState = e.dataState;
@@ -78,9 +112,15 @@ const TaxList = () => {
 
     const pageNumber = Math.floor(newDataState.skip / newDataState.take) + 1;
     const pageSize = newDataState.take;
+    const sortField = newDataState.sort?.[0]?.field || null;
+    const sortDir = newDataState.sort?.[0]?.dir || null;
 
-    if (pageNumber !== currentPage || pageSize !== gridData.take) {
-      fetchData(pageNumber, pageSize);
+    const oldSortField = gridData.sort?.[0]?.field || null;
+    const oldSortDir = gridData.sort?.[0]?.dir || null;
+    const sortChanged = sortField !== oldSortField || sortDir !== oldSortDir;
+
+    if (pageNumber !== currentPage || pageSize !== gridData.take || sortChanged) {
+      fetchData(pageNumber, pageSize, debouncedSearchText, statusFilter, sortField, sortDir);
     }
   };
 
@@ -105,20 +145,8 @@ const TaxList = () => {
       return [];
     }
 
-    let filteredData = [...data.results];
-
-    // Apply search filter
-    if (searchText) {
-      filteredData = filteredData.filter(tax =>
-        Object.values(tax)
-          .join(' ')
-          .toLowerCase()
-          .includes(searchText.toLowerCase())
-      );
-    }
-
-    return filteredData;
-  }, [data, searchText]);
+    return data.results;
+  }, [data]);
 
   // Handle View button click
   const handleView = (id) => {
@@ -133,7 +161,9 @@ const TaxList = () => {
   const handleRefresh = () => {
     const pageNumber = Math.floor(gridData.skip / gridData.take) + 1;
     const pageSize = gridData.take;
-    fetchData(pageNumber, pageSize);
+    const sortField = gridData.sort?.[0]?.field || null;
+    const sortDir = gridData.sort?.[0]?.dir || null;
+    fetchData(pageNumber, pageSize, debouncedSearchText, statusFilter, sortField, sortDir);
     showNotification('Taxes refreshed successfully', 'success');
   };
 
@@ -147,6 +177,18 @@ const TaxList = () => {
     return (
       <td {...props.tdProps} style={{ textAlign: 'right' }}>
         {formatTaxRate(props.dataItem[props.field])}
+      </td>
+    );
+  };
+
+  const StatusCell = (props) => {
+    const isInactive = props.dataItem.inactive;
+    const statusText = isInactive ? 'Inactive' : 'Active';
+    const badgeClass = isInactive ? 'status-inactive' : 'status-active';
+
+    return (
+      <td {...props.tdProps} style={{ textAlign: 'center' }}>
+        <span className={`status-badge ${badgeClass}`}>{statusText}</span>
       </td>
     );
   };
@@ -258,6 +300,15 @@ const TaxList = () => {
               onChange={(e) => setSearchText(e.target.value)}
             />
           </div>
+          <div className="filter-bar">
+            <FaFilter className="filter-icon" />
+            <DropDownList
+              data={STATUS_FILTER_OPTIONS}
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              style={{ width: '100%' }}
+            />
+          </div>
           <Button
             onClick={handleRefresh}
             className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
@@ -293,10 +344,11 @@ const TaxList = () => {
               minHeight: '400px'
             }}
           >
-            <GridColumn title="No" width="70px" cell={SerialNumberCell} />
+            <GridColumn title="No" width="70px" cell={SerialNumberCell} sortable={false} />
             <GridColumn field="name" title="Tax Name" width="300px" />
-            <GridColumn field="taxRate" title="Tax Rate" width="150px" cell={TaxRateCell} />
-            <GridColumn title="Actions" width="180px" cell={ActionCell} locked={true} lockable={false} />
+            <GridColumn field="taxRate" title="Tax Rate" width="150px" cell={TaxRateCell} sortable={false} />
+            <GridColumn field="inactive" title="Status" width="140px" cell={StatusCell} sortable={false} />
+            <GridColumn title="Actions" width="180px" cell={ActionCell} locked={true} lockable={false} sortable={false} />
           </Grid>
         )}
 
@@ -351,6 +403,52 @@ const TaxList = () => {
             padding-left: 28px;
             font-size: 13px;
             height: 32px;
+          }
+
+          .filter-bar {
+            position: relative;
+            width: 180px;
+          }
+
+          .filter-icon {
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #718096;
+            font-size: 13px;
+            z-index: 1;
+          }
+
+          .filter-bar .k-dropdown {
+            width: 100%;
+          }
+
+          .filter-bar .k-input-inner {
+            padding-left: 28px;
+            font-size: 13px;
+            height: 32px;
+          }
+
+          .status-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            min-width: 80px;
+          }
+
+          .status-active {
+            background-color: #C6F6D5;
+            color: #2F855A;
+          }
+
+          .status-inactive {
+            background-color: #FED7D7;
+            color: #9B2C2C;
           }
 
           .k-grid {

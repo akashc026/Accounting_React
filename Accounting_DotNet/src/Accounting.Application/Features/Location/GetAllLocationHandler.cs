@@ -34,22 +34,30 @@ namespace Accounting.Application.Features
             // Build the filter expression
             Expression<Func<Location, bool>>? filterExpression = null;
 
-            // Add IsActive filter
-            if (request.IsActive == true)
+            // Add inactive filter (fallback to IsActive for backward compatibility)
+            var inactiveFilterValue = request.Inactive;
+            if (!inactiveFilterValue.HasValue && request.IsActive.HasValue)
             {
-                filterExpression = x => x.Inactive != true;
+                inactiveFilterValue = request.IsActive.Value ? false : true;
             }
-            else if (request.IsActive == false)
+
+            if (inactiveFilterValue.HasValue)
             {
-                filterExpression = x => x.Inactive == true;
+                Expression<Func<Location, bool>> inactiveFilter = inactiveFilterValue.Value
+                    ? x => x.Inactive == true
+                    : x => x.Inactive != true;
+
+                filterExpression = filterExpression == null
+                    ? inactiveFilter
+                    : filterExpression.And(inactiveFilter);
             }
 
             // Add search text filter
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
+                var likePattern = $"%{request.SearchText}%";
                 Expression<Func<Location, bool>> searchFilter = x =>
-                    EF.Functions.Like(x.Name, request.SearchText) ||
-                    EF.Functions.Like(x.Address, request.SearchText);
+                    EF.Functions.Like(x.Name!, likePattern);
 
                 filterExpression = filterExpression == null
                     ? searchFilter
@@ -58,6 +66,19 @@ namespace Accounting.Application.Features
 
             // Apply the filter if any conditions were added
             return filterExpression != null ? predicate.Or(filterExpression) : predicate;
+        }
+
+        protected override IQueryable<Location> ApplyFiltering(IQueryable<Location> queryable, Expression<Func<Location, bool>> predicate, GetAllLocation request)
+        {
+            var query = queryable.Where(predicate);
+
+            if (!string.IsNullOrWhiteSpace(request.SortBy) && request.SortBy.Equals("name", StringComparison.OrdinalIgnoreCase))
+            {
+                var ascending = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase);
+                query = ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name);
+            }
+
+            return query;
         }
 
         protected override PaginatedList<LocationResultDto> OnQuerySuccess(DbQuerySuccessArgs<GetAllLocation, IEnumerable<Location>> args)

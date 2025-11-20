@@ -8,286 +8,90 @@ import { DatePicker } from '@progress/kendo-react-dateinputs';
 import { Button } from '@progress/kendo-react-buttons';
 import { Notification } from '@progress/kendo-react-notification';
 import { Fade } from '@progress/kendo-react-animation';
-import ConfirmDialog from '../shared/ConfirmDialog';
-import { FaSave, FaTimes, FaTrash, FaPlus, FaClipboardList, FaExchangeAlt, FaEye, FaTruck, FaBoxes, FaChartBar } from 'react-icons/fa';
+import ConfirmDialog from '../../shared/components/ConfirmDialog';
+import { FaSave, FaTimes, FaTrash, FaPlus, FaClipboardList, FaExchangeAlt, FaTruck, FaBoxes, FaChartBar } from 'react-icons/fa';
 import { useDynamicForm } from '../../hooks/useDynamicForm';
 import { useMasterData, useVendorCredits, useStatus } from '../../hooks/useMasterData';
 import useInventoryDetail from '../../hooks/useInventoryDetail';
 import { processJvLines, validateJvAccountsBeforeCreate, generateJvLines } from '../../hooks/useProcessingJvLines';
 import { processJournal } from '../../hooks/useJournal';
 import PurchaseItems from './PurchaseItems';
+import cleanPayload from '../../utils/cleanPayload';
+import usePurchaseTransactions from './hooks/usePurchaseTransactions';
+import { TransactionsPanel, GlImpactPanel } from '../../shared/components/TransactionsPanel';
+import { injectTransactionTabStyles } from '../../shared/styles/transactionTabs';
 import '../../shared/styles/DynamicFormCSS.css';
 
-// Tab styles for Purchase form - compact rectangle tabs
-const tabStyles = `
-  .purchase-tabs {
-    display: flex;
-    gap: 8px;
-    border-bottom: 2px solid #e8eaed;
-    margin-bottom: 0;
-    background: transparent;
-    padding: 0;
+const MASTER_DATA_NO_FETCH = { autoFetch: false };
+
+injectTransactionTabStyles({
+  tabsClass: 'purchase-tabs',
+  tabClass: 'purchase-tab',
+  tabContentClass: 'purchase-tab-content'
+});
+
+const PURCHASE_ORDER_ID_FIELDS = ['purchaseOrderId', 'purchaseOrder', 'poid', 'POID'];
+const ITEM_RECEIPT_ID_FIELDS = ['itemReceiptId', 'itemReceipt', 'irid', 'IRID'];
+
+const hasMeaningfulValue = (value) => value !== undefined && value !== null && value !== '';
+
+const getCaseInsensitiveFieldValue = (obj, fieldName) => {
+  if (!obj) return undefined;
+  if (hasMeaningfulValue(obj[fieldName])) {
+    return obj[fieldName];
   }
-
-  .purchase-tab {
-    padding: 8px 16px;
-    background: #f8f9fa;
-    border: 1px solid #e8eaed;
-    border-bottom: none;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
-    color: #5f6368;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    position: relative;
-    border-radius: 6px 6px 0 0;
-    white-space: nowrap;
+  const lookupKey = Object.keys(obj).find(key => key.toLowerCase() === fieldName.toLowerCase());
+  if (lookupKey && hasMeaningfulValue(obj[lookupKey])) {
+    return obj[lookupKey];
   }
+  return undefined;
+};
 
-  .purchase-tab:hover {
-    background: #e8f0fe;
-    color: #1a73e8;
+const getIdFromObject = (obj = {}, fields = []) => {
+  for (const field of fields) {
+    const value = getCaseInsensitiveFieldValue(obj, field);
+    if (hasMeaningfulValue(value)) {
+      return value;
+    }
   }
+  return null;
+};
 
-  .purchase-tab.active {
-    background: white;
-    color: #1a73e8;
-    border-bottom: 2px solid white;
-    margin-bottom: -2px;
-    font-weight: 700;
+const getIdFromGetter = (valueGetter, fields = []) => {
+  if (!valueGetter) return null;
+  for (const field of fields) {
+    const variations = [
+      field,
+      field.toLowerCase(),
+      field.toUpperCase(),
+      field.charAt(0).toLowerCase() + field.slice(1)
+    ];
+    for (const variant of variations) {
+      const value = valueGetter(variant);
+      if (hasMeaningfulValue(value)) {
+        return value;
+      }
+    }
   }
+  return null;
+};
 
-  .purchase-tab svg {
-    font-size: 14px;
-  }
-
-  .purchase-tab:nth-child(1) svg {
-    color: #4285f4;
-  }
-
-  .purchase-tab:nth-child(1).active svg {
-    color: #4285f4;
-  }
-
-  .purchase-tab:nth-child(2) svg {
-    color: #ea4335;
-  }
-
-  .purchase-tab:nth-child(2).active svg {
-    color: #ea4335;
-  }
-
-  .purchase-tab:nth-child(3) svg {
-    color: #34a853;
-  }
-
-  .purchase-tab:nth-child(3).active svg {
-    color: #34a853;
-  }
-
-  .purchase-tab-content {
-    background: white;
-    border: 1px solid #e8eaed;
-    border-top: none;
-    padding: 0;
-    min-height: 300px;
-  }
-
-  .transactions-section {
-    padding: 24px;
-    background: linear-gradient(135deg, #fafbfc 0%, #ffffff 100%);
-    border-radius: 0;
-    margin: 0;
-    min-height: 300px;
-  }
-
-  .transactions-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid #f1f3f4;
-  }
-
-  .transactions-header h3 {
-    margin: 0;
-    color: #202124;
-    font-size: 16px;
-    font-weight: 600;
-  }
-
-  .transactions-icon {
-    color: #1a73e8;
-    font-size: 16px;
-  }
-
-  .transactions-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin-top: 0;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
-    border: 1px solid #e8eaed;
-    background: white;
-  }
-
-  .transactions-table th {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e8eaed 100%);
-    color: #5f6368;
-    padding: 10px 16px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    position: relative;
-    border: none;
-    border-bottom: 2px solid #e8eaed;
-  }
-
-  .transactions-table th:first-child {
-    border-radius: 8px 0 0 0;
-  }
-
-  .transactions-table th:last-child {
-    border-radius: 0 8px 0 0;
-  }
-
-  .transactions-table td {
-    padding: 12px 16px;
-    border-bottom: 1px solid #f1f3f4;
-    font-size: 13px;
-    color: #202124;
-    font-weight: 400;
-    position: relative;
-    vertical-align: middle;
-  }
-
-  .transactions-table tbody tr {
-    transition: all 0.3s ease;
-    background: white;
-  }
-
-  .transactions-table tbody tr:nth-child(even) {
-    background: #fafbfc;
-  }
-
-  .transactions-table tbody tr:hover {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e8f0fe 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(26,115,232,0.12);
-  }
-
-  .transactions-table tbody tr:hover td {
-    color: #1a73e8;
-  }
-
-  .transactions-table tbody tr:last-child td {
-    border-bottom: none;
-  }
-
-  .transactions-table tbody tr:last-child td:first-child {
-    border-radius: 0 0 0 8px;
-  }
-
-  .transactions-table tbody tr:last-child td:last-child {
-    border-radius: 0 0 8px 0;
-  }
-
-  .view-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    background: linear-gradient(135deg, #1a73e8 0%, #4285f4 100%);
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: 500;
-    font-size: 13px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 4px rgba(26,115,232,0.2);
-    border: none;
-  }
-
-  .view-link:hover {
-    background: linear-gradient(135deg, #1557b0 0%, #1a73e8 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(26,115,232,0.3);
-    color: white;
-    text-decoration: none;
-  }
-
-  .payment-amount {
-    font-weight: 600;
-    color: #137333;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .payment-amount::before {
-    font-size: 12px;
-    color: #5f6368;
-  }
-
-  .payment-id {
-    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-    background: #f8f9fa;
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 12px;
-    color: #5f6368;
-    border: 1px solid #e8eaed;
-    font-weight: 500;
-  }
-
-  .empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: #5f6368;
-  }
-
-  .empty-state-icon {
-    font-size: 36px;
-    color: #dadce0;
-    margin-bottom: 12px;
-  }
-
-  .empty-state-text {
-    font-size: 14px;
-    font-weight: 400;
-    margin: 0;
-  }
-`;
-
-// Inject styles
-if (typeof document !== 'undefined' && !document.getElementById('purchase-tab-styles')) {
-  const style = document.createElement('style');
-  style.id = 'purchase-tab-styles';
-  style.textContent = tabStyles;
-  document.head.appendChild(style);
-}
-
-// Helper function to remove empty, null, or undefined fields from payload
-const cleanPayload = (payload) => {
-  const cleaned = {};
-  Object.keys(payload).forEach(key => {
-    const value = payload[key];
-    // Only include non-empty values (excluding empty strings, null, undefined)
-    if (value !== '' && value !== null && value !== undefined) {
-      cleaned[key] = value;
+const assignIdToObject = (target, value, fields = []) => {
+  if (!target || !hasMeaningfulValue(value)) return;
+  fields.forEach(field => {
+    if (!hasMeaningfulValue(target[field])) {
+      target[field] = value;
     }
   });
-  return cleaned;
 };
+
+const getPurchaseOrderIdFromObject = (obj = {}) => getIdFromObject(obj, PURCHASE_ORDER_ID_FIELDS);
+const getPurchaseOrderIdFromGetter = (valueGetter) => getIdFromGetter(valueGetter, PURCHASE_ORDER_ID_FIELDS);
+const assignPurchaseOrderIdToObject = (target, value) => assignIdToObject(target, value, PURCHASE_ORDER_ID_FIELDS);
+
+const getItemReceiptIdFromObject = (obj = {}) => getIdFromObject(obj, ITEM_RECEIPT_ID_FIELDS);
+const getItemReceiptIdFromGetter = (valueGetter) => getIdFromGetter(valueGetter, ITEM_RECEIPT_ID_FIELDS);
+const assignItemReceiptIdToObject = (target, value) => assignIdToObject(target, value, ITEM_RECEIPT_ID_FIELDS);
 
 const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
   const navigate = useNavigate();
@@ -296,10 +100,10 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
   const { loading: dynamicLoading, error: dynamicError, fetchFormConfiguration } = useDynamicForm();
 
   // Purchase-specific hooks - all called unconditionally to follow Rules of Hooks
-  const purchaseOrdersHook = useMasterData('purchase-order');
-  const itemReceiptsHook = useMasterData('item-receipt');
-  const vendorBillsHook = useMasterData('vendor-bill');
-  const vendorCreditsHook = useVendorCredits();
+  const purchaseOrdersHook = useMasterData('purchase-order', MASTER_DATA_NO_FETCH);
+  const itemReceiptsHook = useMasterData('item-receipt', MASTER_DATA_NO_FETCH);
+  const vendorBillsHook = useMasterData('vendor-bill', MASTER_DATA_NO_FETCH);
+  const vendorCreditsHook = useVendorCredits(MASTER_DATA_NO_FETCH);
   const statusHook = useStatus();
 
   // Inventory management hook for ItemReceipt
@@ -336,10 +140,6 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
   const [itemsTotalAmount, setItemsTotalAmount] = useState(0);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [activeTab, setActiveTab] = useState('items');
-  const [glImpactData, setGlImpactData] = useState([]);
-  const [glImpactLoading, setGlImpactLoading] = useState(false);
-  const [transactionsData, setTransactionsData] = useState([]);
-  const [transactionsLoading, setTransactionsLoading] = useState(false);
 
   const [vendorCreditPaymentLineData, setVendorCreditPaymentLineData] = useState({
     creditAmount: '',
@@ -362,6 +162,17 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
   const notificationTimerRef = React.useRef(null);
   const originalFormData = React.useRef(null);
 
+  const {
+    transactionsData,
+    transactionsLoading,
+    glImpactData,
+    glImpactLoading,
+    loadTransactions,
+    loadGlImpact,
+    resetTransactions,
+    resetGlImpact
+  } = usePurchaseTransactions(recordType);
+
   // Transaction form navigation - simplified for purchase orders, item receipts, vendor bills, and vendor credits
   const navigationPaths = {
     PurchaseOrder: '/purchase-order',
@@ -374,6 +185,13 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
     "Closed": "b2dae51c-12b6-4a90-adfd-4e2345026b70",
     "Open": "5e3f19d1-f615-4954-88cb-30975d52b8cd"
   }
+  const showGlImpactTab = mode !== 'edit';
+
+  useEffect(() => {
+    if (!showGlImpactTab && activeTab === 'glImpact') {
+      setActiveTab('items');
+    }
+  }, [showGlImpactTab, activeTab]);
 
   const fetchDropdownData = useCallback(async (source, signal) => {
     try {
@@ -416,219 +234,6 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
     }
   }, []);
 
-  // Fetch transactions data for vendor payment lines and vendor credit payment lines
-  const fetchTransactionsData = useCallback(async (recordId) => {
-    if (!recordId || recordType !== 'VendorBill') {
-      return [];
-    }
-
-    setTransactionsLoading(true);
-    try {
-      // Fetch both vendor payment lines and vendor credit payment lines in parallel
-      const [vendorPaymentResponse, vendorCreditPaymentResponse] = await Promise.all([
-        fetch(`${apiConfig.baseURL}/vendor-payment-line/by-record-id/${recordId}`, {
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-        }),
-        fetch(`${apiConfig.baseURL}/vendor-credit-payment-line/by-record-id/${recordId}`, {
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-        })
-      ]);
-
-      // Process vendor payment lines
-      let vendorPaymentData = [];
-      if (vendorPaymentResponse.ok) {
-        const paymentData = await vendorPaymentResponse.json();
-        vendorPaymentData = Array.isArray(paymentData) ? paymentData.map(item => ({
-          ...item,
-          transactionType: 'Vendor Payment'
-        })) : [];
-      } else if (vendorPaymentResponse.status !== 404) {
-        console.warn(`Failed to fetch vendor payment lines: ${vendorPaymentResponse.status}`);
-      }
-
-      // Process vendor credit payment lines
-      let vendorCreditPaymentData = [];
-      if (vendorCreditPaymentResponse.ok) {
-        const creditData = await vendorCreditPaymentResponse.json();
-        vendorCreditPaymentData = Array.isArray(creditData) ? creditData.map(item => ({
-          ...item,
-          transactionType: 'Vendor Credit'
-        })) : [];
-      } else if (vendorCreditPaymentResponse.status !== 404) {
-        console.warn(`Failed to fetch vendor credit payment lines: ${vendorCreditPaymentResponse.status}`);
-      }
-
-      // Combine both types of transactions
-      const allTransactions = [...vendorPaymentData, ...vendorCreditPaymentData];
-
-      // Sort by date if available, or by ID
-      allTransactions.sort((a, b) => {
-        if (a.createdAt && b.createdAt) {
-          return new Date(b.createdAt) - new Date(a.createdAt);
-        }
-        return (b.id || 0) - (a.id || 0);
-      });
-
-      return allTransactions;
-    } catch (err) {
-      console.error('Error fetching transactions data:', err);
-      return [];
-    } finally {
-      setTransactionsLoading(false);
-    }
-  }, [recordType]);
-
-  // Fetch GL Impact data for the current record
-  const fetchGLImpactData = useCallback(async (recordId) => {
-    if (!recordId || recordType === 'PurchaseOrder') {
-      return [];
-    }
-
-    try {
-      setGlImpactLoading(true);
-      const response = await fetch(`${apiConfig.baseURL}/journal-entry-line/by-record-id/${recordId}`, {
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-      });
-
-      if (response.ok) {
-        const glData = await response.json();
-        return Array.isArray(glData) ? glData : [];
-      }
-      return [];
-    } catch (err) {
-      console.error('Error fetching GL Impact data:', err);
-      return [];
-    } finally {
-      setGlImpactLoading(false);
-    }
-  }, [recordType]);
-
-  // Render transactions table
-  const renderTransactionsTable = () => {
-    if (transactionsLoading) {
-      return (
-        <div className="transactions-section">
-          <div className="loading-transactions">
-            <div className="spinner"></div>
-            Loading payment transactions...
-          </div>
-        </div>
-      );
-    }
-
-    if (!transactionsData || transactionsData.length === 0) {
-      return (
-        <div className="transactions-section">
-          <div className="no-transactions">
-            <FaExchangeAlt />
-            No payment transactions found for this {recordType.toLowerCase()}.
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div className="transactions-section">
-        <table className="transactions-table">
-          <thead>
-            <tr>
-              <th>Action</th>
-              <th>Type</th>
-              <th>Reference</th>
-              <th>Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactionsData.map((transaction, index) => (
-              <tr key={transaction.id || index}>
-                <td>
-                  {transaction.transactionType === 'Vendor Payment' && (
-                    <button
-                      className="view-button"
-                      onClick={() => navigate(`/vendor-payment/view/${transaction.paymentId}`)}
-                    >
-                      <FaEye /> View
-                    </button>
-                  )}
-                  {transaction.transactionType === 'Vendor Credit' && (
-                    <button
-                      className="view-button"
-                      onClick={() => navigate(`/vendor-credit/view/${transaction.paymentId || transaction.vcid}`)}
-                    >
-                      <FaEye /> View
-                    </button>
-                  )}
-                </td>
-                <td>{transaction.transactionType || 'Unknown'}</td>
-                <td>{transaction.paymentSeqNum || transaction.vendorCreditSeqNum || 'N/A'}</td>
-                <td>{(transaction.paymentAmount || 0).toFixed(2)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
-
-  // Render GL Impact table
-  const renderGLImpactTable = () => {
-    if (glImpactLoading) {
-      return (
-        <div className="transactions-section">
-          <div className="empty-state">
-            <div className="empty-state-icon">⏳</div>
-            <p className="empty-state-text">Loading GL Impact data...</p>
-          </div>
-        </div>
-      );
-    }
-
-    if (!glImpactData || glImpactData.length === 0) {
-      return (
-        <div className="transactions-section">
-          <div className="empty-state">
-            <div className="empty-state-icon">📊</div>
-            <p className="empty-state-text">
-              No GL Impact data found for this {recordType.toLowerCase()}.
-            </p>
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div className="transactions-section">
-        <table className="transactions-table">
-          <thead>
-            <tr>
-              <th>Account Name</th>
-              <th>Debit</th>
-              <th>Credit</th>
-              <th>Memo</th>
-            </tr>
-          </thead>
-          <tbody>
-            {glImpactData.map((entry, index) => (
-              <tr key={entry.id || index}>
-                <td>{entry.accountName || ''}</td>
-                <td>
-                  <span className="payment-amount">
-                    {entry.debit ? entry.debit.toFixed(2) : '0.00'}
-                  </span>
-                </td>
-                <td>
-                  <span className="payment-amount">
-                    {entry.credit ? entry.credit.toFixed(2) : '0.00'}
-                  </span>
-                </td>
-                <td>{entry.memo || ''}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
 
   const fetchCustomFormFields = async (formId) => {
     try {
@@ -1020,8 +625,9 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
                 }
 
                 // Populate ItemReceipt form with PurchaseOrder data
-                if (purchaseOrderData.poid) {
-                  initialFormData.poid = purchaseOrderData.poid;
+                const sessionPurchaseOrderId = getPurchaseOrderIdFromObject(purchaseOrderData);
+                if (sessionPurchaseOrderId) {
+                  assignPurchaseOrderIdToObject(initialFormData, sessionPurchaseOrderId);
                 }
 
                 if (purchaseOrderData.vendorID) {
@@ -1115,8 +721,9 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
                 }
 
                 // Populate VendorBill form with ItemReceipt data
-                if (itemReceiptData.irid) {
-                  initialFormData.irid = itemReceiptData.irid;
+                const sessionItemReceiptId = getItemReceiptIdFromObject(itemReceiptData);
+                if (sessionItemReceiptId) {
+                  assignItemReceiptIdToObject(initialFormData, sessionItemReceiptId);
                 }
                 if (itemReceiptData.vendorID) {
                   initialFormData.vendorID = itemReceiptData.vendorID;
@@ -1393,27 +1000,18 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
                 // Don't throw - line items loading is not critical for form display
               }
 
-              // Load transactions data for VendorBill and VendorCredit in view mode
-              if (mode === 'view' && ['VendorBill', 'VendorCredit'].includes(recordType)) {
-                try {
-                  const transactions = await fetchTransactionsData(id);
-                  if (!isMounted) return;
-                  setTransactionsData(transactions);
-                } catch (transactionError) {
-                  // Don't throw - transactions loading is not critical for form display
-                }
+              // Load transactions data in view mode when applicable
+              if (mode === 'view' && recordType === 'VendorBill') {
+                loadTransactions(id);
+              } else {
+                resetTransactions();
               }
 
               // Load GL Impact data for edit and view modes (skip for PurchaseOrder)
               if ((mode === 'edit' || mode === 'view') && recordType !== 'PurchaseOrder') {
-                try {
-                  const glData = await fetchGLImpactData(id);
-                  if (!isMounted) return;
-                  setGlImpactData(glData);
-                } catch (glError) {
-                  console.error('Error loading GL Impact data:', glError);
-                  // Don't throw - GL Impact loading is not critical for form display
-                }
+                loadGlImpact(id);
+              } else {
+                resetGlImpact();
               }
 
               // If a form is already selected, load its custom fields
@@ -1478,7 +1076,7 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
     return () => {
       isMounted = false;
     };
-  }, [mode, id, recordType, statusHook.data]); // Only stable dependencies
+  }, [mode, id, recordType, statusHook.data, loadTransactions, loadGlImpact, resetTransactions, resetGlImpact]);
 
   // Cleanup effect to reset state when component unmounts
   useEffect(() => {
@@ -2958,13 +2556,16 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
   const updatePurchaseOrderLineQuantities = async (receiptItems, isEdit = false, originalReceiptItems = []) => {
     if (recordType !== 'ItemReceipt') return;
 
-    let purchaseOrderId = formData.poid || formData.purchaseOrderId;
+    let purchaseOrderId = getPurchaseOrderIdFromObject(formData);
 
     // If no purchase order ID in formData, try to get it from the receipt items
     if (!purchaseOrderId && receiptItems.length > 0) {
       const firstItem = receiptItems[0];
-      if (firstItem && (firstItem.poid || firstItem.purchaseOrderId)) {
-        purchaseOrderId = firstItem.poid || firstItem.purchaseOrderId;
+      if (firstItem) {
+        const firstItemPurchaseOrderId = getPurchaseOrderIdFromObject(firstItem);
+        if (firstItemPurchaseOrderId) {
+          purchaseOrderId = firstItemPurchaseOrderId;
+        }
       }
     }
 
@@ -2974,8 +2575,9 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
         const purchaseOrderDataString = sessionStorage.getItem('purchaseOrderDataForReceiving');
         if (purchaseOrderDataString) {
           const purchaseOrderData = JSON.parse(purchaseOrderDataString);
-          if (purchaseOrderData.poid) {
-            purchaseOrderId = purchaseOrderData.poid;
+          const storedPurchaseOrderId = getPurchaseOrderIdFromObject(purchaseOrderData);
+          if (storedPurchaseOrderId) {
+            purchaseOrderId = storedPurchaseOrderId;
           }
         }
       } catch (error) {
@@ -2993,7 +2595,10 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
 
           if (receiptResponse.ok) {
             const receiptData = await receiptResponse.json();
-            purchaseOrderId = receiptData.poid || receiptData.purchaseOrderId;
+            const receiptPurchaseOrderId = getPurchaseOrderIdFromObject(receiptData);
+            if (receiptPurchaseOrderId) {
+              purchaseOrderId = receiptPurchaseOrderId;
+            }
           }
         } catch (error) {
         }
@@ -3163,14 +2768,17 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
   const updateItemReceiptLineQuantities = async (vendorBillItems, isEdit = false, originalVendorBillItems = []) => {
     if (recordType !== 'VendorBill') return;
 
-    let itemReceiptId = formData.irid || formData.itemReceiptId;
+    let itemReceiptId = getItemReceiptIdFromObject(formData);
 
     // If no item receipt ID in formData, try to get it from the vendor bill items
     if (!itemReceiptId && vendorBillItems.length > 0) {
       // For new vendor bills, get IRID from the vendor bill line items
       const firstItem = vendorBillItems[0];
-      if (firstItem && (firstItem.irid || firstItem.itemReceiptId)) {
-        itemReceiptId = firstItem.irid || firstItem.itemReceiptId;
+      if (firstItem) {
+        const firstItemReceiptId = getItemReceiptIdFromObject(firstItem);
+        if (firstItemReceiptId) {
+          itemReceiptId = firstItemReceiptId;
+        }
       }
     }
 
@@ -3180,8 +2788,9 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
         const itemReceiptDataString = sessionStorage.getItem('itemReceiptDataForBilling');
         if (itemReceiptDataString) {
           const itemReceiptData = JSON.parse(itemReceiptDataString);
-          if (itemReceiptData.irid) {
-            itemReceiptId = itemReceiptData.irid;
+          const storedItemReceiptId = getItemReceiptIdFromObject(itemReceiptData);
+          if (storedItemReceiptId) {
+            itemReceiptId = storedItemReceiptId;
           }
         }
       } catch (error) {
@@ -3355,7 +2964,7 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
     try {
       if (recordType === 'ItemReceipt') {
         // Check if PurchaseOrder is fully received
-        const purchaseOrderId = standardData.poid || standardData.purchaseOrderId;
+        const purchaseOrderId = getPurchaseOrderIdFromObject(standardData);
         if (purchaseOrderId) {
 
           // Call unreceived API to check remaining unreceived items
@@ -3396,7 +3005,7 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
         }
       } else if (recordType === 'VendorBill') {
         // Check if ItemReceipt is fully invoiced
-        const itemReceiptId = standardData.irid || standardData.itemReceiptId;
+        const itemReceiptId = getItemReceiptIdFromObject(standardData);
         if (itemReceiptId) {
           console.log(`[Status Update] Checking if ItemReceipt ${itemReceiptId} is fully invoiced...`);
 
@@ -4154,7 +3763,7 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
           // Update parent record status to "Open" when deleting child records
           if (recordType === 'ItemReceipt') {
             // Update PurchaseOrder status to "Open" if purchaseOrderId is available
-            const purchaseOrderId = formData.poid || formData.purchaseOrderId;
+            const purchaseOrderId = getPurchaseOrderIdFromObject(formData);
             if (purchaseOrderId) {
               try {
                 console.log(`[Status Update] Setting PurchaseOrder ${purchaseOrderId} status to Open`);
@@ -4177,7 +3786,7 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
             }
           } else if (recordType === 'VendorBill') {
             // Update ItemReceipt status to "Open" if itemReceiptId is available
-            const itemReceiptId = formData.irid || formData.itemReceiptId;
+            const itemReceiptId = getItemReceiptIdFromObject(formData);
             if (itemReceiptId) {
               try {
                 console.log(`[Status Update] Setting ItemReceipt ${itemReceiptId} status to Open`);
@@ -4874,6 +4483,16 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
           render={(formRenderProps) => {
             // Calculate transaction summary totals from current form items
             const currentItems = formRenderProps.valueGetter('items') || [];
+            const resolvedPurchaseOrderId = recordType === 'ItemReceipt'
+              ? (mode === 'new'
+                ? getPurchaseOrderIdFromGetter(formRenderProps.valueGetter)
+                : getPurchaseOrderIdFromObject(formData) || (formData.items && formData.items.length > 0 && getPurchaseOrderIdFromObject(formData.items[0])))
+              : (mode === 'new' ? id : null);
+            const resolvedItemReceiptId = recordType === 'VendorBill'
+              ? (mode === 'new'
+                ? getItemReceiptIdFromGetter(formRenderProps.valueGetter)
+                : getItemReceiptIdFromObject(formData))
+              : (mode === 'new' ? id : null);
 
             return (
               <FormElement>
@@ -5037,12 +4656,14 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
                               <FaExchangeAlt /> Payments
                             </button>
                           )}
-                          <button
-                            className={`purchase-tab ${activeTab === 'glImpact' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('glImpact')}
-                          >
-                            <FaChartBar /> GL Impact
-                          </button>
+                          {showGlImpactTab && (
+                            <button
+                              className={`purchase-tab ${activeTab === 'glImpact' ? 'active' : ''}`}
+                              onClick={() => setActiveTab('glImpact')}
+                            >
+                              <FaChartBar /> GL Impact
+                            </button>
+                          )}
                         </div>
 
                         <div className="purchase-tab-content" style={{ display: activeTab === 'items' ? 'block' : 'none' }}>
@@ -5053,8 +4674,8 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
                             onTotalAmountChange={setItemsTotalAmount}
                             headerDiscount={formRenderProps.valueGetter('discount') || 0}
                             selectedLocation={selectedLocation}
-                            poid={recordType === 'ItemReceipt' ? (mode === 'new' ? formRenderProps.valueGetter('purchaseOrderId') || formRenderProps.valueGetter('poid') || formRenderProps.valueGetter('purchaseOrder') : formData.poid || formData.purchaseOrderId || formData.purchaseOrder || (formData.items && formData.items.length > 0 && formData.items[0].poid)) : (mode === 'new' ? id : null)}
-                            irid={recordType === 'VendorBill' ? (mode === 'new' ? formRenderProps.valueGetter('itemReceiptId') || formRenderProps.valueGetter('irid') || formRenderProps.valueGetter('itemReceipt') : formData.irid || formData.itemReceiptId) : (mode === 'new' ? id : null)}
+                            poid={resolvedPurchaseOrderId}
+                            irid={resolvedItemReceiptId}
                             vendorId={recordType === 'VendorCredit' ? (formRenderProps.valueGetter('vendorID') || formRenderProps.valueGetter('vendorId') || formRenderProps.valueGetter('vendor') || formData.vendorID || formData.vendorId) : null}
                             vendorCreditTotalAmount={recordType === 'VendorCredit' ? (itemsTotalAmount || formRenderProps.valueGetter('totalAmount') || 0) : 0}
                             onCreditApplicationChange={recordType === 'VendorCredit' ? handleVendorCreditApplicationChange : null}
@@ -5064,12 +4685,23 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
                         </div>
 
                         <div className="purchase-tab-content" style={{ display: activeTab === 'transactions' ? 'block' : 'none' }}>
-                          {renderTransactionsTable()}
+                          <TransactionsPanel
+                            loading={transactionsLoading}
+                            transactions={transactionsData}
+                            recordType={recordType}
+                            onNavigate={(path) => navigate(path)}
+                          />
                         </div>
 
-                        <div className="purchase-tab-content" style={{ display: activeTab === 'glImpact' ? 'block' : 'none' }}>
-                          {renderGLImpactTable()}
-                        </div>
+                        {showGlImpactTab && (
+                          <div className="purchase-tab-content" style={{ display: activeTab === 'glImpact' ? 'block' : 'none' }}>
+                            <GlImpactPanel
+                              loading={glImpactLoading}
+                              entries={glImpactData}
+                              recordType={recordType}
+                            />
+                          </div>
+                        )}
                       </>
                     ) : (
                       /* Regular Items section for non-view modes or other record types */
@@ -5085,8 +4717,8 @@ const PurchaseForm = React.memo(({ recordType, mode = 'new' }) => {
                             onTotalAmountChange={setItemsTotalAmount}
                             headerDiscount={formRenderProps.valueGetter('discount') || 0}
                             selectedLocation={selectedLocation}
-                            poid={recordType === 'ItemReceipt' ? (mode === 'new' ? formRenderProps.valueGetter('purchaseOrderId') || formRenderProps.valueGetter('poid') || formRenderProps.valueGetter('purchaseOrder') : formData.poid || formData.purchaseOrderId || formData.purchaseOrder || (formData.items && formData.items.length > 0 && formData.items[0].poid)) : (mode === 'new' ? id : null)}
-                            irid={recordType === 'VendorBill' ? (mode === 'new' ? formRenderProps.valueGetter('itemReceiptId') || formRenderProps.valueGetter('irid') || formRenderProps.valueGetter('itemReceipt') : formData.irid || formData.itemReceiptId) : (mode === 'new' ? id : null)}
+                            poid={resolvedPurchaseOrderId}
+                            irid={resolvedItemReceiptId}
                             vendorId={recordType === 'VendorCredit' ? (formRenderProps.valueGetter('vendorID') || formRenderProps.valueGetter('vendorId') || formRenderProps.valueGetter('vendor') || formData.vendorID || formData.vendorId) : null}
                             vendorCreditTotalAmount={recordType === 'VendorCredit' ? (itemsTotalAmount || formRenderProps.valueGetter('totalAmount') || 0) : 0}
                             onCreditApplicationChange={recordType === 'VendorCredit' ? handleVendorCreditApplicationChange : null}

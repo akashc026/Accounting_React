@@ -8,7 +8,7 @@ import { DatePicker } from '@progress/kendo-react-dateinputs';
 import { Button } from '@progress/kendo-react-buttons';
 import { Notification } from '@progress/kendo-react-notification';
 import { Fade } from '@progress/kendo-react-animation';
-import ConfirmDialog from '../shared/ConfirmDialog';
+import ConfirmDialog from '../../shared/components/ConfirmDialog';
 import { FaSave, FaTimes, FaTrash, FaPlus, FaTruck, FaClipboardList, FaExchangeAlt, FaEye, FaBoxes, FaCreditCard, FaChartBar, FaPencilAlt } from 'react-icons/fa';
 import { useDynamicForm } from '../../hooks/useDynamicForm';
 import { useSalesOrders, useItemFulfillments, useInvoices, useCreditMemos, useDebitMemos, useStatus } from '../../hooks/useMasterData';
@@ -16,277 +16,76 @@ import { processJvLines, validateJvAccountsBeforeCreate, generateJvLines } from 
 import { processJournal } from '../../hooks/useJournal';
 import useInventoryDetail from '../../hooks/useInventoryDetail';
 import SalesItems from './SalesItems';
+import cleanPayload from '../../utils/cleanPayload';
+import useSalesTransactions from './hooks/useSalesTransactions';
+import { TransactionsPanel, GlImpactPanel } from '../../shared/components/TransactionsPanel';
+import { injectTransactionTabStyles } from '../../shared/styles/transactionTabs';
 import '../../shared/styles/DynamicFormCSS.css';
 
-// Tab styles for Sales form - compact rectangle tabs
-const tabStyles = `
-  .sales-tabs {
-    display: flex;
-    gap: 8px;
-    border-bottom: 2px solid #e8eaed;
-    margin-bottom: 0;
-    background: transparent;
-    padding: 0;
-  }
+injectTransactionTabStyles({
+  tabsClass: 'sales-tabs',
+  tabClass: 'sales-tab',
+  tabContentClass: 'sales-tab-content'
+});
+const MASTER_DATA_NO_FETCH = { autoFetch: false };
 
-  .sales-tab {
-    padding: 8px 16px;
-    background: #f8f9fa;
-    border: 1px solid #e8eaed;
-    border-bottom: none;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
-    color: #5f6368;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    position: relative;
-    border-radius: 6px 6px 0 0;
-    white-space: nowrap;
-  }
+const INVOICE_FULFILLMENT_FIELDS = ['itemFulfillmentId', 'itemFulfillment', 'dnid', 'IFID'];
+const hasMeaningfulValue = (value) => value !== undefined && value !== null && value !== '';
 
-  .sales-tab:hover {
-    background: #e8f0fe;
-    color: #1a73e8;
+const getCaseInsensitiveFieldValue = (obj, fieldName) => {
+  if (!obj) {
+    return undefined;
   }
+  if (hasMeaningfulValue(obj[fieldName])) {
+    return obj[fieldName];
+  }
+  const lookupKey = Object.keys(obj).find(key => key.toLowerCase() === fieldName.toLowerCase());
+  if (lookupKey && hasMeaningfulValue(obj[lookupKey])) {
+    return obj[lookupKey];
+  }
+  return undefined;
+};
 
-  .sales-tab.active {
-    background: white;
-    color: #1a73e8;
-    border-bottom: 2px solid white;
-    margin-bottom: -2px;
-    font-weight: 700;
+const getItemFulfillmentIdFromObject = (obj = {}) => {
+  for (const field of INVOICE_FULFILLMENT_FIELDS) {
+    const value = getCaseInsensitiveFieldValue(obj, field);
+    if (hasMeaningfulValue(value)) {
+      return value;
+    }
   }
+  return null;
+};
 
-  .sales-tab svg {
-    font-size: 14px;
+const getItemFulfillmentIdFromGetter = (valueGetter) => {
+  if (!valueGetter) {
+    return null;
   }
+  for (const field of INVOICE_FULFILLMENT_FIELDS) {
+    const variations = [
+      field,
+      field.toLowerCase(),
+      field.toUpperCase(),
+      field.charAt(0).toLowerCase() + field.slice(1)
+    ];
+    for (const variant of variations) {
+      const value = valueGetter(variant);
+      if (hasMeaningfulValue(value)) {
+        return value;
+      }
+    }
+  }
+  return null;
+};
 
-  .sales-tab:nth-child(1) svg {
-    color: #4285f4;
+const assignItemFulfillmentIdToObject = (target, value) => {
+  if (!target || !hasMeaningfulValue(value)) {
+    return;
   }
-
-  .sales-tab:nth-child(1).active svg {
-    color: #4285f4;
-  }
-
-  .sales-tab:nth-child(2) svg {
-    color: #ea4335;
-  }
-
-  .sales-tab:nth-child(2).active svg {
-    color: #ea4335;
-  }
-
-  .sales-tab:nth-child(3) svg {
-    color: #34a853;
-  }
-
-  .sales-tab:nth-child(3).active svg {
-    color: #34a853;
-  }
-
-  .sales-tab-content {
-    background: white;
-    border: 1px solid #e8eaed;
-    border-top: none;
-    padding: 0;
-    min-height: 300px;
-  }
-  
-  .transactions-section {
-    padding: 24px;
-    background: linear-gradient(135deg, #fafbfc 0%, #ffffff 100%);
-    border-radius: 0;
-    margin: 0;
-    min-height: 300px;
-  }
-
-  .transactions-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid #f1f3f4;
-  }
-
-  .transactions-header h3 {
-    margin: 0;
-    color: #202124;
-    font-size: 16px;
-    font-weight: 600;
-  }
-
-  .transactions-icon {
-    color: #1a73e8;
-    font-size: 16px;
-  }
-
-  .transactions-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin-top: 0;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
-    border: 1px solid #e8eaed;
-    background: white;
-  }
-
-  .transactions-table th {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e8eaed 100%);
-    color: #5f6368;
-    padding: 10px 16px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    position: relative;
-    border: none;
-    border-bottom: 2px solid #e8eaed;
-  }
-
-  .transactions-table th:first-child {
-    border-radius: 8px 0 0 0;
-  }
-
-  .transactions-table th:last-child {
-    border-radius: 0 8px 0 0;
-  }
-
-  .transactions-table td {
-    padding: 12px 16px;
-    border-bottom: 1px solid #f1f3f4;
-    font-size: 13px;
-    color: #202124;
-    font-weight: 400;
-    position: relative;
-    vertical-align: middle;
-  }
-  
-  .transactions-table tbody tr {
-    transition: all 0.3s ease;
-    background: white;
-  }
-  
-  .transactions-table tbody tr:nth-child(even) {
-    background: #fafbfc;
-  }
-  
-  .transactions-table tbody tr:hover {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e8f0fe 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(26,115,232,0.12);
-  }
-  
-  .transactions-table tbody tr:hover td {
-    color: #1a73e8;
-  }
-  
-  .transactions-table tbody tr:last-child td {
-    border-bottom: none;
-  }
-  
-  .transactions-table tbody tr:last-child td:first-child {
-    border-radius: 0 0 0 8px;
-  }
-
-  .transactions-table tbody tr:last-child td:last-child {
-    border-radius: 0 0 8px 0;
-  }
-  
-  .view-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    background: linear-gradient(135deg, #1a73e8 0%, #4285f4 100%);
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: 500;
-    font-size: 13px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 4px rgba(26,115,232,0.2);
-    border: none;
-  }
-  
-  .view-link:hover {
-    background: linear-gradient(135deg, #1557b0 0%, #1a73e8 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(26,115,232,0.3);
-    color: white;
-    text-decoration: none;
-  }
-  
-  .payment-amount {
-    font-weight: 600;
-    color: #137333;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .payment-amount::before {
-    font-size: 12px;
-    color: #5f6368;
-  }
-  
-  .payment-id {
-    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
-    background: #f8f9fa;
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 12px;
-    color: #5f6368;
-    border: 1px solid #e8eaed;
-    font-weight: 500;
-  }
-  
-  .empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: #5f6368;
-  }
-
-  .empty-state-icon {
-    font-size: 36px;
-    color: #dadce0;
-    margin-bottom: 12px;
-  }
-
-  .empty-state-text {
-    font-size: 14px;
-    font-weight: 400;
-    margin: 0;
-  }
-`;
-
-// Inject styles
-if (typeof document !== 'undefined' && !document.getElementById('sales-form-tab-styles')) {
-  const style = document.createElement('style');
-  style.id = 'sales-form-tab-styles';
-  style.textContent = tabStyles;
-  document.head.appendChild(style);
-}
-
-// Helper function to remove empty, null, or undefined fields from payload
-const cleanPayload = (payload) => {
-  const cleaned = {};
-  Object.keys(payload).forEach(key => {
-    const value = payload[key];
-    // Only include non-empty values (excluding empty strings, null, undefined)
-    if (value !== '' && value !== null && value !== undefined) {
-      cleaned[key] = value;
+  INVOICE_FULFILLMENT_FIELDS.forEach((field) => {
+    if (!hasMeaningfulValue(target[field])) {
+      target[field] = value;
     }
   });
-  return cleaned;
 };
 
 const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
@@ -296,11 +95,11 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
   const { loading: dynamicLoading, error: dynamicError, fetchFormConfiguration } = useDynamicForm();
 
   // Transaction-specific hooks - all called unconditionally to follow Rules of Hooks
-  const salesOrdersHook = useSalesOrders();
-  const itemFulfillmentsHook = useItemFulfillments();
-  const invoicesHook = useInvoices();
-  const creditMemosHook = useCreditMemos();
-  const debitMemosHook = useDebitMemos();
+  const salesOrdersHook = useSalesOrders(MASTER_DATA_NO_FETCH);
+  const itemFulfillmentsHook = useItemFulfillments(MASTER_DATA_NO_FETCH);
+  const invoicesHook = useInvoices(MASTER_DATA_NO_FETCH);
+  const creditMemosHook = useCreditMemos(MASTER_DATA_NO_FETCH);
+  const debitMemosHook = useDebitMemos(MASTER_DATA_NO_FETCH);
   const statusHook = useStatus();
 
   // Inventory management hook for ItemFulfillment
@@ -353,10 +152,16 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
     unapplied: 0
   });
   const [activeTab, setActiveTab] = useState('items');
-  const [transactionsData, setTransactionsData] = useState([]);
-  const [transactionsLoading, setTransactionsLoading] = useState(false);
-  const [glImpactData, setGlImpactData] = useState([]);
-  const [glImpactLoading, setGlImpactLoading] = useState(false);
+  const {
+    transactionsData,
+    transactionsLoading,
+    glImpactData,
+    glImpactLoading,
+    loadTransactions,
+    loadGlImpact,
+    resetTransactions,
+    resetGlImpact
+  } = useSalesTransactions(recordType);
 
   // Refs for cleanup
   const notificationTimerRef = React.useRef(null);
@@ -416,246 +221,7 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
     }
   }, []);
 
-  // Fetch transactions data for customer payment lines and credit memo payment lines
-  const fetchTransactionsData = useCallback(async (recordId) => {
-    if (!recordId || !['Invoice', 'DebitMemo'].includes(recordType)) {
-      return [];
-    }
-
-    try {
-      setTransactionsLoading(true);
-
-      // Fetch both customer payment lines and credit memo payment lines in parallel
-      const [customerPaymentResponse, creditMemoPaymentResponse] = await Promise.all([
-        fetch(`${apiConfig.baseURL}/customer-payment-line/by-record-id/${recordId}`, {
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-        }),
-        fetch(`${apiConfig.baseURL}/credit-memo-payment-line/by-record-id/${recordId}`, {
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-        })
-      ]);
-
-      // Process customer payment lines
-      let customerPaymentData = [];
-      if (customerPaymentResponse.ok) {
-        const customerData = await customerPaymentResponse.json();
-        customerPaymentData = Array.isArray(customerData) ? customerData.map(item => ({
-          ...item,
-          transactionType: 'Customer Payment'
-        })) : [];
-      } else if (customerPaymentResponse.status !== 404) {
-        console.warn(`Failed to fetch customer payment lines: ${customerPaymentResponse.status}`);
-      }
-
-      // Process credit memo payment lines
-      let creditMemoPaymentData = [];
-      if (creditMemoPaymentResponse.ok) {
-        const creditMemoData = await creditMemoPaymentResponse.json();
-        creditMemoPaymentData = Array.isArray(creditMemoData) ? creditMemoData.map(item => ({
-          ...item,
-          transactionType: 'Credit Memo'
-        })) : [];
-      } else if (creditMemoPaymentResponse.status !== 404) {
-        console.warn(`Failed to fetch credit memo payment lines: ${creditMemoPaymentResponse.status}`);
-      }
-
-      // Combine both types of transactions
-      const allTransactions = [...customerPaymentData, ...creditMemoPaymentData];
-
-      // Sort by date if available, or by ID
-      allTransactions.sort((a, b) => {
-        if (a.createdAt && b.createdAt) {
-          return new Date(b.createdAt) - new Date(a.createdAt);
-        }
-        return (b.id || '').localeCompare(a.id || '');
-      });
-
-      return allTransactions;
-    } catch (err) {
-      console.error('Error fetching transactions:', err);
-      return [];
-    } finally {
-      setTransactionsLoading(false);
-    }
-  }, [recordType]);
-
-  // Fetch GL Impact data for journal entry lines
-  const fetchGLImpactData = useCallback(async (recordId) => {
-    if (!recordId || recordType === 'SalesOrder') {
-      return [];
-    }
-
-    try {
-      setGlImpactLoading(true);
-
-      const response = await fetch(`${apiConfig.baseURL}/journal-entry-line/by-record-id/${recordId}`, {
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-      });
-
-      if (response.ok) {
-        const glData = await response.json();
-        return Array.isArray(glData) ? glData : [];
-      } else if (response.status !== 404) {
-        console.warn(`Failed to fetch GL Impact data: ${response.status}`);
-      }
-
-      return [];
-    } catch (err) {
-      console.error('Error fetching GL Impact data:', err);
-      return [];
-    } finally {
-      setGlImpactLoading(false);
-    }
-  }, [recordType]);
-
-  // Render transactions table
-  const renderTransactionsTable = () => {
-    if (transactionsLoading) {
-      return (
-        <div className="transactions-section">
-          <div className="empty-state">
-            <div className="empty-state-icon">⏳</div>
-            <p className="empty-state-text">Loading transactions...</p>
-          </div>
-        </div>
-      );
-    }
-
-    if (!transactionsData || transactionsData.length === 0) {
-      return (
-        <div className="transactions-section">
-          <div className="empty-state">
-            <div className="empty-state-icon">📄</div>
-            <p className="empty-state-text">
-              No payment transactions found for this {recordType.toLowerCase()}.
-            </p>
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div className="transactions-section">
-        <table className="transactions-table">
-          <thead>
-            <tr>
-              <th>Action</th>
-              <th>Type</th>
-              <th>Payment ID</th>
-              <th>Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactionsData.map((transaction, index) => (
-              <tr key={transaction.id || index}>
-                <td>
-                  {transaction.transactionType === 'Customer Payment' && (
-                    <a
-                      href={`/customer-payment/view/${transaction.paymentId}`}
-                      className="view-link"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigate(`/customer-payment/view/${transaction.paymentId}`);
-                      }}
-                    >
-                      <FaEye /> View
-                    </a>
-                  )}
-                  {transaction.transactionType === 'Credit Memo' && (
-                    <a
-                      href={`/credit-memo/view/${transaction.paymentId || transaction.cmid}`}
-                      className="view-link"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigate(`/credit-memo/view/${transaction.paymentId || transaction.cmid}`);
-                      }}
-                    >
-                      <FaEye /> View
-                    </a>
-                  )}
-                </td>
-                <td>
-                  <span className="payment-id">
-                    {transaction.transactionType}
-                  </span>
-                </td>
-                <td>
-                  <span className="payment-id">
-                    {transaction.paymentSeqNum || transaction.creditMemoSeqNum || 'N/A'}
-                  </span>
-                </td>
-                <td>
-                  <span className="payment-amount">
-                    {(transaction.paymentAmount || 0).toFixed(2)}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
-
-  // Render GL Impact table
-  const renderGLImpactTable = () => {
-    if (glImpactLoading) {
-      return (
-        <div className="transactions-section">
-          <div className="empty-state">
-            <div className="empty-state-icon">⏳</div>
-            <p className="empty-state-text">Loading GL Impact data...</p>
-          </div>
-        </div>
-      );
-    }
-
-    if (!glImpactData || glImpactData.length === 0) {
-      return (
-        <div className="transactions-section">
-          <div className="empty-state">
-            <div className="empty-state-icon">📊</div>
-            <p className="empty-state-text">
-              No GL Impact data found for this {recordType.toLowerCase()}.
-            </p>
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div className="transactions-section">
-        <table className="transactions-table">
-          <thead>
-            <tr>
-              <th>Account Name</th>
-              <th>Debit</th>
-              <th>Credit</th>
-              <th>Memo</th>
-            </tr>
-          </thead>
-          <tbody>
-            {glImpactData.map((entry, index) => (
-              <tr key={entry.id || index}>
-                <td>{entry.accountName || ''}</td>
-                <td>
-                  <span className="payment-amount">
-                    {entry.debit ? entry.debit.toFixed(2) : '0.00'}
-                  </span>
-                </td>
-                <td>
-                  <span className="payment-amount">
-                    {entry.credit ? entry.credit.toFixed(2) : '0.00'}
-                  </span>
-                </td>
-                <td>{entry.memo || ''}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
+  
 
   const fetchCustomFormFields = async (formId) => {
     try {
@@ -963,7 +529,7 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
         setFormConfig(config);
 
         const dropdownFields = config.standardFields.filter(field =>
-          field.fieldTypeName === 'DropDownList' && field.source
+          ['DropDownList', 'MultiSelect'].includes(field.fieldTypeName) && (field.source || field.fieldSource)
         );
 
         // Get the typeOfRecord ID for filtering forms
@@ -988,7 +554,8 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
             }
           } else {
             // Use existing logic for other dropdown fields
-            data = await fetchDropdownData(field.source);
+            const sourceEndpoint = field.source || field.fieldSource;
+            data = await fetchDropdownData(sourceEndpoint);
           }
 
           return {
@@ -1157,8 +724,9 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
                 }
 
                 // Populate Invoice form with ItemFulfillment data
-                if (itemFulfillmentData.dnid) {
-                  initialFormData.dnid = itemFulfillmentData.dnid;
+                const sessionItemFulfillmentId = getItemFulfillmentIdFromObject(itemFulfillmentData);
+                if (sessionItemFulfillmentId) {
+                  assignItemFulfillmentIdToObject(initialFormData, sessionItemFulfillmentId);
                 }
 
                 if (itemFulfillmentData.customerID) {
@@ -1469,29 +1037,16 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
 
               // Load transactions data for Invoice and DebitMemo in view mode
               if (mode === 'view' && ['Invoice', 'DebitMemo'].includes(recordType)) {
-                try {
-                  const transactions = await fetchTransactionsData(id);
-                  if (!isMounted) return;
-                  setTransactionsData(transactions);
-                } catch (err) {
-                  console.error('Error loading transactions:', err);
-                  setTransactionsData([]);
-                }
+                loadTransactions(id);
+              } else {
+                resetTransactions();
               }
 
               // Load GL Impact data for ItemFulfillment, Invoice, DebitMemo in edit and view modes, and CreditMemo only in view mode
               if (((mode === 'edit' || mode === 'view') && (recordType === 'ItemFulfillment' || recordType === 'Invoice' || recordType === 'DebitMemo')) || (mode === 'view' && recordType === 'CreditMemo')) {
-                try {
-                  const glImpactEntries = await fetchGLImpactData(id);
-                  if (!isMounted) return;
-                  setGlImpactData(glImpactEntries);
-                } catch (err) {
-                  console.error('Error loading GL Impact data:', err);
-                  setGlImpactData([]);
-                }
+                loadGlImpact(id);
               } else {
-                // Clear GL Impact data for unsupported modes/record types (e.g., CreditMemo in edit mode)
-                setGlImpactData([]);
+                resetGlImpact();
               }
             } else {
               console.warn(`No data found for ${recordType} with ID: ${id}`);
@@ -1523,7 +1078,7 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
     return () => {
       isMounted = false;
     };
-  }, [mode, id, recordType, statusHook.data]); // Only stable dependencies
+  }, [mode, id, recordType, statusHook.data, loadTransactions, loadGlImpact, resetTransactions, resetGlImpact]);
 
   // Cleanup effect to reset state when component unmounts
   useEffect(() => {
@@ -2060,7 +1615,7 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
           }
         }
       } else if (recordType === 'Invoice') {
-        const itemFulfillmentId = standardData.dnid || standardData.itemFulfillmentId;
+        const itemFulfillmentId = getItemFulfillmentIdFromObject(standardData);
         if (itemFulfillmentId) {
           const response = await fetch(`${apiConfig.baseURL}/item-fulfilment-line/unfulfilled?DNID=${itemFulfillmentId}`, {
             method: 'GET',
@@ -2324,14 +1879,17 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
   const updateItemFulfillmentLineQuantities = async (invoiceItems, isEdit = false, originalInvoiceItems = []) => {
     if (recordType !== 'Invoice') return;
 
-    let itemFulfillmentId = formData.dnid || formData.itemFulfillmentId;
+    let itemFulfillmentId = getItemFulfillmentIdFromObject(formData);
 
     // If no item fulfillment ID in formData, try to get it from the invoice items
     if (!itemFulfillmentId && invoiceItems.length > 0) {
       // For new invoices, get DNID from the invoice line items
       const firstItem = invoiceItems[0];
-      if (firstItem && (firstItem.dnid || firstItem.itemFulfillmentId)) {
-        itemFulfillmentId = firstItem.dnid || firstItem.itemFulfillmentId;
+      if (firstItem) {
+        const lineItemFulfillmentId = getItemFulfillmentIdFromObject(firstItem);
+        if (lineItemFulfillmentId) {
+          itemFulfillmentId = lineItemFulfillmentId;
+        }
       }
     }
 
@@ -2341,8 +1899,9 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
         const itemFulfillmentDataString = sessionStorage.getItem('itemFulfillmentDataForBilling');
         if (itemFulfillmentDataString) {
           const itemFulfillmentData = JSON.parse(itemFulfillmentDataString);
-          if (itemFulfillmentData.dnid) {
-            itemFulfillmentId = itemFulfillmentData.dnid;
+          const storedId = getItemFulfillmentIdFromObject(itemFulfillmentData);
+          if (storedId) {
+            itemFulfillmentId = storedId;
           }
         }
       } catch (error) {
@@ -3451,6 +3010,69 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
   };
 
 
+  const normalizeArrayValues = (valueArray) => {
+    return valueArray.map(item => {
+      if (item === null || item === undefined) return item;
+      if (typeof item === 'object') {
+        if (item.value !== undefined) return item.value;
+        if (item.id !== undefined) return item.id;
+      }
+      return item;
+    });
+  };
+
+  const normalizeCustomFieldValueForComparison = (value) => {
+    if (Array.isArray(value)) {
+      return JSON.stringify(normalizeArrayValues(value));
+    }
+
+    if (typeof value === 'string') {
+      const trimmed = value.trim();
+      if (!trimmed) return '';
+      if ((trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+        try {
+          const parsed = JSON.parse(trimmed);
+          if (Array.isArray(parsed)) {
+            return JSON.stringify(parsed);
+          }
+        } catch {
+          // Ignore JSON parse errors and treat as plain string
+        }
+      }
+      return trimmed;
+    }
+
+    if (value instanceof Date && !isNaN(value)) {
+      return value.toISOString();
+    }
+
+    if (value === null || value === undefined) {
+      return '';
+    }
+
+    return value;
+  };
+
+  const formatCustomFieldValue = (value) => {
+    if (Array.isArray(value)) {
+      return JSON.stringify(normalizeArrayValues(value));
+    }
+
+    if (value instanceof Date && !isNaN(value)) {
+      return value.toISOString();
+    }
+
+    if (value === null || value === undefined) {
+      return '';
+    }
+
+    return String(value);
+  };
+
+  const areCustomFieldValuesEqual = (a, b) => {
+    return normalizeCustomFieldValueForComparison(a) === normalizeCustomFieldValueForComparison(b);
+  };
+
   // Helper function to create custom field values
   const createCustomFieldValues = async (customData, recordId, typeOfRecordId) => {
     if (!Object.keys(customData).length || !recordId) return;
@@ -3464,7 +3086,7 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
       const payload = {
         request: "create", // Required field for the API
         typeOfRecord: typeOfRecordId,
-        valueText: String(fieldValue), // Ensure it's always a string
+        valueText: formatCustomFieldValue(fieldValue),
         customFieldID: customFieldId,
         recordID: recordId
       };
@@ -3501,7 +3123,7 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
     const changedFields = {};
     Object.entries(customData).forEach(([fieldName, fieldValue]) => {
       const originalValue = originalCustomFormData[fieldName];
-      if (originalValue !== fieldValue) {
+      if (!areCustomFieldValuesEqual(originalValue, fieldValue)) {
         changedFields[fieldName] = fieldValue;
       }
     });
@@ -3525,7 +3147,7 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
       const payload = {
         request: existingCustomFieldValueId ? "update" : "create",
         typeOfRecord: typeOfRecordId,
-        valueText: String(fieldValue), // Ensure it's always a string
+        valueText: formatCustomFieldValue(fieldValue),
         customFieldID: customFieldId,
         recordID: recordId
       };
@@ -4651,7 +4273,18 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
       return obj.name;
     }
 
-    if (fieldName === 'dnid' && obj.sequenceNumber) {
+    const normalizedFieldName = fieldName ? fieldName.toLowerCase() : '';
+
+    const isItemFulfillmentField =
+      normalizedFieldName === 'dnid' ||
+      normalizedFieldName === 'itemfulfillment' ||
+      normalizedFieldName === 'itemfulfillmentid' ||
+      normalizedFieldName === 'ifid' ||
+      normalizedFieldName.includes('itemfulfillment') ||
+      normalizedFieldName.includes('item_fulfillment') ||
+      normalizedFieldName.includes('fulfillment');
+
+    if (isItemFulfillmentField && obj.sequenceNumber) {
       return obj.sequenceNumber;
     }
 
@@ -5154,24 +4787,87 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
     };
   }, [dropdownData, handleFormSelection, setSelectedLocation]);
 
+  const normalizeMultiSelectValue = useCallback((rawValue) => {
+    if (Array.isArray(rawValue)) {
+      return rawValue
+        .map(item => {
+          if (item === null || item === undefined) return null;
+          if (typeof item === 'object') {
+            if (item.value !== undefined) return item.value;
+            if (item.id !== undefined) return item.id;
+          }
+          return item;
+        })
+        .filter(value => value !== null && value !== undefined && value !== '');
+    }
+
+    if (rawValue === null || rawValue === undefined || rawValue === '') {
+      return [];
+    }
+
+    if (typeof rawValue === 'string') {
+      const trimmed = rawValue.trim();
+      if (!trimmed) return [];
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
+      } catch {
+        if (trimmed.includes(',')) {
+          return trimmed.split(',').map(value => value.trim()).filter(Boolean);
+        }
+      }
+      return [trimmed];
+    }
+
+    return [rawValue];
+  }, []);
+
   const getMultiSelectProps = useCallback((fieldRenderProps) => {
-    const { name: fieldName } = fieldRenderProps;
+    const { name: fieldName, value, onChange } = fieldRenderProps;
     const fieldData = dropdownData[fieldName] || [];
 
     const processedData = fieldData.map(item => {
       if (typeof item === 'string') return { text: item, value: item };
-      if (item.name && item.id) return { text: item.name, value: item.id };
-      if (item.text && item.value) return item;
-      const keys = Object.keys(item);
-      return { text: item[keys[0]], value: item[keys[0]] };
+      if (!item || typeof item !== 'object') return { text: String(item), value: item };
+
+      const valueFieldValue = item.id ?? item.value ?? item.sequenceNumber ?? JSON.stringify(item);
+      const displayText = getDisplayText(item, fieldName) ||
+        item.sequenceNumber ||
+        item.name ||
+        valueFieldValue;
+
+      return { text: displayText, value: valueFieldValue };
     });
+
+    const normalizedValues = normalizeMultiSelectValue(value);
+    const selectedFromData = processedData.filter(item => normalizedValues.includes(item.value));
+    const unmatchedValues = normalizedValues.filter(val => !processedData.some(item => item.value === val));
+    const unmatchedItems = unmatchedValues.map(val => ({ text: val, value: val }));
+    const multiSelectValue = [...selectedFromData, ...unmatchedItems];
 
     return {
       data: processedData,
       textField: 'text',
-      valueField: 'value'
+      valueField: 'value',
+      value: multiSelectValue,
+      placeholder: '-- Select --',
+      tagMode: 'single',
+      autoClose: false,
+      popupSettings: {
+        appendTo: typeof document !== 'undefined' ? document.body : undefined,
+        animate: false
+      },
+      onChange: (event) => {
+        const selectedItems = event.target.value || [];
+        const nextValues = selectedItems.map(item => (item && item.value !== undefined) ? item.value : item);
+        if (onChange) {
+          onChange({ target: { value: nextValues } });
+        }
+      }
     };
-  }, [dropdownData]);
+  }, [dropdownData, normalizeMultiSelectValue, getDisplayText]);
 
   const createFieldComponent = useCallback((Component, type = 'default') => (fieldRenderProps) => {
     const { validationMessage, touched, label, ...others } = fieldRenderProps;
@@ -5315,7 +5011,7 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
     let currentRow = [];
 
     fields.forEach((field) => {
-      const isFullWidth = ['TextArea', 'Checkbox', 'MultiSelect'].includes(field.fieldTypeName);
+      const isFullWidth = ['TextArea', 'Checkbox'].includes(field.fieldTypeName);
 
       if (isFullWidth) {
         if (currentRow.length > 0) {
@@ -5577,6 +5273,11 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
           render={(formRenderProps) => {
             // Calculate transaction summary totals from current form items
             const currentItems = formRenderProps.valueGetter('items') || [];
+            const resolvedInvoiceFulfillmentId = recordType === 'Invoice'
+              ? (mode === 'new'
+                ? getItemFulfillmentIdFromGetter(formRenderProps.valueGetter)
+                : getItemFulfillmentIdFromObject(formData))
+              : null;
 
             //formRenderProps.valueGetter('grossAmount')
             return (
@@ -5803,7 +5504,7 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
                               headerDiscount={formRenderProps.valueGetter('discount') || 0}
                               selectedLocation={selectedLocation}
                               soid={recordType === 'ItemFulfillment' ? (mode === 'new' ? formRenderProps.valueGetter('salesOrderId') || formRenderProps.valueGetter('soid') || formRenderProps.valueGetter('salesOrder') : formData.soid || formData.salesOrderId) : (mode === 'new' ? id : null)}
-                              dnid={recordType === 'Invoice' ? (mode === 'new' ? formRenderProps.valueGetter('itemFulfillmentId') || formRenderProps.valueGetter('dnid') || formRenderProps.valueGetter('itemFulfillment') : formData.dnid || formData.itemFulfillmentId) : null}
+                              dnid={recordType === 'Invoice' ? resolvedInvoiceFulfillmentId : null}
                               customerId={recordType === 'CreditMemo' ? (formRenderProps.valueGetter('customerID') || formRenderProps.valueGetter('customer') || formData.customerID) : null}
                               creditMemoTotalAmount={recordType === 'CreditMemo' ? (itemsTotalAmount || formRenderProps.valueGetter('totalAmount') || 0) : 0}
                               onCreditApplicationChange={recordType === 'CreditMemo' ? handleCreditApplicationChange : null}
@@ -5812,11 +5513,20 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
                           )}
 
                           {activeTab === 'transactions' && (recordType === 'Invoice' || recordType === 'DebitMemo') && (
-                            renderTransactionsTable()
+                            <TransactionsPanel
+                              loading={transactionsLoading}
+                              transactions={transactionsData}
+                              recordType={recordType}
+                              onNavigate={(path) => navigate(path)}
+                            />
                           )}
 
                           {activeTab === 'glimpact' && (recordType === 'Invoice' || recordType === 'DebitMemo' || recordType === 'CreditMemo' || recordType === 'ItemFulfillment') && (mode === 'edit' || mode === 'view') && (
-                            renderGLImpactTable()
+                            <GlImpactPanel
+                              loading={glImpactLoading}
+                              entries={glImpactData}
+                              recordType={recordType}
+                            />
                           )}
                         </div>
                       </div>
@@ -5835,7 +5545,7 @@ const SalesForm = React.memo(({ recordType, mode = 'new' }) => {
                             headerDiscount={formRenderProps.valueGetter('discount') || 0}
                             selectedLocation={selectedLocation}
                             soid={recordType === 'ItemFulfillment' ? (mode === 'new' ? formRenderProps.valueGetter('salesOrderId') || formRenderProps.valueGetter('soid') || formRenderProps.valueGetter('salesOrder') : formData.soid || formData.salesOrderId) : (mode === 'new' ? id : null)}
-                            dnid={recordType === 'Invoice' ? (mode === 'new' ? formRenderProps.valueGetter('itemFulfillmentId') || formRenderProps.valueGetter('dnid') || formRenderProps.valueGetter('itemFulfillment') : formData.dnid || formData.itemFulfillmentId) : null}
+                            dnid={recordType === 'Invoice' ? resolvedInvoiceFulfillmentId : null}
                             customerId={recordType === 'CreditMemo' ? (formRenderProps.valueGetter('customerID') || formRenderProps.valueGetter('customer') || formData.customerID) : null}
                             creditMemoTotalAmount={recordType === 'CreditMemo' ? (itemsTotalAmount || formRenderProps.valueGetter('totalAmount') || 0) : 0}
                             onCreditApplicationChange={recordType === 'CreditMemo' ? handleCreditApplicationChange : null}

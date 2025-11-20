@@ -1,31 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Abstractions\\ExcentOne.EntityFrameworkCore.Abstractions.csproj": {}
+    "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Abstractions/ExcentOne.EntityFrameworkCore.Abstractions.csproj": {}
   },
   "projects": {
-    "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Abstractions\\ExcentOne.EntityFrameworkCore.Abstractions.csproj": {
+    "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Abstractions/ExcentOne.EntityFrameworkCore.Abstractions.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Abstractions\\ExcentOne.EntityFrameworkCore.Abstractions.csproj",
+        "projectUniqueName": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Abstractions/ExcentOne.EntityFrameworkCore.Abstractions.csproj",
         "projectName": "ExcentOne.EntityFrameworkCore.Abstractions",
-        "projectPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Abstractions\\ExcentOne.EntityFrameworkCore.Abstractions.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Abstractions\\obj\\",
+        "projectPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Abstractions/ExcentOne.EntityFrameworkCore.Abstractions.csproj",
+        "packagesPath": "/Users/akashchavan/.nuget/packages/",
+        "outputPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Abstractions/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/akashchavan/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "/usr/local/share/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -43,8 +38,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -65,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.409/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

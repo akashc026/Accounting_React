@@ -19,11 +19,19 @@ namespace Accounting.Application.Features
 
         protected override IQueryable<InventoryAdjustment> ApplyFiltering(IQueryable<InventoryAdjustment> queryable, Expression<Func<InventoryAdjustment, bool>> predicate, GetAllInventoryAdjustment request)
         {
-            return queryable
+            var query = queryable
                 .Include(x => x.CustomerNavigation)
                 .Include(x => x.LocationNavigation)
                 .Include(x => x.FormNavigation)
                 .Where(predicate);
+
+            if (!string.IsNullOrWhiteSpace(request.SortBy) && request.SortBy.Equals("sequenceNumber", StringComparison.OrdinalIgnoreCase))
+            {
+                var ascending = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase);
+                query = ascending ? query.OrderBy(x => x.SequenceNumber) : query.OrderByDescending(x => x.SequenceNumber);
+            }
+
+            return query;
         }
 
         protected override Expression<Func<InventoryAdjustment, bool>> ComposeFilter(Expression<Func<InventoryAdjustment, bool>> predicate, GetAllInventoryAdjustment request)
@@ -77,4 +85,3 @@ namespace Accounting.Application.Features
         }
     }
 }
-

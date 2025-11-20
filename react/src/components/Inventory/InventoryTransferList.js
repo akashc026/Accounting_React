@@ -29,7 +29,7 @@ const InventoryTransferList = () => {
     skip: 0,
     take: 10,
     sort: [
-      { field: 'transferDate', dir: 'desc' }
+      { field: 'sequenceNumber', dir: 'desc' }
     ]
   });
 
@@ -45,7 +45,14 @@ const InventoryTransferList = () => {
   }, [searchText]);
 
   // Fetch inventory transfers with pagination and search
-  const fetchData = useCallback(async (pageNumber = 1, pageSize = 10, search = '', status = 'All') => {
+  const fetchData = useCallback(async (
+    pageNumber = 1,
+    pageSize = 10,
+    search = '',
+    status = 'All',
+    sortField = null,
+    sortDir = null
+  ) => {
     try {
       setLoading(true);
       setError(null);
@@ -61,6 +68,11 @@ const InventoryTransferList = () => {
       // Add status filter if not 'All'
       if (status !== 'All') {
         queryParams += `&status=${encodeURIComponent(status)}`;
+      }
+
+      // Add sorting parameters if provided
+      if (sortField && sortDir) {
+        queryParams += `&SortBy=${encodeURIComponent(sortField)}&SortOrder=${sortDir === 'asc' ? 'asc' : 'desc'}`;
       }
 
       const url = buildUrl(`/inventory-transfer?${queryParams}`);
@@ -100,14 +112,18 @@ const InventoryTransferList = () => {
 
   // Initial data load
   useEffect(() => {
-    fetchData(1, gridData.take, debouncedSearchText, statusFilter);
+    const sortField = gridData.sort?.[0]?.field || null;
+    const sortDir = gridData.sort?.[0]?.dir || null;
+    fetchData(1, gridData.take, debouncedSearchText, statusFilter, sortField, sortDir);
   }, []);
 
   // Trigger search when debounced search text or filters change
   useEffect(() => {
     // Reset to first page when search or filters change
     setGridData(prev => ({ ...prev, skip: 0 }));
-    fetchData(1, gridData.take, debouncedSearchText, statusFilter);
+    const sortField = gridData.sort?.[0]?.field || null;
+    const sortDir = gridData.sort?.[0]?.dir || null;
+    fetchData(1, gridData.take, debouncedSearchText, statusFilter, sortField, sortDir);
   }, [debouncedSearchText, statusFilter]);
 
   // Handle grid data state changes (sorting, filtering, paging)
@@ -117,9 +133,15 @@ const InventoryTransferList = () => {
 
     const pageNumber = Math.floor(newDataState.skip / newDataState.take) + 1;
     const pageSize = newDataState.take;
+    const sortField = newDataState.sort?.[0]?.field || null;
+    const sortDir = newDataState.sort?.[0]?.dir || null;
 
-    if (pageNumber !== currentPage || pageSize !== gridData.take) {
-      fetchData(pageNumber, pageSize, debouncedSearchText, statusFilter);
+    const oldSortField = gridData.sort?.[0]?.field || null;
+    const oldSortDir = gridData.sort?.[0]?.dir || null;
+    const sortChanged = sortField !== oldSortField || sortDir !== oldSortDir;
+
+    if (pageNumber !== currentPage || pageSize !== gridData.take || sortChanged) {
+      fetchData(pageNumber, pageSize, debouncedSearchText, statusFilter, sortField, sortDir);
     }
   };
 
@@ -303,7 +325,9 @@ const InventoryTransferList = () => {
   const refresh = () => {
     const pageNumber = Math.floor(gridData.skip / gridData.take) + 1;
     const pageSize = gridData.take;
-    fetchData(pageNumber, pageSize);
+    const sortField = gridData.sort?.[0]?.field || null;
+    const sortDir = gridData.sort?.[0]?.dir || null;
+    fetchData(pageNumber, pageSize, debouncedSearchText, statusFilter, sortField, sortDir);
     showNotification('Inventory transfers refreshed successfully');
   };
 
@@ -409,11 +433,11 @@ const InventoryTransferList = () => {
               minHeight: '400px'
         }}
       >
-            <GridColumn title="No" width="70px" cell={SerialNumberCell} />
+            <GridColumn title="No" width="70px" cell={SerialNumberCell} sortable={false} />
             <GridColumn field="sequenceNumber" title="Sequence Number" width="180px" />
-            <GridColumn field="fromLocation" title="From Location" width="180px" cell={FromLocationCell} />
-            <GridColumn field="toLocation" title="To Location" width="180px" cell={ToLocationCell} />
-            <GridColumn title="Actions" width="180px" cell={ActionCell} locked={true} lockable={false} />
+            <GridColumn field="fromLocation" title="From Location" width="180px" cell={FromLocationCell} sortable={false} />
+            <GridColumn field="toLocation" title="To Location" width="180px" cell={ToLocationCell} sortable={false} />
+            <GridColumn title="Actions" width="180px" cell={ActionCell} locked={true} lockable={false} sortable={false} />
       </Grid>
         )}
 

@@ -20,15 +20,25 @@ namespace Accounting.Application.Features
         protected override IQueryable<Form> ApplyFiltering(IQueryable<Form> queryable, Expression<Func<Form, bool>> predicate, GetAllForm request)
         {
             // Only include essential navigation properties to improve performance
-            return queryable
+            var query = queryable
                 .Include(x => x.TypeOfRecordNavigation)
                 .Include(x => x.FormTypeNavigation)
                 .Where(predicate);
-        }
 
-        protected override IQueryable<Form> ApplySorting(IQueryable<Form> queryable, GetAllForm request)
-        {
-            return queryable.OrderBy(x => x.FormName);
+            var sortBy = request.SortBy?.ToLower();
+            var ascending = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase);
+
+            query = sortBy switch
+            {
+                "formname" => ascending ? query.OrderBy(x => x.FormName) : query.OrderByDescending(x => x.FormName),
+                "typeofrecordname" => ascending
+                    ? query.OrderBy(x => x.TypeOfRecordNavigation!.Name)
+                    : query.OrderByDescending(x => x.TypeOfRecordNavigation!.Name),
+                "prefix" => ascending ? query.OrderBy(x => x.Prefix) : query.OrderByDescending(x => x.Prefix),
+                _ => query.OrderBy(x => x.FormName)
+            };
+
+            return query;
         }
 
         protected override IQueryable<Form> ApplyPagination(IQueryable<Form> queryable, GetAllForm request)
@@ -48,22 +58,32 @@ namespace Accounting.Application.Features
             // Build the filter expression
             Expression<Func<Form, bool>>? filterExpression = null;
 
-            // Add IsActive filter
-            if (request.IsActive == true)
+            // Add inactive filter (fallback to IsActive for backward compatibility)
+            var inactiveFilterValue = request.Inactive;
+            if (!inactiveFilterValue.HasValue && request.IsActive.HasValue)
             {
-                filterExpression = x => x.Inactive != true;
+                inactiveFilterValue = request.IsActive.Value ? false : true;
             }
-            else if (request.IsActive == false)
+
+            if (inactiveFilterValue.HasValue)
             {
-                filterExpression = x => x.Inactive == true;
+                Expression<Func<Form, bool>> inactiveFilter = inactiveFilterValue.Value
+                    ? x => x.Inactive == true
+                    : x => x.Inactive != true;
+
+                filterExpression = filterExpression == null
+                    ? inactiveFilter
+                    : filterExpression.And(inactiveFilter);
             }
 
             // Add search text filter
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
+                var likePattern = $"%{request.SearchText}%";
                 Expression<Func<Form, bool>> searchFilter = x =>
-                    EF.Functions.Like(x.FormName, $"%{request.SearchText}%") ||
-                    EF.Functions.Like(x.Prefix, $"%{request.SearchText}%");
+                    EF.Functions.Like(x.FormName!, likePattern) ||
+                    EF.Functions.Like(x.Prefix!, likePattern) ||
+                    (x.TypeOfRecordNavigation != null && EF.Functions.Like(x.TypeOfRecordNavigation.Name!, likePattern));
 
                 filterExpression = filterExpression == null
                     ? searchFilter

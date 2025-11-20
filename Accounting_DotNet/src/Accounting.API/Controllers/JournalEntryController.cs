@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Accounting.API.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
+    [Route("journal-entry")]
     public class JournalEntryController : ControllerBase
     {
         private readonly IMediator mediator;

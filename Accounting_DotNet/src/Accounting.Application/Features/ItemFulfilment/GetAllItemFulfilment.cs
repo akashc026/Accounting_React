@@ -7,6 +7,7 @@ namespace Accounting.Application.Features
     public class GetAllItemFulfilment : IGetEntities<PaginatedList<ItemFulfilmentResultDto>>, IPageCollection
     {
         public string? SearchText { get; set; }
+        public string? Status { get; set; }
         public string? SortBy { get; set; }
         public string? SortOrder { get; set; }
         public int PageNumber { get; set; }

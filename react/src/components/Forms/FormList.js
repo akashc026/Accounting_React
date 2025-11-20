@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Grid, GridColumn } from '@progress/kendo-react-grid';
 import { Button } from '@progress/kendo-react-buttons';
-import { process } from '@progress/kendo-data-query';
 import { Input } from '@progress/kendo-react-inputs';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
 import { Dialog, DialogActionsBar } from '@progress/kendo-react-dialogs';
@@ -10,6 +9,7 @@ import { Notification } from '@progress/kendo-react-notification';
 import { Fade } from '@progress/kendo-react-animation';
 import { FaPlus, FaSearch, FaEye, FaPencilAlt, FaTrash, FaFilter, FaSync } from 'react-icons/fa';
 import { apiConfig, buildUrl } from '../../config/api';
+import { STATUS_FILTER_OPTIONS, appendInactiveFilter } from '../../utils/statusFilters';
 
 const FormList = () => {
   const navigate = useNavigate();
@@ -17,6 +17,7 @@ const FormList = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchText, setSearchText] = useState('');
+  const [debouncedSearchText, setDebouncedSearchText] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
 
@@ -34,13 +35,32 @@ const FormList = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   // Fetch forms from API with pagination
-  const fetchForms = useCallback(async (pageNumber = 1, pageSize = 10) => {
+  const fetchForms = useCallback(async (
+    pageNumber = 1,
+    pageSize = 10,
+    search = '',
+    status = 'All',
+    sortField = null,
+    sortDir = null
+  ) => {
     try {
       setLoading(true);
       setError(null);
 
       // Build URL with pagination parameters only
-      const url = buildUrl(`/form?PageNumber=${pageNumber}&PageSize=${pageSize}`);
+      let queryParams = `PageNumber=${pageNumber}&PageSize=${pageSize}`;
+
+      if (search && search.trim() !== '') {
+        queryParams += `&SearchText=${encodeURIComponent(search.trim())}`;
+      }
+
+      queryParams = appendInactiveFilter(status, queryParams);
+
+      if (sortField && sortDir) {
+        queryParams += `&SortBy=${encodeURIComponent(sortField)}&SortOrder=${sortDir === 'asc' ? 'asc' : 'desc'}`;
+      }
+
+      const url = buildUrl(`/form?${queryParams}`);
 
       const response = await fetch(url);
 
@@ -77,8 +97,20 @@ const FormList = () => {
   }, []);
 
   useEffect(() => {
-    fetchForms();
-  }, [fetchForms]);
+    const timer = setTimeout(() => {
+      setDebouncedSearchText(searchText);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [searchText]);
+
+  useEffect(() => {
+    setGridData(prev => prev.skip === 0 ? prev : { ...prev, skip: 0 });
+    const sortField = gridData.sort?.[0]?.field || null;
+    const sortDir = gridData.sort?.[0]?.dir || null;
+    fetchForms(1, gridData.take, debouncedSearchText, statusFilter, sortField, sortDir);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearchText, statusFilter]);
 
   // Handle grid data state changes (sorting, filtering, paging)
   const dataStateChange = (e) => {
@@ -89,9 +121,16 @@ const FormList = () => {
     const pageNumber = Math.floor(newDataState.skip / newDataState.take) + 1;
     const pageSize = newDataState.take;
 
-    // Fetch new data if pagination changed
-    if (pageNumber !== currentPage || pageSize !== gridData.take) {
-      fetchForms(pageNumber, pageSize);
+    const sortField = newDataState.sort?.[0]?.field || null;
+    const sortDir = newDataState.sort?.[0]?.dir || null;
+
+    const oldSortField = gridData.sort?.[0]?.field || null;
+    const oldSortDir = gridData.sort?.[0]?.dir || null;
+    const sortChanged = sortField !== oldSortField || sortDir !== oldSortDir;
+
+    // Fetch new data if pagination or sorting changed
+    if (pageNumber !== currentPage || pageSize !== gridData.take || sortChanged) {
+      fetchForms(pageNumber, pageSize, debouncedSearchText, statusFilter, sortField, sortDir);
     }
   };
 
@@ -119,20 +158,6 @@ const FormList = () => {
 
     let filteredData = [...forms.results];
 
-    // Apply search filter - only search on relevant fields
-    if (searchText) {
-      const searchLower = searchText.toLowerCase();
-      filteredData = filteredData.filter(form => {
-        const formName = (form.formName || '').toLowerCase();
-        const recordType = (form.typeOfRecordName || '').toLowerCase();
-        const prefix = (form.prefix || '').toLowerCase();
-
-        return formName.includes(searchLower) ||
-               recordType.includes(searchLower) ||
-               prefix.includes(searchLower);
-      });
-    }
-
     // Apply status filter
     if (statusFilter !== 'All') {
       filteredData = filteredData.filter(form =>
@@ -141,7 +166,7 @@ const FormList = () => {
     }
 
     return filteredData;
-  }, [forms, searchText, statusFilter]);
+  }, [forms, statusFilter]);
 
   // Handle View button click
   const handleView = (id) => {
@@ -157,7 +182,9 @@ const FormList = () => {
   const handleRefresh = () => {
     const pageNumber = Math.floor(gridData.skip / gridData.take) + 1;
     const pageSize = gridData.take;
-    fetchForms(pageNumber, pageSize);
+    const sortField = gridData.sort?.[0]?.field || null;
+    const sortDir = gridData.sort?.[0]?.dir || null;
+    fetchForms(pageNumber, pageSize, debouncedSearchText, statusFilter, sortField, sortDir);
     showNotification('Forms refreshed successfully', 'success');
   };
 
@@ -289,7 +316,7 @@ const FormList = () => {
           <div className="filter-bar">
             <FaFilter className="filter-icon" />
             <DropDownList
-              data={['All', 'Active', 'Inactive']}
+              data={STATUS_FILTER_OPTIONS}
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               style={{ width: '100%' }}
@@ -330,12 +357,12 @@ const FormList = () => {
               minHeight: '400px'
             }}
           >
-            <GridColumn title="No" width="70px" cell={SerialNumberCell} />
+            <GridColumn title="No" width="70px" cell={SerialNumberCell} sortable={false} />
             <GridColumn field="formName" title="Form Name" width="250px" />
             <GridColumn field="typeOfRecordName" title="Record Type" width="200px" />
             <GridColumn field="prefix" title="Prefix" width="150px" />
-            <GridColumn field="inactive" title="Status" width="150px" cell={StatusCell} />
-            <GridColumn title="Actions" width="180px" cell={ActionCell} locked={true} lockable={false} />
+            <GridColumn field="inactive" title="Status" width="150px" cell={StatusCell} sortable={false} />
+            <GridColumn title="Actions" width="180px" cell={ActionCell} locked={true} lockable={false} sortable={false} />
           </Grid>
         )}
 

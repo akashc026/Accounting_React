@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Grid, GridColumn } from '@progress/kendo-react-grid';
 import { Button } from '@progress/kendo-react-buttons';
-import { process } from '@progress/kendo-data-query';
 import { Input } from '@progress/kendo-react-inputs';
 import { Notification } from '@progress/kendo-react-notification';
 import { Fade } from '@progress/kendo-react-animation';
@@ -20,23 +19,40 @@ const JournalEntryList = () => {
 
   const [searchText, setSearchText] = useState('');
   const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
+  const [debouncedSearchText, setDebouncedSearchText] = useState('');
 
   // State for grid data and filtering/sorting
   const [gridData, setGridData] = useState({
     skip: 0,
     take: 10,
     sort: [
-      { field: 'tranDate', dir: 'desc' }
+      { field: 'sequenceNumber', dir: 'desc' }
     ]
   });
 
   // Fetch journal entries with pagination
-  const fetchJournalEntries = useCallback(async (pageNumber = 1, pageSize = 10) => {
+  const fetchJournalEntries = useCallback(async (
+    pageNumber = 1,
+    pageSize = 10,
+    search = '',
+    sortField = null,
+    sortDir = null
+  ) => {
     try {
       setLoading(true);
       setError(null);
 
-      const url = buildUrl(`/journal-entry?PageNumber=${pageNumber}&PageSize=${pageSize}`);
+      let queryParams = `PageNumber=${pageNumber}&PageSize=${pageSize}`;
+
+      if (search && search.trim() !== '') {
+        queryParams += `&SearchText=${encodeURIComponent(search.trim())}`;
+      }
+
+      if (sortField && sortDir) {
+        queryParams += `&SortBy=${encodeURIComponent(sortField)}&SortOrder=${sortDir === 'asc' ? 'asc' : 'desc'}`;
+      }
+
+      const url = buildUrl(`/journal-entry?${queryParams}`);
       const response = await fetch(url, {
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
       });
@@ -78,22 +94,45 @@ const JournalEntryList = () => {
 
     const pageNumber = Math.floor(newDataState.skip / newDataState.take) + 1;
     const pageSize = newDataState.take;
+    const sortField = newDataState.sort?.[0]?.field || null;
+    const sortDir = newDataState.sort?.[0]?.dir || null;
 
-    if (pageNumber !== currentPage || pageSize !== gridData.take) {
-      fetchJournalEntries(pageNumber, pageSize);
+    const oldSortField = gridData.sort?.[0]?.field || null;
+    const oldSortDir = gridData.sort?.[0]?.dir || null;
+    const sortChanged = sortField !== oldSortField || sortDir !== oldSortDir;
+
+    if (pageNumber !== currentPage || pageSize !== gridData.take || sortChanged) {
+      fetchJournalEntries(pageNumber, pageSize, debouncedSearchText, sortField, sortDir);
     }
   };
 
-  // Load data on component mount
+  // Debounce search input
   useEffect(() => {
-    fetchJournalEntries();
-  }, []);
+    const timer = setTimeout(() => {
+      setDebouncedSearchText(searchText);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [searchText]);
+
+  // Refetch when debounced search text changes
+  useEffect(() => {
+    setGridData(prev => {
+      const updated = prev.skip === 0 ? prev : { ...prev, skip: 0 };
+      const sortField = prev.sort?.[0]?.field || null;
+      const sortDir = prev.sort?.[0]?.dir || null;
+      fetchJournalEntries(1, prev.take, debouncedSearchText, sortField, sortDir);
+      return updated;
+    });
+  }, [debouncedSearchText, fetchJournalEntries]);
 
   // Handle refresh
   const refresh = () => {
     const pageNumber = Math.floor(gridData.skip / gridData.take) + 1;
     const pageSize = gridData.take;
-    fetchJournalEntries(pageNumber, pageSize);
+    const sortField = gridData.sort?.[0]?.field || null;
+    const sortDir = gridData.sort?.[0]?.dir || null;
+    fetchJournalEntries(pageNumber, pageSize, debouncedSearchText, sortField, sortDir);
     showNotification('Journal entries refreshed successfully');
   };
 
@@ -137,18 +176,8 @@ const JournalEntryList = () => {
       return [];
     }
 
-    let filteredData = [...data.results];
-
-    // Apply search filter
-    if (searchText) {
-      filteredData = filteredData.filter(entry => {
-        const searchString = `${entry.sequenceNumber || ''} ${entry.description || ''} ${formatAmount(entry.totalAmount)}`.toLowerCase();
-        return searchString.includes(searchText.toLowerCase());
-      });
-    }
-
-    return filteredData;
-  }, [data, searchText]);
+    return data.results;
+  }, [data]);
 
   // Handle View button click
   const handleView = (id) => {
@@ -332,10 +361,10 @@ const JournalEntryList = () => {
               minHeight: '400px'
             }}
           >
-            <GridColumn title="No" width="70px" cell={SerialNumberCell} />
+            <GridColumn title="No" width="70px" cell={SerialNumberCell} sortable={false} />
             <GridColumn field="sequenceNumber" title="Sequence Number" width="180px" />
-            <GridColumn field="tranDate" title="Transaction Date" width="150px" cell={DateCell} />
-            <GridColumn title="Actions" width="180px" cell={ActionCell} locked={true} lockable={false} />
+            <GridColumn field="tranDate" title="Transaction Date" width="150px" cell={DateCell} sortable={false} />
+            <GridColumn title="Actions" width="180px" cell={ActionCell} locked={true} lockable={false} sortable={false} />
           </Grid>
         )}
 

@@ -1,1 +1,11 @@
-{"Version":1,"Hash":"aVrjr2q63XLT0Ldlw2IXezzIlZxewQHk7OF1f6ZyexI=","Source":"Accounting.API","BasePath":"_content/Accounting.API","Mode":"Default","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}
+{
+  "Version": 1,
+  "Hash": "TEvX9aqI105EGpOJdyd45kI1xupIlcFKCM9ywwKy4xg=",
+  "Source": "Accounting.API",
+  "BasePath": "_content/Accounting.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

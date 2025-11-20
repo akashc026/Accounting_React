@@ -30,7 +30,7 @@ const VendorPaymentList = () => {
     skip: 0,
     take: 10,
     sort: [
-      { field: 'tranDate', dir: 'desc' }
+      { field: 'sequenceNumber', dir: 'desc' }
     ]
   });
 
@@ -46,7 +46,14 @@ const VendorPaymentList = () => {
   }, [searchText]);
 
   // Fetch data with pagination
-  const fetchData = useCallback(async (pageNumber = 1, pageSize = 10, search = '', status = 'All') => {
+  const fetchData = useCallback(async (
+    pageNumber = 1,
+    pageSize = 10,
+    search = '',
+    status = 'All',
+    sortField = null,
+    sortDir = null
+  ) => {
     try {
       // Build query parameters
       let queryParams = `PageNumber=${pageNumber}&PageSize=${pageSize}`;
@@ -59,6 +66,11 @@ const VendorPaymentList = () => {
       // Add status filter if not 'All'
       if (status !== 'All') {
         queryParams += `&status=${encodeURIComponent(status)}`;
+      }
+
+      // Add sorting parameters if provided
+      if (sortField && sortDir) {
+        queryParams += `&SortBy=${encodeURIComponent(sortField)}&SortOrder=${sortDir === 'asc' ? 'asc' : 'desc'}`;
       }
 
       const url = buildUrl(`/vendor-payment?${queryParams}`);
@@ -94,7 +106,9 @@ const VendorPaymentList = () => {
 
   // Initial data load
   useEffect(() => {
-    fetchData(1, gridData.take, debouncedSearchText, statusFilter);
+    const sortField = gridData.sort?.[0]?.field || null;
+    const sortDir = gridData.sort?.[0]?.dir || null;
+    fetchData(1, gridData.take, debouncedSearchText, statusFilter, sortField, sortDir);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -104,7 +118,9 @@ const VendorPaymentList = () => {
       setCurrentPage(1);
       setGridData(prev => ({ ...prev, skip: 0 }));
     }
-    fetchData(1, gridData.take, debouncedSearchText, statusFilter);
+    const sortField = gridData.sort?.[0]?.field || null;
+    const sortDir = gridData.sort?.[0]?.dir || null;
+    fetchData(1, gridData.take, debouncedSearchText, statusFilter, sortField, sortDir);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchText, statusFilter]);
 
@@ -115,9 +131,15 @@ const VendorPaymentList = () => {
 
     const pageNumber = Math.floor(newDataState.skip / newDataState.take) + 1;
     const pageSize = newDataState.take;
+    const sortField = newDataState.sort?.[0]?.field || null;
+    const sortDir = newDataState.sort?.[0]?.dir || null;
 
-    if (pageNumber !== currentPage || pageSize !== gridData.take) {
-      fetchData(pageNumber, pageSize, debouncedSearchText, statusFilter);
+    const oldSortField = gridData.sort?.[0]?.field || null;
+    const oldSortDir = gridData.sort?.[0]?.dir || null;
+    const sortChanged = sortField !== oldSortField || sortDir !== oldSortDir;
+
+    if (pageNumber !== currentPage || pageSize !== gridData.take || sortChanged) {
+      fetchData(pageNumber, pageSize, debouncedSearchText, statusFilter, sortField, sortDir);
     }
   };
 
@@ -169,7 +191,9 @@ const VendorPaymentList = () => {
   const handleRefresh = () => {
     const pageNumber = Math.floor(gridData.skip / gridData.take) + 1;
     const pageSize = gridData.take;
-    fetchData(pageNumber, pageSize, debouncedSearchText, statusFilter);
+    const sortField = gridData.sort?.[0]?.field || null;
+    const sortDir = gridData.sort?.[0]?.dir || null;
+    fetchData(pageNumber, pageSize, debouncedSearchText, statusFilter, sortField, sortDir);
     showNotification('Vendor payments refreshed successfully', 'success');
   };
 
@@ -378,12 +402,12 @@ const VendorPaymentList = () => {
               minHeight: '400px'
         }}
       >
-            <GridColumn title="No" width="70px" cell={SerialNumberCell} />
+            <GridColumn title="No" width="70px" cell={SerialNumberCell} sortable={false} />
             <GridColumn field="sequenceNumber" title="Transaction Number" width="180px" />
-            <GridColumn field="vendorID" title="Vendor" width="200px" cell={VendorCell} />
-            <GridColumn field="status" title="Status" width="150px" cell={StatusCell} />
-            <GridColumn field="amount" title="Total Amount" width="140px" cell={AmountCell} />
-            <GridColumn title="Actions" width="180px" cell={ActionCell} locked={true} lockable={false} />
+            <GridColumn field="vendorID" title="Vendor" width="200px" cell={VendorCell} sortable={false} />
+            <GridColumn field="status" title="Status" width="150px" cell={StatusCell} sortable={false} />
+            <GridColumn field="amount" title="Total Amount" width="140px" cell={AmountCell} sortable={false} />
+            <GridColumn title="Actions" width="180px" cell={ActionCell} locked={true} lockable={false} sortable={false} />
       </Grid>
         )}
 

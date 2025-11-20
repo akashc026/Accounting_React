@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "6hhH5WvwkMQ=",
+  "dgSpecHash": "j2sHHTMW/S8=",
   "success": true,
-  "projectFilePath": "D:\\Organise Dotnet\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Abstractions\\ExcentOne.EntityFrameworkCore.Abstractions.csproj",
+  "projectFilePath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Abstractions/ExcentOne.EntityFrameworkCore.Abstractions.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

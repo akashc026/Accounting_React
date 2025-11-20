@@ -7,8 +7,11 @@ namespace Accounting.Application.Features
     public class GetAllTax : IGetEntities<PaginatedList<TaxResultDto>>, IPageCollection
     {
         public string? SearchText { get; set; }
+        public string? SortBy { get; set; }
+        public string? SortOrder { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+        public bool? Inactive { get; set; }
         public bool? IsActive { get; set; }
     }
-} 
+}

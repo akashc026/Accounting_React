@@ -22,23 +22,31 @@ namespace Accounting.Application.Features
             // Build the filter expression
             Expression<Func<Customer, bool>>? filterExpression = null;
 
-            // Add IsActive filter
-            if (request.IsActive == true)
+            // Add inactive filter (fallback to IsActive for backward compatibility)
+            var inactiveFilterValue = request.Inactive;
+            if (!inactiveFilterValue.HasValue && request.IsActive.HasValue)
             {
-                filterExpression = x => x.Inactive != true;
+                inactiveFilterValue = request.IsActive.Value ? false : true;
             }
-            else if (request.IsActive == false)
+
+            if (inactiveFilterValue.HasValue)
             {
-                filterExpression = x => x.Inactive == true;
+                Expression<Func<Customer, bool>> inactiveFilter = inactiveFilterValue.Value
+                    ? x => x.Inactive == true
+                    : x => x.Inactive != true;
+
+                filterExpression = filterExpression == null
+                    ? inactiveFilter
+                    : filterExpression.And(inactiveFilter);
             }
 
             // Add search text filter
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
+                var likePattern = $"%{request.SearchText}%";
                 Expression<Func<Customer, bool>> searchFilter = x =>
-                    EF.Functions.Like(x.Name, request.SearchText) ||
-                    EF.Functions.Like(x.Email, request.SearchText) ||
-                    EF.Functions.Like(x.SequenceNumber, request.SearchText);
+                    EF.Functions.Like(x.Name!, likePattern) ||
+                    EF.Functions.Like(x.Email!, likePattern);
 
                 filterExpression = filterExpression == null
                     ? searchFilter
@@ -51,9 +59,17 @@ namespace Accounting.Application.Features
 
         protected override IQueryable<Customer> ApplyFiltering(IQueryable<Customer> queryable, Expression<Func<Customer, bool>> predicate, GetAllCustomer request)
         {
-            return queryable
+            var query = queryable
                 .Include(x => x.FormNavigation)
                 .Where(predicate);
+
+            if (!string.IsNullOrWhiteSpace(request.SortBy) && request.SortBy.Equals("name", StringComparison.OrdinalIgnoreCase))
+            {
+                var ascending = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase);
+                query = ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name);
+            }
+
+            return query;
         }
 
         protected override IQueryable<Customer> ApplyPagination(IQueryable<Customer> queryable, GetAllCustomer request)

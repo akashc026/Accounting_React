@@ -18,22 +18,62 @@ namespace Accounting.Application.Features
 
         protected override Expression<Func<Product, bool>> ComposeFilter(Expression<Func<Product, bool>> predicate, GetAllProduct request)
         {
+            Expression<Func<Product, bool>>? filterExpression = null;
+
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
-                return predicate.Or(x => EF.Functions.Like(x.ItemName, request.SearchText) || EF.Functions.Like(x.ItemCode, request.SearchText));
+                var likePattern = $"%{request.SearchText}%";
+                Expression<Func<Product, bool>> searchFilter = x =>
+                    EF.Functions.Like(x.ItemCode!, likePattern) ||
+                    EF.Functions.Like(x.ItemName!, likePattern);
+
+                filterExpression = filterExpression == null
+                    ? searchFilter
+                    : filterExpression.Or(searchFilter);
             }
 
-            return predicate;
+            if (request.ItemType.HasValue)
+            {
+                Expression<Func<Product, bool>> itemTypeFilter = x => x.ItemType == request.ItemType.Value;
+                filterExpression = filterExpression == null
+                    ? itemTypeFilter
+                    : filterExpression.And(itemTypeFilter);
+            }
+
+            if (request.Inactive.HasValue)
+            {
+                Expression<Func<Product, bool>> inactiveFilter = request.Inactive.Value
+                    ? x => x.Inactive == true
+                    : x => x.Inactive != true;
+
+                filterExpression = filterExpression == null
+                    ? inactiveFilter
+                    : filterExpression.And(inactiveFilter);
+            }
+
+            return filterExpression != null ? predicate.Or(filterExpression) : predicate;
         }
 
         protected override IQueryable<Product> ApplyFiltering(IQueryable<Product> queryable, Expression<Func<Product, bool>> predicate, GetAllProduct request)
         {
-            return queryable
+            var query = queryable
                 .Include(x => x.PurchaseTaxCodeNavigation)
                 .Include(x => x.SalesTaxCodeNavigation)
                 .Include(x => x.ItemTypeNavigation)
                 .Include(x => x.FormNavigation)
                 .Where(predicate);
+
+            if (!string.IsNullOrWhiteSpace(request.SortBy))
+            {
+                var ascending = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase);
+                query = request.SortBy.Equals("itemcode", StringComparison.OrdinalIgnoreCase)
+                    ? (ascending ? query.OrderBy(x => x.ItemCode) : query.OrderByDescending(x => x.ItemCode))
+                    : request.SortBy.Equals("itemname", StringComparison.OrdinalIgnoreCase)
+                        ? (ascending ? query.OrderBy(x => x.ItemName) : query.OrderByDescending(x => x.ItemName))
+                        : query;
+            }
+
+            return query;
         }
 
         protected override IQueryable<Product> ApplyPagination(IQueryable<Product> queryable, GetAllProduct request)

@@ -36,23 +36,38 @@ namespace Accounting.Application.Features
 
         protected override Expression<Func<JournalEntry, bool>> ComposeFilter(Expression<Func<JournalEntry, bool>> predicate, GetAllJournalEntry request)
         {
+            // Build the filter expression similar to other transaction handlers
+            Expression<Func<JournalEntry, bool>>? filterExpression = null;
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
-                predicate = predicate.And(x =>
-                    EF.Functions.Like(x.SequenceNumber, $"%{request.SearchText}%") ||
-                    EF.Functions.Like(x.Memo, $"%{request.SearchText}%") ||
-                    EF.Functions.Like(x.RecordID, $"%{request.SearchText}%") ||
-                    EF.Functions.Like(x.RecordType, $"%{request.SearchText}%"));
+                var likePattern = $"%{request.SearchText}%";
+                Expression<Func<JournalEntry, bool>> searchFilter = x =>
+                    EF.Functions.Like(x.SequenceNumber ?? string.Empty, likePattern) ||
+                    EF.Functions.Like(x.Memo ?? string.Empty, likePattern) ||
+                    EF.Functions.Like(x.RecordID ?? string.Empty, likePattern) ||
+                    (x.FormNavigation != null && EF.Functions.Like(x.FormNavigation.FormName!, likePattern));
+
+                filterExpression = searchFilter;
             }
 
-            return predicate;
+            return filterExpression != null ? predicate.Or(filterExpression) : predicate;
         }
 
         protected override IQueryable<JournalEntry> ApplyFiltering(IQueryable<JournalEntry> queryable, Expression<Func<JournalEntry, bool>> predicate, GetAllJournalEntry request)
         {
-            return queryable
+            var query = queryable
                 .Include(x => x.FormNavigation)
+                .Include(x => x.JournalEntryLines)
+                    .ThenInclude(x => x.AccountNavigation)
                 .Where(predicate);
+
+            if (!string.IsNullOrWhiteSpace(request.SortBy) && request.SortBy.Equals("sequenceNumber", StringComparison.OrdinalIgnoreCase))
+            {
+                var ascending = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase);
+                query = ascending ? query.OrderBy(x => x.SequenceNumber) : query.OrderByDescending(x => x.SequenceNumber);
+            }
+
+            return query;
         }
 
         protected override PaginatedList<JournalEntryResultDto> OnQuerySuccess(DbQuerySuccessArgs<GetAllJournalEntry, IEnumerable<JournalEntry>> args)
@@ -60,6 +75,15 @@ namespace Accounting.Application.Features
             var mappedResults = args.Result.Select(entity => {
                 var result = Mapper.Map<JournalEntryResultDto>(entity);
                 result.FormName = entity.FormNavigation?.FormName;
+                if (entity.JournalEntryLines != null && entity.JournalEntryLines.Any())
+                {
+                    result.JournalEntryLines = entity.JournalEntryLines.Select(line =>
+                    {
+                        var dto = Mapper.Map<JournalEntryLineDto>(line);
+                        dto.AccountName = line.AccountNavigation?.Name;
+                        return dto;
+                    }).ToList();
+                }
                 return result;
             });
             

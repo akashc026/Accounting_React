@@ -129,6 +129,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("AccountType");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Name).HasMaxLength(50);
         });
 
@@ -138,6 +145,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.AccountNumber).HasMaxLength(50);
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.IsParent).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.OpeningBalance).HasColumnType("decimal(18, 2)");
@@ -161,6 +175,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Applied).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.NetTotal).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.SequenceNumber).HasMaxLength(50);
@@ -195,6 +216,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__CreditMe__3214EC07BF154E03");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
@@ -221,6 +249,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__CreditMe__3214EC07521E9024");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.CreditMemoSeqNum).HasMaxLength(50);
             entity.Property(e => e.MainRecordAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.PaymentAmount).HasColumnType("decimal(18, 2)");
@@ -238,6 +273,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.ID).HasName("PK__CustomFi__3214EC27D8F72545");
 
             entity.Property(e => e.ID).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.RecordID).HasMaxLength(50);
             entity.Property(e => e.ValueText).HasMaxLength(255);
 
@@ -257,6 +299,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__CustomFo__3214EC078A5FE181");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.FieldLabel).HasMaxLength(50);
             entity.Property(e => e.FieldName).HasMaxLength(50);
             entity.Property(e => e.FieldSource).HasMaxLength(50);
@@ -280,6 +329,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Address).HasMaxLength(50);
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.Phone).HasMaxLength(50);
@@ -300,6 +356,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.AppliedAmount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.PaymentDate).HasColumnType("date");
             entity.Property(e => e.SequenceNumber).HasMaxLength(50);
             entity.Property(e => e.UnAppliedAmount).HasColumnType("decimal(18, 2)");
@@ -328,6 +391,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__Customer__3214EC0754DE5A79");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.IsApplied).HasDefaultValue(false);
             entity.Property(e => e.MainRecordAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.PaymentAmount).HasColumnType("decimal(18, 2)");
@@ -350,6 +420,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.AmountDue).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.AmountPaid).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.NetTotal).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.SequenceNumber)
@@ -385,6 +462,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__DebitMem__3214EC07BD81DD68");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
@@ -411,6 +495,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__Forms__3214EC07E9F76E9E");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.FormName).HasMaxLength(255);
             entity.Property(e => e.Inactive).HasDefaultValue(false);
             entity.Property(e => e.IsDefault).HasDefaultValue(false);
@@ -481,6 +572,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("FormSequence");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
 
             entity.HasOne(d => d.Form).WithMany(p => p.FormSequences)
                 .HasForeignKey(d => d.FormId)
@@ -495,6 +593,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("FormSourceType");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Name).HasMaxLength(100);
         });
 
@@ -505,6 +610,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("InventoryAdjustment");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.SequenceNumber).HasMaxLength(50);
             entity.Property(e => e.TranDate).HasColumnType("date");
 
@@ -527,6 +639,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__Inventor__3214EC07958225FC");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.QuantityAdjusted).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.QuantityInHand).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 2)");
@@ -551,6 +670,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("InventoryDetail");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.QuantityAvailable).HasColumnType("decimal(18, 2)");
 
             entity.HasOne(d => d.Item).WithMany(p => p.InventoryDetails)
@@ -569,6 +695,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("InventoryLedger");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Date).HasColumnType("date");
             entity.Property(e => e.QuantityChange).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 2)");
@@ -591,6 +724,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("InventoryTransfer");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.SequenceNumber).HasMaxLength(50);
             entity.Property(e => e.TranDate).HasColumnType("date");
 
@@ -617,6 +757,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__Inventor__3214EC07389E174E");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.QuantityInHand).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.QuantityTransfer).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 2)");
@@ -643,6 +790,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
             entity.Property(e => e.AmountDue).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.AmountPaid).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Discount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.InvoiceDate).HasColumnType("date");
@@ -684,6 +838,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasIndex(e => new { e.InvoiceID, e.ItemFulFillmentID }, "UQ_InvoiceFulFillMent_ItemFulFillMent").IsUnique();
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
 
             entity.HasOne(d => d.Invoice).WithMany(p => p.InvoiceFulFillMentLinks)
                 .HasForeignKey(d => d.InvoiceID)
@@ -701,6 +862,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__InvoiceL__4383E576B5D85946");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.QuantityDelivered).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxPercent).HasColumnType("decimal(18, 2)");
@@ -733,6 +901,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("ItemFulfilment");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.DeliveryDate).HasColumnType("date");
             entity.Property(e => e.Discount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
@@ -772,6 +947,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__ItemFulf__3214EC0702354C53");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
@@ -804,6 +986,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("ItemReceipt");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Discount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.NetTotal).HasColumnType("decimal(18, 2)");
@@ -843,6 +1032,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__ItemRece__3214EC079B9C630C");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.TaxPercent).HasColumnType("decimal(18, 2)");
@@ -874,6 +1070,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("ItemType");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Name).HasMaxLength(100);
         });
 
@@ -884,6 +1087,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("JournalEntry");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.JournalAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Memo).HasMaxLength(50);
             entity.Property(e => e.RecordID).HasMaxLength(200);
@@ -902,6 +1112,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__JournalE__3214EC078290056A");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Credit).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Debit).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Memo).HasMaxLength(50);
@@ -925,6 +1142,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Address).HasMaxLength(50);
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.Notes).HasMaxLength(50);
             entity.Property(e => e.Phone).HasMaxLength(50);
@@ -938,6 +1162,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
             entity.Property(e => e.AverageCost).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.ItemCode).HasMaxLength(50);
             entity.Property(e => e.ItemName).HasMaxLength(100);
             entity.Property(e => e.PurchasePrice).HasColumnType("decimal(18, 10)");
@@ -981,6 +1212,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("ProductStock");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.OpeningStockQty).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.OpeningStockRate).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
@@ -1001,6 +1239,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("PurchaseOrder");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Discount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.NetTotal).HasColumnType("decimal(18, 2)");
@@ -1035,6 +1280,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__Purchase__3214EC0716F8A783");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.TaxPercent).HasColumnType("decimal(18, 2)");
@@ -1062,6 +1314,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("RecordType");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Name).HasMaxLength(100);
         });
 
@@ -1072,6 +1331,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("SalesOrder");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Discount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.NetTotal).HasColumnType("decimal(18, 2)");
@@ -1107,6 +1373,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__SalesOrd__3214EC07562BBD6E");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
@@ -1136,6 +1409,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("SalesOrderNumberSequence");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
         });
 
         modelBuilder.Entity<StandardField>(entity =>
@@ -1143,6 +1423,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__Standard__3214EC07F0E4B51D");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Label).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.Source).HasMaxLength(100);
@@ -1165,6 +1452,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("Status");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Name).HasMaxLength(100);
         });
 
@@ -1175,6 +1469,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("Tax");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Inactive).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.TaxRate).HasColumnType("decimal(5, 2)");
@@ -1191,6 +1492,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.ToTable("TransactionStatus");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Name).HasMaxLength(100);
 
             entity.HasOne(d => d.TypeOfRecordNavigation).WithMany(p => p.TransactionStatuses)
@@ -1208,6 +1516,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
             entity.Property(e => e.Category).HasMaxLength(50);
             entity.Property(e => e.ComponentName).HasMaxLength(100);
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(255);
             entity.Property(e => e.PackageName).HasMaxLength(100);
         });
@@ -1220,6 +1535,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Address).HasMaxLength(50);
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.Phone).HasMaxLength(50);
@@ -1239,6 +1561,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.AmountDue).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.AmountPaid).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Discount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.InvoiceDate).HasColumnType("date");
@@ -1278,6 +1607,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__VendorBi__3214EC07F3572BFA");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.TaxPercent).HasColumnType("decimal(18, 2)");
@@ -1310,6 +1646,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Applied).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.NetTotal).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.SequenceNumber).HasMaxLength(50);
@@ -1344,6 +1687,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__VendorCr__3214EC070A9CFB04");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
@@ -1370,6 +1720,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__VendorCr__3214EC0728CE2483");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.MainRecordAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.PaymentAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.RecordID).HasMaxLength(50);
@@ -1391,6 +1748,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.AppliedAmount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.PaymentDate).HasColumnType("date");
             entity.Property(e => e.SequenceNumber).HasMaxLength(50);
             entity.Property(e => e.UnAppliedAmount).HasColumnType("decimal(18, 2)");
@@ -1419,6 +1783,13 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.HasKey(e => e.Id).HasName("PK__VendorPa__3214EC072C61A056");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasDefaultValue("test");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.IsApplied).HasDefaultValue(false);
             entity.Property(e => e.MainRecordAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.PaymentAmount).HasColumnType("decimal(18, 2)");

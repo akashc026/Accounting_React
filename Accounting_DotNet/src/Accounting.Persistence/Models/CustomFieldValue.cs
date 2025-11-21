@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using ExcentOne.Persistence.Features.Models.Auditing;
 
 namespace Accounting.Persistence.Models;
 
-public partial class CustomFieldValue
+public partial class CustomFieldValue : ICreateAudit
 {
     public Guid ID { get; set; }
 
@@ -14,6 +15,10 @@ public partial class CustomFieldValue
     public Guid CustomFieldID { get; set; }
 
     public string? RecordID { get; set; }
+
+    public DateTime CreatedDate { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
 
     public virtual CustomFormField CustomField { get; set; } = null!;
 

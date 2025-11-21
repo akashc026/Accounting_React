@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using ExcentOne.Persistence.Features.Models;
+using ExcentOne.Persistence.Features.Models.Auditing;
 
 namespace Accounting.Persistence.Models;
 
-public partial class InventoryTransferLine : IEntity<System.Guid>
+public partial class InventoryTransferLine : IEntity<System.Guid>, ICreateAudit
 {
     public Guid Id { get; set; }
 
@@ -21,6 +22,10 @@ public partial class InventoryTransferLine : IEntity<System.Guid>
     public Guid InventoryTransferID { get; set; }
 
     public string? Reason { get; set; }
+
+    public DateTime CreatedDate { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
 
     public virtual InventoryTransfer InventoryTransfer { get; set; } = null!;
 

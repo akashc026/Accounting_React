@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using ExcentOne.Persistence.Features.Models;
+using ExcentOne.Persistence.Features.Models.Auditing;
 
 namespace Accounting.Persistence.Models;
 
-public partial class Form : IEntity<System.Guid>
+public partial class Form : IEntity<System.Guid>, ICreateAudit
 {
     public Guid Id { get; set; }
 
@@ -45,6 +46,10 @@ public partial class Form : IEntity<System.Guid>
     public Guid? DiscountOnTaxDR { get; set; }
 
     public Guid? DiscountOnTaxCR { get; set; }
+
+    public DateTime CreatedDate { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
 
     public virtual ChartOfAccount? AccountPayableNavigation { get; set; }
 

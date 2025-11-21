@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using ExcentOne.Persistence.Features.Models;
+using ExcentOne.Persistence.Features.Models.Auditing;
 
 namespace Accounting.Persistence.Models;
 
-public partial class CreditMemo : IEntity<System.Guid>
+public partial class CreditMemo : IEntity<System.Guid>, ICreateAudit
 {
     public Guid Id { get; set; }
 
@@ -33,6 +34,10 @@ public partial class CreditMemo : IEntity<System.Guid>
     public decimal? SubTotal { get; set; }
 
     public decimal? TaxTotal { get; set; }
+
+    public DateTime CreatedDate { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
 
     public virtual ICollection<CreditMemoLine> CreditMemoLines { get; set; } = new List<CreditMemoLine>();
 

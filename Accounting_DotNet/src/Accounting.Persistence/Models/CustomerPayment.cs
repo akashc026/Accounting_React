@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using ExcentOne.Persistence.Features.Models;
+using ExcentOne.Persistence.Features.Models.Auditing;
 
 namespace Accounting.Persistence.Models;
 
-public partial class CustomerPayment : IEntity<System.Guid>
+public partial class CustomerPayment : IEntity<System.Guid>, ICreateAudit
 {
     public Guid Id { get; set; }
 
@@ -25,6 +26,10 @@ public partial class CustomerPayment : IEntity<System.Guid>
     public DateTime? PaymentDate { get; set; }
 
     public Guid? Status { get; set; }
+
+    public DateTime CreatedDate { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
 
     public virtual Customer CustomerNavigation { get; set; } = null!;
 

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using ExcentOne.Persistence.Features.Models;
+using ExcentOne.Persistence.Features.Models.Auditing;
 
 namespace Accounting.Persistence.Models;
 
-public partial class InvoiceLine : IEntity<System.Guid>
+public partial class InvoiceLine : IEntity<System.Guid>, ICreateAudit
 {
     public Guid Id { get; set; }
 
@@ -25,6 +26,10 @@ public partial class InvoiceLine : IEntity<System.Guid>
     public Guid INID { get; set; }
 
     public Guid? ItemFulfillmentLineId { get; set; }
+
+    public DateTime CreatedDate { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
 
     public virtual Invoice IN { get; set; } = null!;
 

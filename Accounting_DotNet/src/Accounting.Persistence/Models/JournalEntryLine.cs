@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using ExcentOne.Persistence.Features.Models;
+using ExcentOne.Persistence.Features.Models.Auditing;
 
 namespace Accounting.Persistence.Models;
 
-public partial class JournalEntryLine : IEntity<System.Guid>
+public partial class JournalEntryLine : IEntity<System.Guid>, ICreateAudit
 {
     public Guid Id { get; set; }
 
@@ -23,6 +24,10 @@ public partial class JournalEntryLine : IEntity<System.Guid>
     public Guid? JEID { get; set; }
 
     public int? Display { get; set; }
+
+    public DateTime CreatedDate { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
 
     public virtual ChartOfAccount? AccountNavigation { get; set; }
 

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using ExcentOne.Persistence.Features.Models;
+using ExcentOne.Persistence.Features.Models.Auditing;
 
 namespace Accounting.Persistence.Models;
 
-public partial class InventoryAdjustment : IEntity<System.Guid>
+public partial class InventoryAdjustment : IEntity<System.Guid>, ICreateAudit
 {
     public Guid Id { get; set; }
 
@@ -19,6 +20,10 @@ public partial class InventoryAdjustment : IEntity<System.Guid>
     public string SequenceNumber { get; set; } = null!;
 
     public Guid Form { get; set; }
+
+    public DateTime CreatedDate { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
 
     public virtual Customer? CustomerNavigation { get; set; }
 

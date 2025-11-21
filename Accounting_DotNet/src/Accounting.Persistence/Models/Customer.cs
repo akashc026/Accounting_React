@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using ExcentOne.Persistence.Features.Models;
+using ExcentOne.Persistence.Features.Models.Auditing;
 
 namespace Accounting.Persistence.Models;
 
-public partial class Customer : IEntity<System.Guid>
+public partial class Customer : IEntity<System.Guid>, ICreateAudit
 {
     public Guid Id { get; set; }
 
@@ -23,6 +24,10 @@ public partial class Customer : IEntity<System.Guid>
     public Guid Form { get; set; }
 
     public string SequenceNumber { get; set; } = null!;
+
+    public DateTime CreatedDate { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
 
     public virtual ICollection<CreditMemo> CreditMemos { get; set; } = new List<CreditMemo>();
 

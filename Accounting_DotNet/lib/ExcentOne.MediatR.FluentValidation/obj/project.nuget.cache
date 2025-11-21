@@ -1,15 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "3MofOcIdDyY=",
+  "dgSpecHash": "7JQ3/EmqyrY=",
   "success": true,
-  "projectFilePath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.MediatR.FluentValidation/ExcentOne.MediatR.FluentValidation.csproj",
+  "projectFilePath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.MediatR.FluentValidation\\ExcentOne.MediatR.FluentValidation.csproj",
   "expectedPackageFiles": [
-    "/Users/akashchavan/.nuget/packages/fluentvalidation/11.5.1/fluentvalidation.11.5.1.nupkg.sha512",
-    "/Users/akashchavan/.nuget/packages/fluentvalidation.aspnetcore/11.3.0/fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
-    "/Users/akashchavan/.nuget/packages/fluentvalidation.dependencyinjectionextensions/11.5.1/fluentvalidation.dependencyinjectionextensions.11.5.1.nupkg.sha512",
-    "/Users/akashchavan/.nuget/packages/mediatr/12.4.1/mediatr.12.4.1.nupkg.sha512",
-    "/Users/akashchavan/.nuget/packages/mediatr.contracts/2.0.1/mediatr.contracts.2.0.1.nupkg.sha512",
-    "/Users/akashchavan/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.0/microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512"
+    "C:\\Users\\Admin\\.nuget\\packages\\fluentvalidation\\11.5.1\\fluentvalidation.11.5.1.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.0\\fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.5.1\\fluentvalidation.dependencyinjectionextensions.11.5.1.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\mediatr\\12.4.1\\mediatr.12.4.1.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512"
   ],
   "logs": []
 }

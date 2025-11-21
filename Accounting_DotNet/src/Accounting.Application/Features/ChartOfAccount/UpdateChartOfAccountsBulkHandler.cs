@@ -35,6 +35,8 @@ namespace Accounting.Application.Features
                 return 0;
             }
 
+            var previousRunningBalances = existingAccounts.ToDictionary(account => account.Id, account => account.RunningBalance ?? 0m);
+
             foreach (var existingAccount in existingAccounts)
             {
                 var updateDto = request.Accounts.FirstOrDefault(a => a.Id == existingAccount.Id);
@@ -70,6 +72,11 @@ namespace Accounting.Application.Features
 
                     if (updateDto.RunningBalance.HasValue)
                         existingAccount.RunningBalance = updateDto.RunningBalance;
+                }
+
+                if (previousRunningBalances.TryGetValue(existingAccount.Id, out var previousBalance))
+                {
+                    await ChartOfAccountRunningBalanceHelper.PropagateToParentsAsync(_dbContext, existingAccount, previousBalance, cancellationToken);
                 }
             }
 

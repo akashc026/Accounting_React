@@ -15,5 +15,15 @@ namespace Accounting.Application.Features
         public decimal? QuantityAvailable { get; set; }
 
         public string? LocationName { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public string CreatedBy { get; set; } = null!;
+
     }
+
+
+
+
+
 }

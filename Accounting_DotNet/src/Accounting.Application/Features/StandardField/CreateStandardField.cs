@@ -26,5 +26,7 @@ namespace Accounting.Application.Features
         public int DisplayOrder { get; set; }
 
         public string? Label { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 } 

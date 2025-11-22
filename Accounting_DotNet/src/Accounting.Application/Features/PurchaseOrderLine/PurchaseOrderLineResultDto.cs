@@ -34,5 +34,15 @@ namespace Accounting.Application.Features
 
         public decimal? ReceivedQty { get; set; }
 
+
+        public DateTime CreatedDate { get; set; }
+
+        public string CreatedBy { get; set; } = null!;
+
     }
+
+
+
+
+
 } 

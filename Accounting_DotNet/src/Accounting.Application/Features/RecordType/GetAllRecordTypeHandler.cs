@@ -34,11 +34,6 @@ namespace Accounting.Application.Features
                 .Where(predicate);
         }
 
-        protected override IQueryable<RecordType> ApplySorting(IQueryable<RecordType> queryable, GetAllRecordType request)
-        {
-            return queryable.OrderBy(x => x.Name);
-        }
-
         protected override List<RecordTypeResultDto> OnQuerySuccess(DbQuerySuccessArgs<GetAllRecordType, IEnumerable<RecordType>> args)
         {
             var mappedResults = args.Result.Select(entity => {

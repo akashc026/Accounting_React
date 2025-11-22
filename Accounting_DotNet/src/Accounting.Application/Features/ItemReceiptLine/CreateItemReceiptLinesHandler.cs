@@ -41,7 +41,8 @@ namespace Accounting.Application.Features
                     TaxAmount = lineDto.TaxAmount,
                     TotalAmount = lineDto.TotalAmount,
                     PurchaseOrderLineId = lineDto.PurchaseOrderLineId,
-                    InvoicedQty = lineDto.InvoicedQty
+                    InvoicedQty = lineDto.InvoicedQty,
+                    CreatedBy = request.CreatedBy ?? string.Empty
                 };
 
                 _dbContext.ItemReceiptLines.Add(itemReceiptLine);

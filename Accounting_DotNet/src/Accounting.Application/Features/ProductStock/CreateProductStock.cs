@@ -20,5 +20,7 @@ namespace Accounting.Application.Features
         public decimal OpeningStockQty { get; set; }
 
         public decimal OpeningStockRate { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 } 

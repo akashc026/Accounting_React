@@ -23,6 +23,15 @@ namespace Accounting.Application.Features
 
         public Guid Form { get; set; }
         public string? FormName { get; set; }
-    }
-}
 
+        public DateTime CreatedDate { get; set; }
+
+        public string CreatedBy { get; set; } = null!;
+
+    }
+
+
+
+
+
+}

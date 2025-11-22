@@ -46,5 +46,15 @@ namespace Accounting.Application.Features
         public string? FormName { get; set; }
 
         public string? SequenceNumber { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public string CreatedBy { get; set; } = null!;
+
     }
+
+
+
+
+
 } 

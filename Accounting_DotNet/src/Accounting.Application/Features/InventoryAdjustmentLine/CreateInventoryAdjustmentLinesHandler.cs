@@ -38,7 +38,8 @@ namespace Accounting.Application.Features
                     QuantityAdjusted = lineDto.QuantityAdjusted,
                     Rate = lineDto.Rate,
                     TotalAmount = lineDto.TotalAmount,
-                    Reason = lineDto.Reason
+                    Reason = lineDto.Reason,
+                    CreatedBy = request.CreatedBy ?? string.Empty
                 };
 
                 _dbContext.InventoryAdjustmentLines.Add(inventoryAdjustmentLine);

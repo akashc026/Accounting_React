@@ -74,5 +74,15 @@ using System;
             public string? DiscountOnTaxDRName { get; set; }
 
             public string? DiscountOnTaxCRName { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public string CreatedBy { get; set; } = null!;
+
         }
+
+
+
+
+
     }

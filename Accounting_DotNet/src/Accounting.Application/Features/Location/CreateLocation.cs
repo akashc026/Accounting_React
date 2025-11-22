@@ -22,5 +22,7 @@ namespace Accounting.Application.Features
         public bool? Inactive { get; set; }
 
         public string? Notes { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 }

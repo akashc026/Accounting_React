@@ -6,6 +6,8 @@ namespace Accounting.Application.Features
 {
     public class CreateSalesOrderLines : IRequest<List<Guid>>
     {
+
+        public string? CreatedBy { get; set; }
         public List<SalesOrderLineCreateDto> Lines { get; set; } = new();
     }
 

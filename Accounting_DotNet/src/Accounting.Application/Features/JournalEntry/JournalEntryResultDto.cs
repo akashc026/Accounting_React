@@ -48,5 +48,15 @@ namespace Accounting.Application.Features
         public string? AccountName { get; set; }
 
         public Guid? JEID { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public string CreatedBy { get; set; } = null!;
+
     }
+
+
+
+
+
 }

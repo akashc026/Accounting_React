@@ -24,5 +24,7 @@ namespace Accounting.Application.Features
         public string? RecordID { get; set; }
 
         public string? RecordType { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 }

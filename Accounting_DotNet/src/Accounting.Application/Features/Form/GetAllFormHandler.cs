@@ -25,18 +25,21 @@ namespace Accounting.Application.Features
                 .Include(x => x.FormTypeNavigation)
                 .Where(predicate);
 
-            var sortBy = request.SortBy?.ToLower();
-            var ascending = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase);
-
-            query = sortBy switch
+            var sortBy = request.SortBy?.ToLowerInvariant();
+            if (!string.IsNullOrWhiteSpace(sortBy))
             {
-                "formname" => ascending ? query.OrderBy(x => x.FormName) : query.OrderByDescending(x => x.FormName),
-                "typeofrecordname" => ascending
-                    ? query.OrderBy(x => x.TypeOfRecordNavigation!.Name)
-                    : query.OrderByDescending(x => x.TypeOfRecordNavigation!.Name),
-                "prefix" => ascending ? query.OrderBy(x => x.Prefix) : query.OrderByDescending(x => x.Prefix),
-                _ => query.OrderBy(x => x.FormName)
-            };
+                var ascending = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase);
+
+                query = sortBy switch
+                {
+                    "formname" => ascending ? query.OrderBy(x => x.FormName) : query.OrderByDescending(x => x.FormName),
+                    "typeofrecordname" => ascending
+                        ? query.OrderBy(x => x.TypeOfRecordNavigation!.Name)
+                        : query.OrderByDescending(x => x.TypeOfRecordNavigation!.Name),
+                    "prefix" => ascending ? query.OrderBy(x => x.Prefix) : query.OrderByDescending(x => x.Prefix),
+                    _ => query
+                };
+            }
 
             return query;
         }

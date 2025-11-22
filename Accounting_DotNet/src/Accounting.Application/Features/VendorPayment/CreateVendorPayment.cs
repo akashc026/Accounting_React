@@ -28,5 +28,7 @@ namespace Accounting.Application.Features
         public DateTime? PaymentDate { get; set; }
 
         public Guid? Status { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 }

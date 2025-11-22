@@ -26,5 +26,7 @@ namespace Accounting.Application.Features
         public string? PaymentSeqNum { get; set; }
 
         public decimal? MainRecordAmount { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 }

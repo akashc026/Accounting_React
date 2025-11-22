@@ -15,5 +15,15 @@ namespace Accounting.Application.Features
         public int FormSequenceNumber { get; set; }
 
         public string FormName { get; set; } = null!;
+
+        public DateTime CreatedDate { get; set; }
+
+        public string CreatedBy { get; set; } = null!;
+
     }
+
+
+
+
+
 } 

@@ -114,5 +114,7 @@ namespace Accounting.Application.Features
 
             return null;
         }
+
+        public string? CreatedBy { get; set; }
     }
 }

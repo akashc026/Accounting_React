@@ -18,5 +18,7 @@ namespace Accounting.Application.Features
         public string ValueText { get; set; } = null!;
 
         public Guid CustomFieldID { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 } 

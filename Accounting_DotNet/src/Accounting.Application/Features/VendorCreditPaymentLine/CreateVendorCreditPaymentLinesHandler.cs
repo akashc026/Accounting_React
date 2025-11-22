@@ -39,7 +39,8 @@ namespace Accounting.Application.Features
                     RecordType = lineDto.RecordType,
                     VCID = lineDto.VCID,
                     VendorCreditSeqNum = lineDto.VendorCreditSeqNum,
-                    MainRecordAmount = lineDto.MainRecordAmount
+                    MainRecordAmount = lineDto.MainRecordAmount,
+                    CreatedBy = request.CreatedBy ?? string.Empty
                 };
 
                 _dbContext.VendorCreditPaymentLines.Add(vendorCreditPaymentLine);

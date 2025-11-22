@@ -14,5 +14,7 @@ namespace Accounting.Application.Features
         public Guid FormId { get; set; }
 
         public int FormSequenceNumber { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 } 

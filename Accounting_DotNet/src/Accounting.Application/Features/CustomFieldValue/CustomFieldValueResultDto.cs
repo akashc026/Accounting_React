@@ -21,5 +21,15 @@ namespace Accounting.Application.Features
         public string CustomFieldName { get; set; } = null!;
 
         public string TypeOfRecordName { get; set; } = null!;
+
+        public DateTime CreatedDate { get; set; }
+
+        public string CreatedBy { get; set; } = null!;
+
     }
+
+
+
+
+
 } 

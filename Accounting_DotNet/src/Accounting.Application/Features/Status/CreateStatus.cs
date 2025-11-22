@@ -12,5 +12,7 @@ namespace Accounting.Application.Features
         public Guid Id => Guid.NewGuid();
 
         public string? Name { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 }

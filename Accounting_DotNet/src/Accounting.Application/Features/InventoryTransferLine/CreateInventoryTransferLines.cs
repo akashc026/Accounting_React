@@ -6,6 +6,8 @@ namespace Accounting.Application.Features
 {
     public class CreateInventoryTransferLines : IRequest<List<Guid>>
     {
+
+        public string? CreatedBy { get; set; }
         public List<InventoryTransferLineCreateDto> Lines { get; set; } = new();
     }
 

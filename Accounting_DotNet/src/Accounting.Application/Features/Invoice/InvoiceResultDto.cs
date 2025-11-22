@@ -51,5 +51,15 @@ namespace Accounting.Application.Features
         public string? LocationName { get; set; }
 
         public string? DNSequenceNumber { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public string CreatedBy { get; set; } = null!;
+
     }
+
+
+
+
+
 } 

@@ -18,5 +18,7 @@ namespace Accounting.Application.Features
         public Guid? TaxAccount { get; set; }
 
         public bool? Inactive { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 } 

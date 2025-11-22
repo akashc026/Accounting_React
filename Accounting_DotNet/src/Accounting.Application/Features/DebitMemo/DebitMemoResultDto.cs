@@ -43,5 +43,15 @@ namespace Accounting.Application.Features
         public Guid? Status { get; set; }
 
         public string? StatusName { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public string CreatedBy { get; set; } = null!;
+
     }
+
+
+
+
+
 }

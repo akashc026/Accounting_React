@@ -24,5 +24,7 @@ namespace Accounting.Application.Features
         public DateTime? Date { get; set; }
 
         public Guid? LocationID { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 } 

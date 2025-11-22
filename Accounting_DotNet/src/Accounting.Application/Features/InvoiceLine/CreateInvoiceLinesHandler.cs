@@ -40,7 +40,8 @@ namespace Accounting.Application.Features
                     TaxPercent = lineDto.TaxPercent,
                     TaxRate = lineDto.TaxRate,
                     TotalAmount = lineDto.TotalAmount,
-                    ItemFulfillmentLineId = lineDto.ItemFulfillmentLineId
+                    ItemFulfillmentLineId = lineDto.ItemFulfillmentLineId,
+                    CreatedBy = request.CreatedBy ?? string.Empty
                 };
 
                 _dbContext.InvoiceLines.Add(invoiceLine);

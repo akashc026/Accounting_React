@@ -42,5 +42,7 @@ namespace Accounting.Application.Features
         public decimal? SubTotal { get; set; }
 
         public decimal? NetTotal { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 } 

@@ -6,6 +6,8 @@ namespace Accounting.Application.Features
 {
     public class CreateJournalEntryLines : IRequest<List<Guid>>
     {
+
+        public string? CreatedBy { get; set; }
         public List<JournalEntryLineCreateDto> Lines { get; set; } = new();
     }
 

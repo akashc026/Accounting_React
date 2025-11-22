@@ -37,5 +37,7 @@ namespace Accounting.Application.Features
         public Guid? Form { get; set; }
 
         public string? SequenceNumber { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 }

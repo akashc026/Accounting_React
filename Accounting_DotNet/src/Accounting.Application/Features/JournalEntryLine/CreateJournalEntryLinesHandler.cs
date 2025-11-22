@@ -38,7 +38,8 @@ namespace Accounting.Application.Features
                     Memo = lineDto.Memo,
                     RecordType = lineDto.RecordType,
                     Account = lineDto.Account,
-                    JEID = lineDto.JEID
+                    JEID = lineDto.JEID,
+                    CreatedBy = request.CreatedBy ?? string.Empty
                 };
 
                 _dbContext.JournalEntryLines.Add(journalEntryLine);

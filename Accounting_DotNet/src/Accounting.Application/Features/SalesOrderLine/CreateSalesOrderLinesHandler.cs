@@ -40,7 +40,8 @@ namespace Accounting.Application.Features
                     TaxPercent = lineDto.TaxPercent,
                     TaxAmount = lineDto.TaxAmount,
                     TotalAmount = lineDto.TotalAmount,
-                    FulFillQty = lineDto.FulFillQty
+                    FulFillQty = lineDto.FulFillQty,
+                    CreatedBy = request.CreatedBy ?? string.Empty
                 };
 
                 _dbContext.SalesOrderLines.Add(salesOrderLine);

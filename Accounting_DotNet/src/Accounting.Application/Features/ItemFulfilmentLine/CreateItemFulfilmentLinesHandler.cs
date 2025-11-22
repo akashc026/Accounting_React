@@ -41,7 +41,8 @@ namespace Accounting.Application.Features
                     TaxAmount = lineDto.TaxAmount,
                     TotalAmount = lineDto.TotalAmount,
                     InvoicedQty = lineDto.InvoicedQty,
-                    SalesOrderLineId = lineDto.SalesOrderLineId
+                    SalesOrderLineId = lineDto.SalesOrderLineId,
+                    CreatedBy = request.CreatedBy ?? string.Empty
                 };
 
                 _dbContext.ItemFulfilmentLines.Add(itemFulfilmentLine);

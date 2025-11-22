@@ -29,5 +29,15 @@ namespace Accounting.Application.Features
         public int? InvoicedQty { get; set; }
 
         public Guid? SalesOrderLineId { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public string CreatedBy { get; set; } = null!;
+
     }
+
+
+
+
+
 } 

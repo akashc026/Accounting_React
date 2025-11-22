@@ -30,5 +30,7 @@ namespace Accounting.Application.Features
         public Guid? Parent { get; set; }
 
         public decimal? RunningBalance { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 }

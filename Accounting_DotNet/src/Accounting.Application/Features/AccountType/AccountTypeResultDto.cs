@@ -14,5 +14,15 @@ namespace Accounting.Application.Features
 
 
 
+
+        public DateTime CreatedDate { get; set; }
+
+        public string CreatedBy { get; set; } = null!;
+
     }
+
+
+
+
+
 } 

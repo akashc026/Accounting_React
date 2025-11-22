@@ -39,7 +39,8 @@ namespace Accounting.Application.Features
                     TaxID = lineDto.TaxID,
                     TaxPercent = lineDto.TaxPercent,
                     TaxAmount = lineDto.TaxAmount,
-                    TotalAmount = lineDto.TotalAmount
+                    TotalAmount = lineDto.TotalAmount,
+                    CreatedBy = request.CreatedBy ?? string.Empty
                 };
 
                 _dbContext.DebitMemoLines.Add(debitMemoLine);

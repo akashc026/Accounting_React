@@ -39,7 +39,8 @@ namespace Accounting.Application.Features
                     RecordType = lineDto.RecordType,
                     PaymentId = lineDto.PaymentId,
                     PaymentSeqNum = lineDto.PaymentSeqNum,
-                    MainRecordAmount = lineDto.MainRecordAmount
+                    MainRecordAmount = lineDto.MainRecordAmount,
+                    CreatedBy = request.CreatedBy ?? string.Empty
                 };
 
                 _dbContext.CustomerPaymentLines.Add(customerPaymentLine);

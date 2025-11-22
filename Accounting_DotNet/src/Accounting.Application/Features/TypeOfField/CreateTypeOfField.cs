@@ -18,5 +18,7 @@ namespace Accounting.Application.Features
         public string Category { get; set; } = null!;
 
         public string? Description { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 } 

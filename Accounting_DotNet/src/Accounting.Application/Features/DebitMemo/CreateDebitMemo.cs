@@ -36,5 +36,7 @@ namespace Accounting.Application.Features
         public decimal? NetTotal { get; set; }
 
         public Guid? Status { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 }

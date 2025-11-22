@@ -35,7 +35,8 @@ namespace Accounting.Application.Features
                     TypeOfRecord = valueDto.TypeOfRecord,
                     ValueText = valueDto.ValueText,
                     CustomFieldID = valueDto.CustomFieldID,
-                    RecordID = valueDto.RecordID
+                    RecordID = valueDto.RecordID,
+                    CreatedBy = request.CreatedBy ?? string.Empty
                 };
 
                 _dbContext.CustomFieldValues.Add(customFieldValue);

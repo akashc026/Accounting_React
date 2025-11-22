@@ -37,11 +37,6 @@ namespace Accounting.Application.Features
                 .Where(predicate);
         }
 
-        protected override IQueryable<TypeOfField> ApplySorting(IQueryable<TypeOfField> queryable, GetAllTypeOfField request)
-        {
-            return queryable.OrderBy(x => x.Category).ThenBy(x => x.ComponentName);
-        }
-
         protected override IQueryable<TypeOfField> ApplyPagination(IQueryable<TypeOfField> queryable, GetAllTypeOfField request)
         {
             // Only apply pagination if both PageNumber and PageSize are provided (greater than 0)

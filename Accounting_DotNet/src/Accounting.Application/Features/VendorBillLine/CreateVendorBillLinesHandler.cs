@@ -41,7 +41,8 @@ namespace Accounting.Application.Features
                     TaxAmount = lineDto.TaxAmount,
                     TotalAmount = lineDto.TotalAmount,
                     IsActive = lineDto.IsActive,
-                    ItemReceiptLineId = lineDto.ItemReceiptLineId
+                    ItemReceiptLineId = lineDto.ItemReceiptLineId,
+                    CreatedBy = request.CreatedBy ?? string.Empty
                 };
 
                 _dbContext.VendorBillLines.Add(vendorBillLine);

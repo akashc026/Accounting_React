@@ -38,7 +38,8 @@ namespace Accounting.Application.Features
                     Rate = lineDto.Rate,
                     TotalAmount = lineDto.TotalAmount,
                     InventoryTransferID = lineDto.InventoryTransferID,
-                    Reason = lineDto.Reason
+                    Reason = lineDto.Reason,
+                    CreatedBy = request.CreatedBy ?? string.Empty
                 };
 
                 _dbContext.InventoryTransferLines.Add(inventoryTransferLine);

@@ -33,11 +33,6 @@ namespace Accounting.Application.Features
                 .Where(predicate);
         }
 
-        protected override IQueryable<AccountType> ApplySorting(IQueryable<AccountType> queryable, GetAllAccountType request)
-        {
-            return queryable.OrderBy(x => x.Name);
-        }
-
         protected override IQueryable<AccountType> ApplyPagination(IQueryable<AccountType> queryable, GetAllAccountType request)
         {
             // Only apply pagination if both PageNumber and PageSize are provided (greater than 0)

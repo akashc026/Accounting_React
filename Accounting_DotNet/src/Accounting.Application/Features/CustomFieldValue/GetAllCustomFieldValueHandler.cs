@@ -31,19 +31,16 @@ namespace Accounting.Application.Features
                                        (x.CustomField != null && EF.Functions.Like(x.CustomField.FieldName, $"%{request.SearchText}%")));
             }
 
+            query = query.OrderByDescending(x => x.CreatedDate);
+
             var totalItems = await query.CountAsync(cancellationToken);
 
             // Only apply pagination if both PageNumber and PageSize are provided (greater than 0)
             if (request.PageNumber > 0 && request.PageSize > 0)
             {
                 query = query
-                    .OrderBy(x => x.CustomField != null ? x.CustomField.FieldName : "")
                     .Skip((request.PageNumber - 1) * request.PageSize)
                     .Take(request.PageSize);
-            }
-            else
-            {
-                query = query.OrderBy(x => x.CustomField != null ? x.CustomField.FieldName : "");
             }
 
             var items = await query.ToListAsync(cancellationToken);
@@ -56,7 +53,9 @@ namespace Accounting.Application.Features
                 ValueText = item.ValueText,
                 CustomFieldID = item.CustomFieldID,
                 CustomFieldName = item.CustomField?.FieldName ?? string.Empty,
-                TypeOfRecordName = item.TypeOfRecordNavigation?.Name ?? string.Empty
+                TypeOfRecordName = item.TypeOfRecordNavigation?.Name ?? string.Empty,
+                CreatedDate = item.CreatedDate,
+                CreatedBy = item.CreatedBy
             });
 
             return new PaginatedList<CustomFieldValueResultDto>

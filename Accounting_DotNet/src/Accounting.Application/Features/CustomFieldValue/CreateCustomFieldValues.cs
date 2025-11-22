@@ -6,6 +6,8 @@ namespace Accounting.Application.Features
 {
     public class CreateCustomFieldValues : IRequest<List<Guid>>
     {
+        public string? CreatedBy { get; set; }
+
         public List<CustomFieldValueCreateDto> Values { get; set; } = new();
     }
 

@@ -24,11 +24,6 @@ namespace Accounting.Application.Features
                 .Where(predicate);
         }
 
-        protected override IQueryable<FormSequence> ApplySorting(IQueryable<FormSequence> queryable, GetAllFormSequence request)
-        {
-            return queryable.OrderBy(x => x.FormSequenceNumber);
-        }
-
         protected override Expression<Func<FormSequence, bool>> ComposeFilter(Expression<Func<FormSequence, bool>> predicate, GetAllFormSequence request)
         {
             if (!string.IsNullOrWhiteSpace(request.SearchText))

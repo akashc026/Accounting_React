@@ -66,7 +66,7 @@ namespace Accounting.Application.Features
             }
             else
             {
-                query = query.OrderBy(x => x.Id);
+                query = query.OrderByDescending(x => x.CreatedDate);
             }
 
             var totalItems = await query.CountAsync(cancellationToken);

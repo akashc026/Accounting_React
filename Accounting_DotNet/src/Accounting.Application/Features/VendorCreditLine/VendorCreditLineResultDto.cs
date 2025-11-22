@@ -29,5 +29,15 @@ namespace Accounting.Application.Features
         public decimal? TaxAmount { get; set; }
 
         public decimal? TotalAmount { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public string CreatedBy { get; set; } = null!;
+
     }
+
+
+
+
+
 }

@@ -41,9 +41,8 @@ namespace Accounting.Application.Features
             // Apply sorting
             if (!string.IsNullOrWhiteSpace(request.SortBy) && request.SortBy.Equals("sequenceNumber", StringComparison.OrdinalIgnoreCase))
             {
-                query = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase)
-                    ? query.OrderBy(x => x.SequenceNumber)
-                    : query.OrderByDescending(x => x.SequenceNumber);
+                var ascending = string.IsNullOrWhiteSpace(request.SortOrder) || request.SortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase);
+                query = ascending ? query.OrderBy(x => x.SequenceNumber) : query.OrderByDescending(x => x.SequenceNumber);
             }
 
             return query;

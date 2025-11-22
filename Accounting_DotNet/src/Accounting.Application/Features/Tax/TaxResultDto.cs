@@ -20,5 +20,15 @@ namespace Accounting.Application.Features
 
         public string? TaxAccountName { get; set; }
 
+
+        public DateTime CreatedDate { get; set; }
+
+        public string CreatedBy { get; set; } = null!;
+
     }
+
+
+
+
+
 }

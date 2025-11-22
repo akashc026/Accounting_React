@@ -25,11 +25,6 @@ namespace Accounting.Application.Features
                 .Where(predicate);
         }
 
-        protected override IQueryable<CustomFormField> ApplySorting(IQueryable<CustomFormField> queryable, GetAllCustomFormField request)
-        {
-            return queryable.OrderBy(x => x.DisplayOrder).ThenBy(x => x.FieldName);
-        }
-
         protected override Expression<Func<CustomFormField, bool>> ComposeFilter(Expression<Func<CustomFormField, bool>> predicate, GetAllCustomFormField request)
         {
             if (!string.IsNullOrWhiteSpace(request.SearchText))

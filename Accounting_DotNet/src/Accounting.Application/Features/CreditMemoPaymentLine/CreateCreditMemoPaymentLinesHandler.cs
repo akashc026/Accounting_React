@@ -39,7 +39,8 @@ namespace Accounting.Application.Features
                     RecordType = lineDto.RecordType,
                     CMID = lineDto.CMID,
                     CreditMemoSeqNum = lineDto.CreditMemoSeqNum,
-                    MainRecordAmount = lineDto.MainRecordAmount
+                    MainRecordAmount = lineDto.MainRecordAmount,
+                    CreatedBy = request.CreatedBy ?? string.Empty
                 };
 
                 _dbContext.CreditMemoPaymentLines.Add(creditMemoPaymentLine);

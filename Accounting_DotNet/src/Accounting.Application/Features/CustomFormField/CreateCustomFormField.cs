@@ -26,5 +26,7 @@ namespace Accounting.Application.Features
         public Guid? FormId { get; set; }
 
         public Guid? FieldType { get; set; }
+
+        public string? CreatedBy { get; set; }
     }
 } 

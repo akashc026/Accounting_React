@@ -34,7 +34,8 @@ namespace Accounting.Application.Features
                     Id = Guid.NewGuid(),
                     LocationId = detailDto.LocationId,
                     QuantityAvailable = detailDto.QuantityAvailable,
-                    ItemId = detailDto.ItemId
+                    ItemId = detailDto.ItemId,
+                    CreatedBy = request.CreatedBy ?? string.Empty
                 };
 
                 _dbContext.InventoryDetails.Add(inventoryDetail);

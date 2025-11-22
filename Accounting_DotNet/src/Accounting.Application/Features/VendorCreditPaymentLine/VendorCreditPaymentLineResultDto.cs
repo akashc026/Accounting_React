@@ -17,5 +17,15 @@ namespace Accounting.Application.Features
         public Guid? VCID { get; set; }
         public string? VendorCreditSeqNum { get; set; }
         public decimal? MainRecordAmount { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public string CreatedBy { get; set; } = null!;
+
     }
+
+
+
+
+
 }

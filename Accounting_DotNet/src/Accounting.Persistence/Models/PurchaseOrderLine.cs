@@ -31,6 +31,8 @@ public partial class PurchaseOrderLine : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual Product Item { get; set; } = null!;
 
     public virtual ICollection<ItemReceiptLine> ItemReceiptLines { get; set; } = new List<ItemReceiptLine>();

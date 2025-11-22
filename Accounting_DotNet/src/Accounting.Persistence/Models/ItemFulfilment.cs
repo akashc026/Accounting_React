@@ -43,6 +43,8 @@ public partial class ItemFulfilment : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual Customer Customer { get; set; } = null!;
 
     public virtual Form? FormNavigation { get; set; }

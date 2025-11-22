@@ -21,6 +21,8 @@ public partial class TypeOfField : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual ICollection<CustomFormField> CustomFormFields { get; set; } = new List<CustomFormField>();
 
     public virtual ICollection<StandardField> StandardFields { get; set; } = new List<StandardField>();

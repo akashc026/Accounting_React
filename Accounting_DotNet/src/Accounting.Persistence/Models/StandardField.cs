@@ -29,6 +29,8 @@ public partial class StandardField : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual TypeOfField FieldTypeNavigation { get; set; } = null!;
 
     public virtual RecordType TypeOfRecordNavigation { get; set; } = null!;

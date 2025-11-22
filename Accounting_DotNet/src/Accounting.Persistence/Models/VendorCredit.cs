@@ -39,6 +39,8 @@ public partial class VendorCredit : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual Form FormNavigation { get; set; } = null!;
 
     public virtual Location Location { get; set; } = null!;

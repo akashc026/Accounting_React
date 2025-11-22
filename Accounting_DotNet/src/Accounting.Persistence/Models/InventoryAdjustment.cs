@@ -25,6 +25,8 @@ public partial class InventoryAdjustment : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual Customer? CustomerNavigation { get; set; }
 
     public virtual Form FormNavigation { get; set; } = null!;

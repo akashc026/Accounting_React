@@ -15,5 +15,7 @@ public partial class ItemType : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 }

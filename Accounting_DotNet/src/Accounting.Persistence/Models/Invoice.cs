@@ -45,6 +45,8 @@ public partial class Invoice : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual Customer Customer { get; set; } = null!;
 
     public virtual ItemFulfilment? DN { get; set; }

@@ -17,5 +17,7 @@ public partial class FormSequence : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual Form Form { get; set; } = null!;
 }

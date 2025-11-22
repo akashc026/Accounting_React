@@ -39,6 +39,8 @@ public partial class PurchaseOrder : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual Form? FormNavigation { get; set; }
 
     public virtual ICollection<ItemReceipt> ItemReceipts { get; set; } = new List<ItemReceipt>();

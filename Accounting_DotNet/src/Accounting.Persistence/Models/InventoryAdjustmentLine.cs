@@ -27,6 +27,8 @@ public partial class InventoryAdjustmentLine : IEntity<System.Guid>, ICreateAudi
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual InventoryAdjustment InventoryAdjustment { get; set; } = null!;
 
     public virtual Product Item { get; set; } = null!;

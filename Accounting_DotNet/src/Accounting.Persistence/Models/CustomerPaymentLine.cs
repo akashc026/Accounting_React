@@ -29,5 +29,7 @@ public partial class CustomerPaymentLine : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual CustomerPayment? Payment { get; set; }
 }

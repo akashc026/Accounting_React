@@ -33,6 +33,8 @@ public partial class ChartOfAccount : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual AccountType? AccountTypeNavigation { get; set; }
 
     public virtual ICollection<Form> FormAccountPayableNavigations { get; set; } = new List<Form>();

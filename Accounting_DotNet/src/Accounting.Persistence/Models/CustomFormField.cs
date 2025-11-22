@@ -29,6 +29,8 @@ public partial class CustomFormField : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual ICollection<CustomFieldValue> CustomFieldValues { get; set; } = new List<CustomFieldValue>();
 
     public virtual TypeOfField? FieldTypeNavigation { get; set; }

@@ -14,4 +14,6 @@ public partial class SalesOrderNumberSequence : IEntity<System.Int32>, ICreateAu
     public DateTime CreatedDate { get; set; }
 
     public string CreatedBy { get; set; } = null!;
+
+    public bool IsDeleted { get; set; }
 }

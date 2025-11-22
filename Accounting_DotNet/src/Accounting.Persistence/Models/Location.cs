@@ -23,6 +23,8 @@ public partial class Location : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual ICollection<CreditMemo> CreditMemos { get; set; } = new List<CreditMemo>();
 
     public virtual ICollection<CustomerPayment> CustomerPayments { get; set; } = new List<CustomerPayment>();

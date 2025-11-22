@@ -29,6 +29,8 @@ public partial class CreditMemoLine : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual CreditMemo CM { get; set; } = null!;
 
     public virtual Product Item { get; set; } = null!;

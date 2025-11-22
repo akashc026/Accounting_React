@@ -21,6 +21,8 @@ public partial class Tax : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual ICollection<CreditMemoLine> CreditMemoLines { get; set; } = new List<CreditMemoLine>();
 
     public virtual ICollection<DebitMemoLine> DebitMemoLines { get; set; } = new List<DebitMemoLine>();

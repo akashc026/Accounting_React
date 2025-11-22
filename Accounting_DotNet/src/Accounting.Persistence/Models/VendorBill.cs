@@ -45,6 +45,8 @@ public partial class VendorBill : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual Form? FormNavigation { get; set; }
 
     public virtual ItemReceipt? IR { get; set; }

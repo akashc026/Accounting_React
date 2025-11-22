@@ -33,6 +33,8 @@ public partial class VendorBillLine : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual Product Item { get; set; } = null!;
 
     public virtual ItemReceiptLine? ItemReceiptLine { get; set; }

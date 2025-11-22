@@ -51,6 +51,8 @@ public partial class Form : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual ChartOfAccount? AccountPayableNavigation { get; set; }
 
     public virtual ChartOfAccount? AccountReceivableNavigation { get; set; }

@@ -29,6 +29,8 @@ public partial class VendorCreditLine : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual Product Item { get; set; } = null!;
 
     public virtual Tax? Tax { get; set; }

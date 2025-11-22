@@ -15,6 +15,8 @@ public partial class RecordType : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual ICollection<CustomFieldValue> CustomFieldValues { get; set; } = new List<CustomFieldValue>();
 
     public virtual ICollection<Form> Forms { get; set; } = new List<Form>();

@@ -29,6 +29,8 @@ public partial class JournalEntryLine : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual ChartOfAccount? AccountNavigation { get; set; }
 
     public virtual JournalEntry? JE { get; set; }

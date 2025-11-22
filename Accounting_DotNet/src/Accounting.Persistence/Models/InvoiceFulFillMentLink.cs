@@ -17,6 +17,8 @@ public partial class InvoiceFulFillMentLink : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual Invoice Invoice { get; set; } = null!;
 
     public virtual ItemFulfilment ItemFulFillment { get; set; } = null!;

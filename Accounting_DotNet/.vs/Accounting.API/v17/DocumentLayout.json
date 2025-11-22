@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\personal git\\accounting_react\\accounting_dotnet\\src\\accounting.persistence\\models\\formsourcetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|solutionrelative:src\\accounting.persistence\\models\\formsourcetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\personal git\\accounting_react\\accounting_dotnet\\src\\accounting.persistence\\codetemplates\\efcore\\dbcontext.t4||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|solutionrelative:src\\accounting.persistence\\codetemplates\\efcore\\dbcontext.t4||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\personal git\\accounting_react\\accounting_dotnet\\src\\accounting.persistence\\codetemplates\\efcore\\entitytype.t4||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|solutionrelative:src\\accounting.persistence\\codetemplates\\efcore\\entitytype.t4||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\personal git\\accounting_react\\accounting_dotnet\\src\\accounting.persistence\\codetemplates\\efcore\\dbcontext.t4||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|solutionrelative:src\\accounting.persistence\\codetemplates\\efcore\\dbcontext.t4||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\personal git\\accounting_react\\accounting_dotnet\\src\\accounting.persistence\\accountingdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|solutionrelative:src\\accounting.persistence\\accountingdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|d:\\personal git\\accounting_react\\accounting_dotnet\\src\\accounting.persistence\\models\\formsourcetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BB07513D-B3FE-473C-A408-6078A8085B3E}|src\\Accounting.Persistence\\Accounting.Persistence.csproj|solutionrelative:src\\accounting.persistence\\models\\formsourcetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E54CF8B7-B81F-4949-A0D1-B7C24A49F02A}|src\\Accounting.Application\\Accounting.Application.csproj|d:\\personal git\\accounting_react\\accounting_dotnet\\src\\accounting.application\\features\\product\\getproductsbyitemtypehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -66,7 +66,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 12,
           "Children": [
             {
               "$type": "Document",
@@ -80,19 +80,6 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-10T05:57:47.662Z",
               "IsPinned": true
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "FormSourceType.cs",
-              "DocumentMoniker": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\FormSourceType.cs",
-              "RelativeDocumentMoniker": "src\\Accounting.Persistence\\Models\\FormSourceType.cs",
-              "ToolTip": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\FormSourceType.cs",
-              "RelativeToolTip": "src\\Accounting.Persistence\\Models\\FormSourceType.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T19:01:58.497Z",
-              "EditorCaption": ""
             },
             {
               "$type": "Bookmark",
@@ -132,7 +119,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "AccountingDbContext.cs",
               "DocumentMoniker": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\src\\Accounting.Persistence\\AccountingDbContext.cs",
               "RelativeDocumentMoniker": "src\\Accounting.Persistence\\AccountingDbContext.cs",
@@ -141,19 +128,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-06T15:27:32.987Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "DbContext.t4",
-              "DocumentMoniker": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
-              "RelativeDocumentMoniker": "src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
-              "ToolTip": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
-              "RelativeToolTip": "src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
-              "ViewState": "AgIAAFEBAAAAAAAAAAAuwGMBAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-10-25T16:08:18.611Z",
               "EditorCaption": ""
             },
             {
@@ -167,6 +141,32 @@
               "ViewState": "AgIAAMYAAAAAAAAAAAAuwNgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-10-25T16:08:32.071Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DbContext.t4",
+              "DocumentMoniker": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
+              "RelativeDocumentMoniker": "src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
+              "ToolTip": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
+              "RelativeToolTip": "src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
+              "ViewState": "AgIAAFMBAAAAAAAAAAAiwGMBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-10-25T16:08:18.611Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FormSourceType.cs",
+              "DocumentMoniker": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\FormSourceType.cs",
+              "RelativeDocumentMoniker": "src\\Accounting.Persistence\\Models\\FormSourceType.cs",
+              "ToolTip": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\src\\Accounting.Persistence\\Models\\FormSourceType.cs",
+              "RelativeToolTip": "src\\Accounting.Persistence\\Models\\FormSourceType.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-21T19:01:58.497Z",
               "EditorCaption": ""
             },
             {

@@ -31,6 +31,8 @@ public partial class CustomerPayment : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual Customer CustomerNavigation { get; set; } = null!;
 
     public virtual ICollection<CustomerPaymentLine> CustomerPaymentLines { get; set; } = new List<CustomerPaymentLine>();

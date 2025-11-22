@@ -23,6 +23,8 @@ public partial class ProductStock : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual Product? Item { get; set; }
 
     public virtual Location? Location { get; set; }

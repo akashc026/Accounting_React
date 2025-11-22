@@ -20,6 +20,8 @@ public partial class CustomFieldValue : ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual CustomFormField CustomField { get; set; } = null!;
 
     public virtual RecordType TypeOfRecordNavigation { get; set; } = null!;

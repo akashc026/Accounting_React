@@ -17,5 +17,7 @@ public partial class TransactionStatus : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual RecordType TypeOfRecordNavigation { get; set; } = null!;
 }

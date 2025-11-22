@@ -45,6 +45,8 @@ public partial class Product : IEntity<System.Guid>, ICreateAudit
 
     public string CreatedBy { get; set; } = null!;
 
+    public bool IsDeleted { get; set; }
+
     public virtual ChartOfAccount? COGSAccountNavigation { get; set; }
 
     public virtual ICollection<CreditMemoLine> CreditMemoLines { get; set; } = new List<CreditMemoLine>();

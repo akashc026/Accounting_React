@@ -136,6 +136,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(50);
         });
 
@@ -152,6 +153,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.IsParent).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.OpeningBalance).HasColumnType("decimal(18, 2)");
@@ -183,6 +185,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.NetTotal).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.SequenceNumber).HasMaxLength(50);
             entity.Property(e => e.SubTotal).HasColumnType("decimal(18, 2)");
@@ -223,6 +226,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
@@ -257,6 +261,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.CreditMemoSeqNum).HasMaxLength(50);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.MainRecordAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.PaymentAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.RecordID).HasMaxLength(50);
@@ -280,6 +285,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.RecordID).HasMaxLength(50);
             entity.Property(e => e.ValueText).HasMaxLength(255);
 
@@ -309,6 +315,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.FieldLabel).HasMaxLength(50);
             entity.Property(e => e.FieldName).HasMaxLength(50);
             entity.Property(e => e.FieldSource).HasMaxLength(50);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.IsDisabled).HasDefaultValue(false);
             entity.Property(e => e.IsRequired).HasDefaultValue(false);
 
@@ -337,6 +344,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(50);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.Phone).HasMaxLength(50);
             entity.Property(e => e.SequenceNumber).HasMaxLength(50);
@@ -363,6 +371,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.PaymentDate).HasColumnType("date");
             entity.Property(e => e.SequenceNumber).HasMaxLength(50);
             entity.Property(e => e.UnAppliedAmount).HasColumnType("decimal(18, 2)");
@@ -399,6 +408,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.IsApplied).HasDefaultValue(false);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.MainRecordAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.PaymentAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.PaymentSeqNum).HasMaxLength(50);
@@ -428,6 +438,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.NetTotal).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.SequenceNumber)
                 .HasMaxLength(50)
@@ -469,6 +480,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
@@ -505,6 +517,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.FormName).HasMaxLength(255);
             entity.Property(e => e.Inactive).HasDefaultValue(false);
             entity.Property(e => e.IsDefault).HasDefaultValue(false);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Prefix).HasMaxLength(50);
 
             entity.HasOne(d => d.AccountPayableNavigation).WithMany(p => p.FormAccountPayableNavigations)
@@ -579,6 +592,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
 
             entity.HasOne(d => d.Form).WithMany(p => p.FormSequences)
                 .HasForeignKey(d => d.FormId)
@@ -600,6 +614,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(100);
         });
 
@@ -617,6 +632,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.SequenceNumber).HasMaxLength(50);
             entity.Property(e => e.TranDate).HasColumnType("date");
 
@@ -646,6 +662,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.QuantityAdjusted).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.QuantityInHand).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 2)");
@@ -677,6 +694,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.QuantityAvailable).HasColumnType("decimal(18, 2)");
 
             entity.HasOne(d => d.Item).WithMany(p => p.InventoryDetails)
@@ -703,6 +721,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.Date).HasColumnType("date");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.QuantityChange).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.ReferenceId).HasMaxLength(100);
@@ -731,6 +750,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.SequenceNumber).HasMaxLength(50);
             entity.Property(e => e.TranDate).HasColumnType("date");
 
@@ -764,6 +784,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.QuantityInHand).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.QuantityTransfer).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 2)");
@@ -800,6 +821,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.Discount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.InvoiceDate).HasColumnType("date");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.NetTotal).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.SequenceNumber)
                 .HasMaxLength(50)
@@ -845,6 +867,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
 
             entity.HasOne(d => d.Invoice).WithMany(p => p.InvoiceFulFillMentLinks)
                 .HasForeignKey(d => d.InvoiceID)
@@ -869,6 +892,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.QuantityDelivered).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxPercent).HasColumnType("decimal(18, 2)");
@@ -911,6 +935,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.DeliveryDate).HasColumnType("date");
             entity.Property(e => e.Discount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.NetTotal).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.SequenceNumber)
                 .HasMaxLength(50)
@@ -954,6 +979,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
@@ -995,6 +1021,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
                 .HasColumnType("datetime");
             entity.Property(e => e.Discount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.NetTotal).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.ReceiptDate).HasColumnType("date");
             entity.Property(e => e.SequenceNumber)
@@ -1039,6 +1066,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.TaxPercent).HasColumnType("decimal(18, 2)");
@@ -1077,6 +1105,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(100);
         });
 
@@ -1094,6 +1123,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.JournalAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Memo).HasMaxLength(50);
             entity.Property(e => e.RecordID).HasMaxLength(200);
@@ -1121,6 +1151,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
                 .HasColumnType("datetime");
             entity.Property(e => e.Credit).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Debit).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Memo).HasMaxLength(50);
             entity.Property(e => e.RecordID).HasMaxLength(200);
             entity.Property(e => e.RecordType).HasMaxLength(50);
@@ -1149,6 +1180,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.Notes).HasMaxLength(50);
             entity.Property(e => e.Phone).HasMaxLength(50);
@@ -1169,6 +1201,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.ItemCode).HasMaxLength(50);
             entity.Property(e => e.ItemName).HasMaxLength(100);
             entity.Property(e => e.PurchasePrice).HasColumnType("decimal(18, 10)");
@@ -1219,6 +1252,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.OpeningStockQty).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.OpeningStockRate).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
@@ -1248,6 +1282,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
                 .HasColumnType("datetime");
             entity.Property(e => e.Discount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.NetTotal).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.PODate).HasColumnType("date");
             entity.Property(e => e.SequenceNumber)
@@ -1287,6 +1322,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.TaxPercent).HasColumnType("decimal(18, 2)");
@@ -1321,6 +1357,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(100);
         });
 
@@ -1340,6 +1377,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
                 .HasColumnType("datetime");
             entity.Property(e => e.Discount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.NetTotal).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.SODate).HasColumnType("date");
             entity.Property(e => e.SequenceNumber)
@@ -1380,6 +1418,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
@@ -1416,6 +1455,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
         });
 
         modelBuilder.Entity<StandardField>(entity =>
@@ -1430,6 +1470,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Label).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.Source).HasMaxLength(100);
@@ -1459,6 +1500,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(100);
         });
 
@@ -1477,6 +1519,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.Inactive).HasDefaultValue(false);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.TaxRate).HasColumnType("decimal(5, 2)");
 
@@ -1499,6 +1542,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(100);
 
             entity.HasOne(d => d.TypeOfRecordNavigation).WithMany(p => p.TransactionStatuses)
@@ -1524,6 +1568,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(255);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.PackageName).HasMaxLength(100);
         });
 
@@ -1543,6 +1588,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(50);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.Phone).HasMaxLength(50);
             entity.Property(e => e.SequenceNumber).HasMaxLength(50);
@@ -1571,6 +1617,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.Discount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.InvoiceDate).HasColumnType("date");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.NetTotal).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.SequenceNumber)
                 .HasMaxLength(50)
@@ -1614,6 +1661,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.TaxPercent).HasColumnType("decimal(18, 2)");
@@ -1654,6 +1702,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.GrossAmount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.NetTotal).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.SequenceNumber).HasMaxLength(50);
             entity.Property(e => e.SubTotal).HasColumnType("decimal(18, 2)");
@@ -1694,6 +1743,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Rate).HasColumnType("decimal(18, 10)");
             entity.Property(e => e.TaxAmount).HasColumnType("decimal(18, 2)");
@@ -1727,6 +1777,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.MainRecordAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.PaymentAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.RecordID).HasMaxLength(50);
@@ -1755,6 +1806,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.PaymentDate).HasColumnType("date");
             entity.Property(e => e.SequenceNumber).HasMaxLength(50);
             entity.Property(e => e.UnAppliedAmount).HasColumnType("decimal(18, 2)");
@@ -1791,6 +1843,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.IsApplied).HasDefaultValue(false);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.MainRecordAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.PaymentAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.PaymentSeqNum).HasMaxLength(50);

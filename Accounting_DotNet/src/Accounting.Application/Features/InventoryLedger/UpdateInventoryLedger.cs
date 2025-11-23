@@ -10,6 +10,7 @@ namespace Accounting.Application.Features
     public class UpdateInventoryLedger : IUpdateEntity<Guid, Guid>
     {
         public Guid Id { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public Guid? ItemID { get; set; }
 

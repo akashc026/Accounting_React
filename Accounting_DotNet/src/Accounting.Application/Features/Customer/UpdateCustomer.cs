@@ -10,8 +10,9 @@ namespace Accounting.Application.Features
     public class UpdateCustomer : IUpdateEntity<Guid,Guid>
     {
         public Guid Id { get; set; }
+        public bool? IsDeleted { get; set; }
 
-        public string Name { get; set; } = null!;
+        public string? Name { get; set; }
 
         public string? Email { get; set; }
 
@@ -25,6 +26,6 @@ namespace Accounting.Application.Features
 
         public Guid Form { get; set; }
 
-        public string SequenceNumber { get; set; } = null!;
+        public string? SequenceNumber { get; set; }
     }
 }

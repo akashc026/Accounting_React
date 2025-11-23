@@ -27,7 +27,10 @@ namespace Accounting.Application.Features
         public string? RecordType { get; set; }
 
         public List<JournalEntryLineDto>? JournalEntryLines { get; set; }
-    }
+    
+        public bool IsDeleted { get; set; }
+
+}
 
     public class JournalEntryLineDto
     {

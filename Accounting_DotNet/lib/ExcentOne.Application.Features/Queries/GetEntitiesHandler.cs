@@ -22,7 +22,7 @@ public abstract class GetEntitiesHandler<TDbContext, TEntity, TRequest, TRespons
     public override async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
         => await ExecuteQueryAsync(async (req, toek) =>
         {
-            var entities = Entities.AsExpandable();
+            var entities = SoftDeleteQueryHelper<TEntity>.Apply(Entities).AsExpandable();
             var builder = PredicateBuilder.New<TEntity>(false);
             var predicate = ComposeFilter(builder, request);
             if (predicate == builder.DefaultExpression)

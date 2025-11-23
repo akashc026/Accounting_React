@@ -23,7 +23,9 @@ public abstract class UpsertEntityHandler<TDbContext, TEntity, TKey, TRequest, T
 
     public override async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
     {
-        var entities = Entities.AsExpandable();
+        var entities = Entities
+            .IgnoreQueryFilters()
+            .AsExpandable();
         var predicate = ComposeFilter(PredicateBuilder.New<TEntity>(), request);
         var entity = await entities.FirstOrDefaultAsync(predicate, cancellationToken);
         var exists = entity is not null;

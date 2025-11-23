@@ -20,6 +20,9 @@ namespace Accounting.Application.Features
         protected override Product UpdateEntity(UpdateProduct request, Product entity, IMapper mapper)
         {
             // Only update fields that are provided (not null)
+            if (request.IsDeleted.HasValue)
+                entity.IsDeleted = request.IsDeleted.Value;
+
             if (request.ItemCode != null)
                 entity.ItemCode = request.ItemCode;
 

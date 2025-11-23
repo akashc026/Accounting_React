@@ -6,6 +6,7 @@ namespace Accounting.Application.Features
     public class UpdateInventoryAdjustmentLine : IUpdateEntity<Guid, Guid>
     {
         public Guid Id { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public Guid InventoryAdjustmentID { get; set; }
 

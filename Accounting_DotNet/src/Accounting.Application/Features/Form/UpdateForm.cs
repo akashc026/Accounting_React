@@ -10,101 +10,102 @@ using ExcentOne.Application.Features.Commands;
     {
         public class UpdateForm : IUpdateEntity<Guid, Guid>
         {
-            public Guid Id { get; set; }
+        public Guid Id { get; set; }
+        public bool? IsDeleted { get; set; }
 
-            public string? FormName { get; set; }
+        public string? FormName { get; set; }
 
-            public Guid? TypeOfRecord { get; set; }
+        public Guid? TypeOfRecord { get; set; }
 
-            public string? Prefix { get; set; }
+        public string? Prefix { get; set; }
 
-            public string? Reasons { get; set; }
+        public string? Reasons { get; set; }
 
             [JsonPropertyName("isDefault")]
-            public bool? IsDefault { get; set; }
+        public bool? IsDefault { get; set; }
 
             [JsonPropertyName("inactive")]
-            public bool? Inactive { get; set; }
+        public bool? Inactive { get; set; }
 
             // Use string properties for account fields to handle JSON conversion issues
             [JsonPropertyName("accountReceivable")]
-            public string? AccountReceivableString { get; set; }
+        public string? AccountReceivableString { get; set; }
 
             [JsonPropertyName("clearing")]
-            public string? ClearingString { get; set; }
+        public string? ClearingString { get; set; }
 
             [JsonPropertyName("accuredTax")]
-            public string? AccuredTaxString { get; set; }
+        public string? AccuredTaxString { get; set; }
 
             [JsonPropertyName("accuredAR")]
-            public string? AccuredARString { get; set; }
+        public string? AccuredARString { get; set; }
 
             [JsonPropertyName("discountOnTax")]
-            public string? DiscountOnTaxString { get; set; }
+        public string? DiscountOnTaxString { get; set; }
 
             [JsonPropertyName("formType")]
-            public string? FormTypeString { get; set; }
+        public string? FormTypeString { get; set; }
 
             [JsonPropertyName("undepositedFunds")]
-            public string? UndepositedFundsString { get; set; }
+        public string? UndepositedFundsString { get; set; }
 
             [JsonPropertyName("clearingGRNI")]
-            public string? ClearingGRNIString { get; set; }
+        public string? ClearingGRNIString { get; set; }
 
             [JsonPropertyName("clearingSRNI")]
-            public string? ClearingSRNIString { get; set; }
+        public string? ClearingSRNIString { get; set; }
 
             [JsonPropertyName("accountPayable")]
-            public string? AccountPayableString { get; set; }
+        public string? AccountPayableString { get; set; }
 
             [JsonPropertyName("clearingVAT")]
-            public string? ClearingVATString { get; set; }
+        public string? ClearingVATString { get; set; }
 
             [JsonPropertyName("discountOnTaxDR")]
-            public string? DiscountOnTaxDRString { get; set; }
+        public string? DiscountOnTaxDRString { get; set; }
 
             [JsonPropertyName("discountOnTaxCR")]
-            public string? DiscountOnTaxCRString { get; set; }
+        public string? DiscountOnTaxCRString { get; set; }
 
             // Helper properties to convert strings to Guids
             [JsonIgnore]
-            public Guid? AccountReceivable => TryParseGuid(AccountReceivableString);
+        public Guid? AccountReceivable => TryParseGuid(AccountReceivableString);
 
             [JsonIgnore]
-            public Guid? Clearing => TryParseGuid(ClearingString);
+        public Guid? Clearing => TryParseGuid(ClearingString);
 
             [JsonIgnore]
-            public Guid? AccuredTax => TryParseGuid(AccuredTaxString);
+        public Guid? AccuredTax => TryParseGuid(AccuredTaxString);
 
             [JsonIgnore]
-            public Guid? AccuredAR => TryParseGuid(AccuredARString);
+        public Guid? AccuredAR => TryParseGuid(AccuredARString);
 
             [JsonIgnore]
-            public Guid? DiscountOnTax => TryParseGuid(DiscountOnTaxString);
+        public Guid? DiscountOnTax => TryParseGuid(DiscountOnTaxString);
 
             [JsonIgnore]
-            public Guid? FormType => TryParseGuid(FormTypeString);
+        public Guid? FormType => TryParseGuid(FormTypeString);
 
             [JsonIgnore]
-            public Guid? UndepositedFunds => TryParseGuid(UndepositedFundsString);
+        public Guid? UndepositedFunds => TryParseGuid(UndepositedFundsString);
 
             [JsonIgnore]
-            public Guid? ClearingGRNI => TryParseGuid(ClearingGRNIString);
+        public Guid? ClearingGRNI => TryParseGuid(ClearingGRNIString);
 
             [JsonIgnore]
-            public Guid? ClearingSRNI => TryParseGuid(ClearingSRNIString);
+        public Guid? ClearingSRNI => TryParseGuid(ClearingSRNIString);
 
             [JsonIgnore]
-            public Guid? AccountPayable => TryParseGuid(AccountPayableString);
+        public Guid? AccountPayable => TryParseGuid(AccountPayableString);
 
             [JsonIgnore]
-            public Guid? ClearingVAT => TryParseGuid(ClearingVATString);
+        public Guid? ClearingVAT => TryParseGuid(ClearingVATString);
 
             [JsonIgnore]
-            public Guid? DiscountOnTaxDR => TryParseGuid(DiscountOnTaxDRString);
+        public Guid? DiscountOnTaxDR => TryParseGuid(DiscountOnTaxDRString);
 
             [JsonIgnore]
-            public Guid? DiscountOnTaxCR => TryParseGuid(DiscountOnTaxCRString);
+        public Guid? DiscountOnTaxCR => TryParseGuid(DiscountOnTaxCRString);
 
             private static Guid? TryParseGuid(string? value)
             {

@@ -10,11 +10,11 @@ namespace Accounting.Application.Features
     public class UpdateProduct : IUpdateEntity<Guid, Guid>
     {
         public Guid Id { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public string? ItemCode { get; set; }
 
         public string? ItemName { get; set; }
-
 
         public Guid? ItemType { get; set; }
 

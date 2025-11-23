@@ -24,7 +24,9 @@ public abstract class DeleteEntityHandler<TDbContext, TEntity, TKey, TRequest> :
 
     public override async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken)
     {
-        var entities = Entities.AsExpandable();
+        var entities = Entities
+            .IgnoreQueryFilters()
+            .AsExpandable();
         var predicate = ComposeFilter(PredicateBuilder.New<TEntity>(), request);
 
         var entity = await entities.FirstOrDefaultAsync(predicate, cancellationToken);

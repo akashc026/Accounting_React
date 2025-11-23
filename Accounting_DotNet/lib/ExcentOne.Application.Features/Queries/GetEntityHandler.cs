@@ -19,7 +19,7 @@ public abstract class GetEntityHandler<TDbContext, TEntity, TKey, TRequest, TRes
     public override async Task<TResponse?> Handle(TRequest request, CancellationToken cancellationToken)
         => await ExecuteQueryAsync(async (req, token) =>
             {
-                var entities = Entities.AsExpandable();
+                var entities = SoftDeleteQueryHelper<TEntity>.Apply(Entities).AsExpandable();
                 var predicate = ComposeFilter(PredicateBuilder.New<TEntity>(), request);
                 var entity = await entities.FirstOrDefaultAsync(predicate, cancellationToken);
                 return new(request, entity, entity is null ? 0 : 1);

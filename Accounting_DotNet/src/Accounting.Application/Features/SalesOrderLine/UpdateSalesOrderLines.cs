@@ -13,6 +13,8 @@ namespace Accounting.Application.Features
     {
         public Guid Id { get; set; }
 
+        public bool? IsDeleted { get; set; }
+
         public Guid? SOID { get; set; }
 
         public Guid? ItemID { get; set; }

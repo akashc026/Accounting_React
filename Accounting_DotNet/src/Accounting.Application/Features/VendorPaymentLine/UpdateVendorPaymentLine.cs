@@ -10,10 +10,11 @@ namespace Accounting.Application.Features
     public class UpdateVendorPaymentLine : IUpdateEntity<Guid, Guid>
     {
         public Guid Id { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public decimal PaymentAmount { get; set; }
 
-        public string RecordID { get; set; } = null!;
+        public string? RecordID { get; set; }
 
         public bool? IsApplied { get; set; }
 

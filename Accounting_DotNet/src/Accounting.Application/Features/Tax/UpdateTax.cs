@@ -10,6 +10,7 @@ namespace Accounting.Application.Features
     public class UpdateTax : IUpdateEntity<Guid, Guid>
     {
         public Guid Id { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public string? Name { get; set; }
 

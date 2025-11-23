@@ -10,6 +10,7 @@ namespace Accounting.Application.Features
     public class UpdateVendorCredit : IUpdateEntity<Guid, Guid>
     {
         public Guid Id { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public Guid? Form { get; set; }
 

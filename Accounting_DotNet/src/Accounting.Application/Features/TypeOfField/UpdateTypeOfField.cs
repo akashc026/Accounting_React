@@ -10,12 +10,13 @@ namespace Accounting.Application.Features
     public class UpdateTypeOfField : IUpdateEntity<Guid, Guid>
     {
         public Guid Id { get; set; }
+        public bool? IsDeleted { get; set; }
 
-        public string ComponentName { get; set; } = null!;
+        public string? ComponentName { get; set; }
 
-        public string PackageName { get; set; } = null!;
+        public string? PackageName { get; set; }
 
-        public string Category { get; set; } = null!;
+        public string? Category { get; set; }
 
         public string? Description { get; set; }
     }

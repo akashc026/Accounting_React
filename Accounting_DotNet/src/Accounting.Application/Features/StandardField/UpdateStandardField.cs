@@ -10,8 +10,9 @@ namespace Accounting.Application.Features
     public class UpdateStandardField : IUpdateEntity<Guid, Guid>
     {
         public Guid Id { get; set; }
+        public bool? IsDeleted { get; set; }
 
-        public string Name { get; set; } = null!;
+        public string? Name { get; set; }
 
         public Guid TypeOfRecord { get; set; }
 
@@ -21,7 +22,7 @@ namespace Accounting.Application.Features
 
         public bool IsDisabled { get; set; }
 
-        public string Source { get; set; } = null!;
+        public string? Source { get; set; }
 
         public int DisplayOrder { get; set; }
 

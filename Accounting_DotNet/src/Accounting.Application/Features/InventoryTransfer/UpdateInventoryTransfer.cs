@@ -6,6 +6,7 @@ namespace Accounting.Application.Features
     public class UpdateInventoryTransfer : IUpdateEntity<Guid, Guid>
     {
         public Guid Id { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public Guid? CustomerID { get; set; }
 
@@ -17,7 +18,7 @@ namespace Accounting.Application.Features
 
         public bool? IsInactive { get; set; }
 
-        public string SequenceNumber { get; set; } = null!;
+        public string? SequenceNumber { get; set; }
 
         public Guid Form { get; set; }
     }

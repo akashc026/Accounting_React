@@ -40,6 +40,9 @@ namespace Accounting.Application.Features
                 var updateDto = request.Lines.FirstOrDefault(l => l.Id == existingLine.Id);
                 if (updateDto != null)
                 {
+                    if (updateDto.IsDeleted.HasValue)
+                        existingLine.IsDeleted = updateDto.IsDeleted.Value;
+
                     // Only update fields that are provided (not null)
                     if (updateDto.ItemID.HasValue)
                         existingLine.ItemID = updateDto.ItemID.Value;

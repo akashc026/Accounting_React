@@ -42,6 +42,9 @@ namespace Accounting.Application.Features
                 var updateDto = request.Accounts.FirstOrDefault(a => a.Id == existingAccount.Id);
                 if (updateDto != null)
                 {
+                    if (updateDto.IsDeleted.HasValue)
+                        existingAccount.IsDeleted = updateDto.IsDeleted.Value;
+
                     // Only update fields that are provided (not null/empty)
                     if (!string.IsNullOrEmpty(updateDto.Name))
                         existingAccount.Name = updateDto.Name;

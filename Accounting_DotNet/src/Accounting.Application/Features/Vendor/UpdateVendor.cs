@@ -10,7 +10,9 @@ namespace Accounting.Application.Features
     public class UpdateVendor : IUpdateEntity<Guid,Guid>
     {
         public Guid Id { get; set; }
-        public string Name { get; set; } = null!;
+        public bool? IsDeleted { get; set; }
+
+        public string? Name { get; set; }
 
         public string? Email { get; set; }
 

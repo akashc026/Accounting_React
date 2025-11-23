@@ -40,6 +40,9 @@ namespace Accounting.Application.Features
                 var updateDto = request.Details.FirstOrDefault(d => d.Id == existingDetail.Id);
                 if (updateDto != null)
                 {
+                    if (updateDto.IsDeleted.HasValue)
+                        existingDetail.IsDeleted = updateDto.IsDeleted.Value;
+
                     // Only update fields that are provided (not null)
                     if (updateDto.LocationId.HasValue)
                         existingDetail.LocationId = updateDto.LocationId;

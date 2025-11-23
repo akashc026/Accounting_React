@@ -10,10 +10,11 @@ namespace Accounting.Application.Features
     public class UpdateCustomFormField : IUpdateEntity<Guid, Guid>
     {
         public Guid Id { get; set; }
+        public bool? IsDeleted { get; set; }
 
-        public string FieldName { get; set; } = null!;
+        public string? FieldName { get; set; }
 
-        public string FieldLabel { get; set; } = null!;
+        public string? FieldLabel { get; set; }
 
         public bool? IsRequired { get; set; }
 

@@ -39,7 +39,10 @@ namespace Accounting.Application.Features
 
         public string CreatedBy { get; set; } = null!;
 
-    }
+    
+        public bool IsDeleted { get; set; }
+
+}
 
 
 

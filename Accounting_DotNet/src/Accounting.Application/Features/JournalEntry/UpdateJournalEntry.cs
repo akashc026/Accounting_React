@@ -10,6 +10,7 @@ namespace Accounting.Application.Features
     public class UpdateJournalEntry : IUpdateEntity<Guid, Guid>
     {
         public Guid Id { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public decimal? JournalAmount { get; set; }
 

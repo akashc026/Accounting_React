@@ -2631,51 +2631,57 @@
     ]
   },
   "packageFolders": {
-    "/Users/akashchavan/.nuget/packages/": {}
+    "C:\\Users\\Admin\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Application.Features/ExcentOne.Application.Features.csproj",
+      "projectUniqueName": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Application.Features\\ExcentOne.Application.Features.csproj",
       "projectName": "ExcentOne.Application.Features",
-      "projectPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Application.Features/ExcentOne.Application.Features.csproj",
-      "packagesPath": "/Users/akashchavan/.nuget/packages/",
-      "outputPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Application.Features/obj/",
+      "projectPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Application.Features\\ExcentOne.Application.Features.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Application.Features\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/akashchavan/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "/usr/local/share/dotnet/library-packs": {},
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Auditing/ExcentOne.EntityFrameworkCore.Auditing.csproj": {
-              "projectPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Auditing/ExcentOne.EntityFrameworkCore.Auditing.csproj"
+            "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Auditing\\ExcentOne.EntityFrameworkCore.Auditing.csproj": {
+              "projectPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Auditing\\ExcentOne.EntityFrameworkCore.Auditing.csproj"
             },
-            "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Publishing/ExcentOne.EntityFrameworkCore.Publishing.csproj": {
-              "projectPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Publishing/ExcentOne.EntityFrameworkCore.Publishing.csproj"
+            "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Publishing\\ExcentOne.EntityFrameworkCore.Publishing.csproj": {
+              "projectPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Publishing\\ExcentOne.EntityFrameworkCore.Publishing.csproj"
             },
-            "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.SqlServer/ExcentOne.EntityFrameworkCore.SqlServer.csproj": {
-              "projectPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.SqlServer/ExcentOne.EntityFrameworkCore.SqlServer.csproj"
+            "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.SqlServer\\ExcentOne.EntityFrameworkCore.SqlServer.csproj": {
+              "projectPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.SqlServer\\ExcentOne.EntityFrameworkCore.SqlServer.csproj"
             },
-            "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Linq.Extensions/ExcentOne.Linq.Extensions.csproj": {
-              "projectPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Linq.Extensions/ExcentOne.Linq.Extensions.csproj"
+            "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Linq.Extensions\\ExcentOne.Linq.Extensions.csproj": {
+              "projectPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Linq.Extensions\\ExcentOne.Linq.Extensions.csproj"
             },
-            "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.MediatR.EntityFrameworkCore/ExcentOne.MediatR.EntityFrameworkCore.csproj": {
-              "projectPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.MediatR.EntityFrameworkCore/ExcentOne.MediatR.EntityFrameworkCore.csproj"
+            "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.MediatR.EntityFrameworkCore\\ExcentOne.MediatR.EntityFrameworkCore.csproj": {
+              "projectPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.MediatR.EntityFrameworkCore\\ExcentOne.MediatR.EntityFrameworkCore.csproj"
             },
-            "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.MediatR.FluentValidation/ExcentOne.MediatR.FluentValidation.csproj": {
-              "projectPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.MediatR.FluentValidation/ExcentOne.MediatR.FluentValidation.csproj"
+            "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.MediatR.FluentValidation\\ExcentOne.MediatR.FluentValidation.csproj": {
+              "projectPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.MediatR.FluentValidation\\ExcentOne.MediatR.FluentValidation.csproj"
             },
-            "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Persistence.Features/ExcentOne.Persistence.Features.csproj": {
-              "projectPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Persistence.Features/ExcentOne.Persistence.Features.csproj"
+            "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj": {
+              "projectPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj"
             }
           }
         }
@@ -2689,7 +2695,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0": {
@@ -2724,7 +2731,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.409/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

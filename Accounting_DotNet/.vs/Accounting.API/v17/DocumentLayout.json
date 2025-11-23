@@ -151,7 +151,7 @@
               "RelativeDocumentMoniker": "src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
               "ToolTip": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
               "RelativeToolTip": "src\\Accounting.Persistence\\CodeTemplates\\EFCore\\DbContext.t4",
-              "ViewState": "AgIAAFMBAAAAAAAAAAAiwGMBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAFEBAAAAAAAAAAAuwGMBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-10-25T16:08:18.611Z",
               "EditorCaption": ""
@@ -166,8 +166,7 @@
               "RelativeToolTip": "src\\Accounting.Persistence\\Models\\FormSourceType.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-21T19:01:58.497Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-21T19:01:58.497Z"
             },
             {
               "$type": "Document",

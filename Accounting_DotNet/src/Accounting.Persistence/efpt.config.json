@@ -225,6 +225,14 @@
       {
          "Name": "[dbo].[VendorPaymentLines]",
          "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CheckBlockingReferences]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[GetReferenceCount]",
+         "ObjectType": 1
       }
    ],
    "UiHint": null,

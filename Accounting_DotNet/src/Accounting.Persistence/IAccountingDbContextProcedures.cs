@@ -13,7 +13,7 @@ namespace Accounting.Persistence
 {
     public partial interface IAccountingDbContextProcedures
     {
-        Task<List<CheckBlockingReferencesResult>> CheckBlockingReferencesAsync(string tableName, string primaryKeyColumn, string primaryKeyValue, string excludeTables, OutputParameter<int?> totalCount, OutputParameter<int> returnValue = null, CancellationToken cancellationToken = default);
+        Task<int> CheckBlockingReferencesAsync(string tableName, string primaryKeyColumn, string primaryKeyValue, string excludeTables, OutputParameter<int?> totalCount, OutputParameter<int> returnValue = null, CancellationToken cancellationToken = default);
         Task<int> GetReferenceCountAsync(string tableName, string primaryKeyColumn, string primaryKeyValue, OutputParameter<int?> totalCount, OutputParameter<int> returnValue = null, CancellationToken cancellationToken = default);
     }
 }

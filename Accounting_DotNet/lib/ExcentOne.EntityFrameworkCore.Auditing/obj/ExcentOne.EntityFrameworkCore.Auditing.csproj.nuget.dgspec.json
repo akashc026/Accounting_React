@@ -1,37 +1,42 @@
 {
   "format": 1,
   "restore": {
-    "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Auditing/ExcentOne.EntityFrameworkCore.Auditing.csproj": {}
+    "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Auditing\\ExcentOne.EntityFrameworkCore.Auditing.csproj": {}
   },
   "projects": {
-    "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Auditing/ExcentOne.EntityFrameworkCore.Auditing.csproj": {
+    "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Auditing\\ExcentOne.EntityFrameworkCore.Auditing.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Auditing/ExcentOne.EntityFrameworkCore.Auditing.csproj",
+        "projectUniqueName": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Auditing\\ExcentOne.EntityFrameworkCore.Auditing.csproj",
         "projectName": "ExcentOne.EntityFrameworkCore.Auditing",
-        "projectPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Auditing/ExcentOne.EntityFrameworkCore.Auditing.csproj",
-        "packagesPath": "/Users/akashchavan/.nuget/packages/",
-        "outputPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Auditing/obj/",
+        "projectPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Auditing\\ExcentOne.EntityFrameworkCore.Auditing.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Auditing\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/akashchavan/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "/usr/local/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Persistence.Features/ExcentOne.Persistence.Features.csproj": {
-                "projectPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Persistence.Features/ExcentOne.Persistence.Features.csproj"
+              "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj": {
+                "projectPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj"
               },
-              "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Reflection.Extensions/ExcentOne.Reflection.Extensions.csproj": {
-                "projectPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Reflection.Extensions/ExcentOne.Reflection.Extensions.csproj"
+              "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\ExcentOne.Reflection.Extensions.csproj": {
+                "projectPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\ExcentOne.Reflection.Extensions.csproj"
               }
             }
           }
@@ -45,7 +50,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -72,27 +78,32 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.409/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Relational/ExcentOne.EntityFrameworkCore.Relational.csproj": {
+    "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\ExcentOne.EntityFrameworkCore.Relational.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Relational/ExcentOne.EntityFrameworkCore.Relational.csproj",
+        "projectUniqueName": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\ExcentOne.EntityFrameworkCore.Relational.csproj",
         "projectName": "ExcentOne.EntityFrameworkCore.Relational",
-        "projectPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Relational/ExcentOne.EntityFrameworkCore.Relational.csproj",
-        "packagesPath": "/Users/akashchavan/.nuget/packages/",
-        "outputPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Relational/obj/",
+        "projectPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\ExcentOne.EntityFrameworkCore.Relational.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/akashchavan/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "/usr/local/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -110,7 +121,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -137,35 +149,40 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.409/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Persistence.Features/ExcentOne.Persistence.Features.csproj": {
+    "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Persistence.Features/ExcentOne.Persistence.Features.csproj",
+        "projectUniqueName": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj",
         "projectName": "ExcentOne.Persistence.Features",
-        "projectPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Persistence.Features/ExcentOne.Persistence.Features.csproj",
-        "packagesPath": "/Users/akashchavan/.nuget/packages/",
-        "outputPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Persistence.Features/obj/",
+        "projectPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\ExcentOne.Persistence.Features.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Persistence.Features\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/akashchavan/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "/usr/local/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Relational/ExcentOne.EntityFrameworkCore.Relational.csproj": {
-                "projectPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.EntityFrameworkCore.Relational/ExcentOne.EntityFrameworkCore.Relational.csproj"
+              "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\ExcentOne.EntityFrameworkCore.Relational.csproj": {
+                "projectPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.EntityFrameworkCore.Relational\\ExcentOne.EntityFrameworkCore.Relational.csproj"
               }
             }
           }
@@ -179,7 +196,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -200,27 +218,32 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.409/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Reflection.Extensions/ExcentOne.Reflection.Extensions.csproj": {
+    "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\ExcentOne.Reflection.Extensions.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Reflection.Extensions/ExcentOne.Reflection.Extensions.csproj",
+        "projectUniqueName": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\ExcentOne.Reflection.Extensions.csproj",
         "projectName": "ExcentOne.Reflection.Extensions",
-        "projectPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Reflection.Extensions/ExcentOne.Reflection.Extensions.csproj",
-        "packagesPath": "/Users/akashchavan/.nuget/packages/",
-        "outputPath": "/Users/akashchavan/Documents/Account- Excentone/Accounting_React/Accounting_DotNet/lib/ExcentOne.Reflection.Extensions/obj/",
+        "projectPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\ExcentOne.Reflection.Extensions.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "D:\\personal git\\Accounting_React\\Accounting_DotNet\\lib\\ExcentOne.Reflection.Extensions\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/akashchavan/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "/usr/local/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -238,7 +261,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -259,7 +283,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.409/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -43,7 +43,7 @@ namespace Accounting.Persistence
             _context = context;
         }
 
-        public virtual async Task<List<CheckBlockingReferencesResult>> CheckBlockingReferencesAsync(string tableName, string primaryKeyColumn, string primaryKeyValue, string excludeTables, OutputParameter<int?> totalCount, OutputParameter<int> returnValue = null, CancellationToken cancellationToken = default)
+        public virtual async Task<int> CheckBlockingReferencesAsync(string tableName, string primaryKeyColumn, string primaryKeyValue, string excludeTables, OutputParameter<int?> totalCount, OutputParameter<int> returnValue = null, CancellationToken cancellationToken = default)
         {
             var parameterTotalCount = new SqlParameter
             {
@@ -92,7 +92,7 @@ namespace Accounting.Persistence
                 parameterTotalCount,
                 parameterreturnValue,
             };
-            var _ = await _context.SqlQueryAsync<CheckBlockingReferencesResult>("EXEC @returnValue = [dbo].[CheckBlockingReferences] @TableName = @TableName, @PrimaryKeyColumn = @PrimaryKeyColumn, @PrimaryKeyValue = @PrimaryKeyValue, @ExcludeTables = @ExcludeTables, @TotalCount = @TotalCount OUTPUT", sqlParameters, cancellationToken);
+            var _ = await _context.Database.ExecuteSqlRawAsync("EXEC @returnValue = [dbo].[CheckBlockingReferences] @TableName = @TableName, @PrimaryKeyColumn = @PrimaryKeyColumn, @PrimaryKeyValue = @PrimaryKeyValue, @ExcludeTables = @ExcludeTables, @TotalCount = @TotalCount OUTPUT", sqlParameters, cancellationToken);
 
             totalCount?.SetValue(parameterTotalCount.Value);
             returnValue?.SetValue(parameterreturnValue.Value);

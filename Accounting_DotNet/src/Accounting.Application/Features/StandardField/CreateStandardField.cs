@@ -21,6 +21,8 @@ namespace Accounting.Application.Features
 
         public bool IsDisabled { get; set; }
 
+        public bool IsHidden { get; set; }
+
         public string Source { get; set; } = null!;
 
         public int DisplayOrder { get; set; }

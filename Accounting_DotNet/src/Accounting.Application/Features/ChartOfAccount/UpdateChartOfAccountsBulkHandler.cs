@@ -75,6 +75,9 @@ namespace Accounting.Application.Features
 
                     if (updateDto.RunningBalance.HasValue)
                         existingAccount.RunningBalance = updateDto.RunningBalance;
+
+                    if (updateDto.ShowInReport.HasValue)
+                        existingAccount.ShowInReport = updateDto.ShowInReport;
                 }
 
                 if (previousRunningBalances.TryGetValue(existingAccount.Id, out var previousBalance))

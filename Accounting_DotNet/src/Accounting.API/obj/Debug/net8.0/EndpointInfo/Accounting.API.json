@@ -277,6 +277,102 @@
         }
       }
     },
+    "/api/journal": {
+      "post": {
+        "tags": [
+          "AutoJournal"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateJvRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateJvRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateJvRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoJournalResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoJournalResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoJournalResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/journal/preview": {
+      "post": {
+        "tags": [
+          "AutoJournal"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateJvRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateJvRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateJvRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateJvResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateJvResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateJvResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/chart-of-account": {
       "get": {
         "tags": [
@@ -757,6 +853,13 @@
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           },
           {
@@ -1569,6 +1672,20 @@
             }
           },
           {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "PageNumber",
             "in": "query",
             "schema": {
@@ -1582,6 +1699,13 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          },
+          {
+            "name": "Inactive",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
             }
           },
           {
@@ -1843,6 +1967,13 @@
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           },
           {
@@ -2911,6 +3042,13 @@
             }
           },
           {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "SortBy",
             "in": "query",
             "schema": {
@@ -3448,6 +3586,20 @@
             }
           },
           {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "PageNumber",
             "in": "query",
             "schema": {
@@ -3461,6 +3613,13 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          },
+          {
+            "name": "Inactive",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
             }
           },
           {
@@ -4431,6 +4590,20 @@
             }
           },
           {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "PageNumber",
             "in": "query",
             "schema": {
@@ -5338,6 +5511,20 @@
             }
           },
           {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "PageNumber",
             "in": "query",
             "schema": {
@@ -5789,6 +5976,13 @@
         "parameters": [
           {
             "name": "SearchText",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Status",
             "in": "query",
             "schema": {
               "type": "string"
@@ -6324,6 +6518,13 @@
             }
           },
           {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "SortBy",
             "in": "query",
             "schema": {
@@ -6851,6 +7052,13 @@
         "parameters": [
           {
             "name": "SearchText",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Status",
             "in": "query",
             "schema": {
               "type": "string"
@@ -7532,6 +7740,20 @@
             }
           },
           {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "PageNumber",
             "in": "query",
             "schema": {
@@ -8083,6 +8305,20 @@
             }
           },
           {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "PageNumber",
             "in": "query",
             "schema": {
@@ -8096,6 +8332,13 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          },
+          {
+            "name": "Inactive",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
             }
           },
           {
@@ -8352,6 +8595,20 @@
             }
           },
           {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "PageNumber",
             "in": "query",
             "schema": {
@@ -8365,6 +8622,21 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          },
+          {
+            "name": "ItemType",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "Inactive",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
             }
           }
         ],
@@ -8915,6 +9187,13 @@
         "parameters": [
           {
             "name": "SearchText",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Status",
             "in": "query",
             "schema": {
               "type": "string"
@@ -9763,6 +10042,13 @@
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           },
           {
@@ -10812,6 +11098,20 @@
             }
           },
           {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "PageNumber",
             "in": "query",
             "schema": {
@@ -10825,6 +11125,13 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          },
+          {
+            "name": "Inactive",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
             }
           },
           {
@@ -11399,6 +11706,20 @@
             }
           },
           {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortOrder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "PageNumber",
             "in": "query",
             "schema": {
@@ -11412,6 +11733,13 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          },
+          {
+            "name": "Inactive",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
             }
           },
           {
@@ -11662,6 +11990,13 @@
         "parameters": [
           {
             "name": "SearchText",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Status",
             "in": "query",
             "schema": {
               "type": "string"
@@ -12250,6 +12585,13 @@
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           },
           {
@@ -13110,6 +13452,13 @@
             }
           },
           {
+            "name": "Status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "SortBy",
             "in": "query",
             "schema": {
@@ -13628,6 +13977,30 @@
           "name": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AutoJournalResponse": {
+        "type": "object",
+        "properties": {
+          "isValid": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -13710,6 +14083,21 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "showInReport": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -13751,6 +14139,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "name": {
             "type": "string",
@@ -13795,6 +14187,10 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "showInReport": {
+            "type": "boolean",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -13808,6 +14204,10 @@
             "readOnly": true
           },
           "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
             "type": "string",
             "nullable": true
           }
@@ -13864,6 +14264,14 @@
           "runningBalance": {
             "type": "number",
             "format": "double",
+            "nullable": true
+          },
+          "showInReport": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
             "nullable": true
           }
         },
@@ -13937,6 +14345,10 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -13944,6 +14356,10 @@
       "CreateCreditMemoLines": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -13957,6 +14373,10 @@
       "CreateCreditMemoPaymentLines": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -13970,6 +14390,10 @@
       "CreateCustomFieldValues": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "values": {
             "type": "array",
             "items": {
@@ -14021,6 +14445,10 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -14062,6 +14490,10 @@
             "format": "uuid"
           },
           "sequenceNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
             "type": "string",
             "nullable": true
           }
@@ -14117,6 +14549,10 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -14124,6 +14560,10 @@
       "CreateCustomerPaymentLines": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -14200,6 +14640,10 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -14207,6 +14651,10 @@
       "CreateDebitMemoLines": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -14300,6 +14748,10 @@
           "discountOnTaxCR": {
             "type": "string",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -14319,6 +14771,10 @@
           "formSequenceNumber": {
             "type": "integer",
             "format": "int32"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -14332,6 +14788,10 @@
             "readOnly": true
           },
           "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
             "type": "string",
             "nullable": true
           }
@@ -14372,6 +14832,10 @@
           "form": {
             "type": "string",
             "format": "uuid"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -14379,6 +14843,10 @@
       "CreateInventoryAdjustmentLines": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -14392,6 +14860,10 @@
       "CreateInventoryDetails": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "details": {
             "type": "array",
             "items": {
@@ -14441,6 +14913,10 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -14484,6 +14960,10 @@
           "form": {
             "type": "string",
             "format": "uuid"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -14491,6 +14971,10 @@
       "CreateInventoryTransferLines": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -14582,6 +15066,10 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -14589,6 +15077,10 @@
       "CreateInvoiceLines": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -14676,6 +15168,10 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -14683,6 +15179,10 @@
       "CreateItemFulfilmentLines": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -14765,6 +15265,10 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -14772,6 +15276,10 @@
       "CreateItemReceiptLines": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -14818,6 +15326,10 @@
           "recordType": {
             "type": "string",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -14825,6 +15337,10 @@
       "CreateJournalEntryLines": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -14864,6 +15380,10 @@
             "nullable": true
           },
           "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
             "type": "string",
             "nullable": true
           }
@@ -14953,6 +15473,10 @@
           "sequenceNumber": {
             "type": "string",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -14986,6 +15510,10 @@
           "openingStockRate": {
             "type": "number",
             "format": "double"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -15059,6 +15587,10 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -15066,6 +15598,10 @@
       "CreatePurchaseOrderLines": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -15085,6 +15621,10 @@
             "readOnly": true
           },
           "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
             "type": "string",
             "nullable": true
           }
@@ -15157,6 +15697,10 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -15164,6 +15708,10 @@
       "CreateSalesOrderLines": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -15200,6 +15748,9 @@
           "isDisabled": {
             "type": "boolean"
           },
+          "isHidden": {
+            "type": "boolean"
+          },
           "source": {
             "type": "string",
             "nullable": true
@@ -15209,6 +15760,10 @@
             "format": "int32"
           },
           "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
             "type": "string",
             "nullable": true
           }
@@ -15224,6 +15779,10 @@
             "readOnly": true
           },
           "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
             "type": "string",
             "nullable": true
           }
@@ -15254,6 +15813,10 @@
           "inactive": {
             "type": "boolean",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -15279,6 +15842,10 @@
             "nullable": true
           },
           "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
             "type": "string",
             "nullable": true
           }
@@ -15323,6 +15890,10 @@
             "nullable": true
           },
           "sequenceNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
             "type": "string",
             "nullable": true
           }
@@ -15412,6 +15983,10 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -15419,6 +15994,10 @@
       "CreateVendorBillLines": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -15497,6 +16076,10 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -15504,6 +16087,10 @@
       "CreateVendorCreditLines": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -15517,6 +16104,10 @@
       "CreateVendorCreditPaymentLines": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -15576,6 +16167,10 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -15583,6 +16178,10 @@
       "CreateVendorPaymentLines": {
         "type": "object",
         "properties": {
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
           "lines": {
             "type": "array",
             "items": {
@@ -15685,6 +16284,17 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -15726,6 +16336,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "cmid": {
             "type": "string",
@@ -15850,6 +16464,17 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -15891,6 +16516,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "paymentAmount": {
             "type": "number",
@@ -16009,6 +16638,17 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -16096,6 +16736,17 @@
           "typeOfRecordName": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -16137,6 +16788,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "typeOfRecord": {
             "type": "string",
@@ -16207,6 +16862,17 @@
           "fieldTypeName": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -16322,6 +16988,17 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -16363,6 +17040,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "paymentAmount": {
             "type": "number",
@@ -16466,6 +17147,17 @@
           "statusName": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -16543,6 +17235,17 @@
           "formName": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -16670,6 +17373,17 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -16711,6 +17425,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "debitMemoId": {
             "type": "string",
@@ -16836,6 +17554,17 @@
           "statusName": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -17274,6 +18003,17 @@
           "discountOnTaxCRName": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -17327,6 +18067,17 @@
           "formName": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -17370,6 +18121,117 @@
             "format": "uuid"
           },
           "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GenerateJvRequest": {
+        "type": "object",
+        "properties": {
+          "recordType": {
+            "type": "string",
+            "nullable": true
+          },
+          "formId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "discount": {
+            "type": "number",
+            "format": "double"
+          },
+          "operationType": {
+            "type": "string",
+            "nullable": true
+          },
+          "recordId": {
+            "type": "string",
+            "nullable": true
+          },
+          "journalEntryId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "lineItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LineItemDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GenerateJvResult": {
+        "type": "object",
+        "properties": {
+          "isValid": {
+            "type": "boolean"
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GeneratedLine"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GeneratedLine": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "newDebit": {
+            "type": "number",
+            "format": "double"
+          },
+          "newCredit": {
+            "type": "number",
+            "format": "double"
+          },
+          "oldDebit": {
+            "type": "number",
+            "format": "double"
+          },
+          "oldCredit": {
+            "type": "number",
+            "format": "double"
+          },
+          "memo": {
+            "type": "string",
+            "nullable": true
+          },
+          "recordId": {
+            "type": "string",
+            "nullable": true
+          },
+          "recordType": {
             "type": "string",
             "nullable": true
           }
@@ -17462,6 +18324,17 @@
           "reason": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -17503,6 +18376,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "inventoryAdjustmentID": {
             "type": "string",
@@ -17586,6 +18463,17 @@
           "formName": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -17662,6 +18550,17 @@
           "locationName": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -17703,6 +18602,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "locationId": {
             "type": "string",
@@ -17760,6 +18663,17 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -17867,6 +18781,17 @@
           "reason": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -17908,6 +18833,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "itemID": {
             "type": "string",
@@ -18000,6 +18929,17 @@
           "formName": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -18127,6 +19067,17 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -18168,6 +19119,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "inid": {
             "type": "string",
@@ -18317,6 +19272,17 @@
           "dnSequenceNumber": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -18450,6 +19416,17 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -18491,6 +19468,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "dnid": {
             "type": "string",
@@ -18641,6 +19622,17 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -18794,6 +19786,17 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -18835,6 +19838,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "irid": {
             "type": "string",
@@ -18980,6 +19987,17 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -19025,6 +20043,17 @@
           "name": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -19140,6 +20169,14 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -19186,6 +20223,17 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -19227,6 +20275,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "debit": {
             "type": "number",
@@ -19309,6 +20361,9 @@
               "$ref": "#/components/schemas/JournalEntryLineDto"
             },
             "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -19344,6 +20399,65 @@
         },
         "additionalProperties": false
       },
+      "LineItemDto": {
+        "type": "object",
+        "properties": {
+          "itemId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "taxId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "quantityDelivered": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "quantityReceived": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "quantityAdjusted": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "taxAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "taxRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "isTaxApplied": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "LocationResultDto": {
         "type": "object",
         "properties": {
@@ -19374,6 +20488,17 @@
           "notes": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -19516,6 +20641,17 @@
           "sequenceNumber": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -19548,6 +20684,17 @@
           "openingStockRate": {
             "type": "number",
             "format": "double"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -19691,6 +20838,17 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -19732,6 +20890,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "poid": {
             "type": "string",
@@ -19865,6 +21027,17 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -19914,6 +21087,17 @@
           "standardFieldsCount": {
             "type": "integer",
             "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -20004,6 +21188,17 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -20045,6 +21240,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "soid": {
             "type": "string",
@@ -20175,6 +21374,17 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -20253,6 +21463,9 @@
           "isDisabled": {
             "type": "boolean"
           },
+          "isHidden": {
+            "type": "boolean"
+          },
           "source": {
             "type": "string",
             "nullable": true
@@ -20272,6 +21485,17 @@
           "fieldTypeName": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -20317,6 +21541,17 @@
           "name": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -20379,6 +21614,17 @@
           "taxAccountName": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -20432,6 +21678,17 @@
           "typeOfRecordName": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -20502,6 +21759,17 @@
           "standardFieldsCount": {
             "type": "integer",
             "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -20543,6 +21811,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "name": {
             "type": "string",
@@ -20600,6 +21872,10 @@
           "runningBalance": {
             "type": "number",
             "format": "double",
+            "nullable": true
+          },
+          "showInReport": {
+            "type": "boolean",
             "nullable": true
           }
         },
@@ -20737,6 +22013,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "fieldName": {
             "type": "string",
@@ -20976,6 +22256,10 @@
             "type": "string",
             "format": "uuid"
           },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
+          },
           "formName": {
             "type": "string",
             "nullable": true
@@ -21076,6 +22360,10 @@
             "type": "string",
             "format": "uuid"
           },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
+          },
           "formId": {
             "type": "string",
             "format": "uuid"
@@ -21093,6 +22381,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "name": {
             "type": "string",
@@ -21170,6 +22462,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "itemID": {
             "type": "string",
@@ -21556,6 +22852,10 @@
             "type": "string",
             "format": "uuid"
           },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
+          },
           "journalAmount": {
             "type": "number",
             "format": "double",
@@ -21730,6 +23030,10 @@
             "type": "string",
             "format": "uuid"
           },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
+          },
           "itemID": {
             "type": "string",
             "format": "uuid",
@@ -21848,6 +23152,10 @@
             "type": "string",
             "format": "uuid"
           },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
+          },
           "name": {
             "type": "string",
             "nullable": true
@@ -21948,6 +23256,10 @@
             "type": "string",
             "format": "uuid"
           },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
+          },
           "name": {
             "type": "string",
             "nullable": true
@@ -21964,6 +23276,9 @@
             "type": "boolean"
           },
           "isDisabled": {
+            "type": "boolean"
+          },
+          "isHidden": {
             "type": "boolean"
           },
           "source": {
@@ -21987,6 +23302,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "name": {
             "type": "string",
@@ -22029,6 +23348,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "componentName": {
             "type": "string",
@@ -22474,6 +23797,17 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -22515,6 +23849,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "vbid": {
             "type": "string",
@@ -22662,6 +24000,17 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -22790,6 +24139,17 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -22831,6 +24191,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "vcid": {
             "type": "string",
@@ -22956,6 +24320,17 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -22997,6 +24372,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "paymentAmount": {
             "type": "number",
@@ -23119,6 +24498,17 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -23234,6 +24624,17 @@
             "type": "number",
             "format": "double",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -23275,6 +24676,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "nullable": true
           },
           "paymentAmount": {
             "type": "number",
@@ -23378,6 +24783,17 @@
           "statusName": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -23456,6 +24872,17 @@
           "formName": {
             "type": "string",
             "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

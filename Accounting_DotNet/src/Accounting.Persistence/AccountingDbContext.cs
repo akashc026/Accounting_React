@@ -159,6 +159,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
             entity.Property(e => e.OpeningBalance).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.ParentNumber).HasMaxLength(50);
             entity.Property(e => e.RunningBalance).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.ShowInReport).HasDefaultValue(false);
 
             entity.HasOne(d => d.AccountTypeNavigation).WithMany(p => p.ChartOfAccounts)
                 .HasForeignKey(d => d.AccountType)
@@ -1471,6 +1472,7 @@ public partial class AccountingDbContext : SqlServerDbContext<AccountingDbContex
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.IsDeleted).HasDefaultValue(false);
+            entity.Property(e => e.IsHidden).HasDefaultValue(false);
             entity.Property(e => e.Label).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.Source).HasMaxLength(100);

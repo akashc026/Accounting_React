@@ -31,6 +31,8 @@ namespace Accounting.Application.Features
 
         public decimal? RunningBalance { get; set; }
 
+        public bool? ShowInReport { get; set; }
+
         public string? CreatedBy { get; set; }
     }
 }

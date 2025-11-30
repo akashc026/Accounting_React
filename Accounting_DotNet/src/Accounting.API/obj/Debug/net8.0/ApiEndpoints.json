@@ -167,6 +167,58 @@
     ]
   },
   {
+    "ContainingType": "Accounting.API.Controllers.AutoJournalController",
+    "Method": "GenerateAndProcess",
+    "RelativePath": "api/journal",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Services.GenerateJvRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Accounting.API.Controllers.AutoJournalResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Accounting.API.Controllers.AutoJournalController",
+    "Method": "Preview",
+    "RelativePath": "api/journal/preview",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Accounting.Application.Services.GenerateJvRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Accounting.Application.Services.GenerateJvResult",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "Accounting.API.Controllers.ChartOfAccountController",
     "Method": "Get",
     "RelativePath": "chart-of-account",
@@ -453,6 +505,11 @@
       {
         "Name": "LocationId",
         "Type": "System.Nullable\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Status",
+        "Type": "System.String",
         "IsRequired": false
       },
       {
@@ -1254,6 +1311,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -1261,6 +1328,11 @@
       {
         "Name": "PageSize",
         "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Inactive",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       },
       {
@@ -1323,6 +1395,11 @@
       {
         "Name": "LocationId",
         "Type": "System.Nullable\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Status",
+        "Type": "System.String",
         "IsRequired": false
       },
       {
@@ -1696,13 +1773,7 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "Accounting.API.Controllers.CustomerController",
@@ -1740,6 +1811,11 @@
       {
         "Name": "LocationID",
         "Type": "System.Nullable\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Status",
+        "Type": "System.String",
         "IsRequired": false
       },
       {
@@ -2066,6 +2142,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -2073,6 +2159,11 @@
       {
         "Name": "PageSize",
         "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Inactive",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       },
       {
@@ -2665,6 +2756,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -3213,6 +3314,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -3486,6 +3597,11 @@
     "Parameters": [
       {
         "Name": "SearchText",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Status",
         "Type": "System.String",
         "IsRequired": false
       },
@@ -3804,6 +3920,11 @@
     "Parameters": [
       {
         "Name": "SearchText",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Status",
         "Type": "System.String",
         "IsRequired": false
       },
@@ -4132,6 +4253,11 @@
     "Parameters": [
       {
         "Name": "SearchText",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Status",
         "Type": "System.String",
         "IsRequired": false
       },
@@ -4552,6 +4678,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -4886,6 +5022,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -4893,6 +5039,11 @@
       {
         "Name": "PageSize",
         "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Inactive",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       },
       {
@@ -5052,6 +5203,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -5059,6 +5220,16 @@
       {
         "Name": "PageSize",
         "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ItemType",
+        "Type": "System.Nullable\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Inactive",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       }
     ],
@@ -5391,6 +5562,11 @@
     "Parameters": [
       {
         "Name": "SearchText",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Status",
         "Type": "System.String",
         "IsRequired": false
       },
@@ -5908,6 +6084,11 @@
       {
         "Name": "LocationID",
         "Type": "System.Nullable\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Status",
+        "Type": "System.String",
         "IsRequired": false
       },
       {
@@ -6552,6 +6733,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -6559,6 +6750,11 @@
       {
         "Name": "PageSize",
         "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Inactive",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       },
       {
@@ -6921,6 +7117,16 @@
         "IsRequired": false
       },
       {
+        "Name": "SortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortOrder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "PageNumber",
         "Type": "System.Int32",
         "IsRequired": false
@@ -6928,6 +7134,11 @@
       {
         "Name": "PageSize",
         "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Inactive",
+        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       },
       {
@@ -6984,6 +7195,11 @@
     "Parameters": [
       {
         "Name": "SearchText",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Status",
         "Type": "System.String",
         "IsRequired": false
       },
@@ -7334,6 +7550,11 @@
       {
         "Name": "LocationId",
         "Type": "System.Nullable\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Status",
+        "Type": "System.String",
         "IsRequired": false
       },
       {
@@ -7845,6 +8066,11 @@
       {
         "Name": "LocationId",
         "Type": "System.Nullable\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Status",
+        "Type": "System.String",
         "IsRequired": false
       },
       {

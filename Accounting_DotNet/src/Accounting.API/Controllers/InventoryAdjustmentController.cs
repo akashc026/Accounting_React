@@ -1,4 +1,5 @@
 using Accounting.Application.Features;
+using Accounting.Application.Services;
 using ExcentOne.Application.Features.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -9,11 +10,13 @@ namespace Accounting.API.Controllers
     [Route("inventory-adjustment")]
     public class InventoryAdjustmentController : ControllerBase
     {
+        private readonly IJournalGenerationService _journalGenerationService;
         private readonly IMediator _mediator;
 
-        public InventoryAdjustmentController(IMediator mediator)
+        public InventoryAdjustmentController(IMediator mediator, IJournalGenerationService journalGenerationService)
         {
             _mediator = mediator;
+            _journalGenerationService = journalGenerationService;
         }
 
         [HttpGet]
@@ -49,7 +52,13 @@ namespace Accounting.API.Controllers
         {
             DeleteInventoryAdjustment request = new() { Id = id };
             await _mediator.Send(request);
+
+            await _journalGenerationService.ProcessAsync(new GenerateJvRequest
+            {
+                RecordType = "InventoryAdjustment",
+                OperationType = "delete",
+                RecordId = id.ToString()
+            });
         }
     }
 }
-

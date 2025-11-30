@@ -15,7 +15,7 @@ namespace Accounting.Application.Features
     {
         public Guid TypeOfRecord { get; set; }
 
-        public string ValueText { get; set; } = null!;
+        public string? ValueText { get; set; }
 
         public Guid CustomFieldID { get; set; }
 

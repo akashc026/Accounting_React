@@ -6,7 +6,7 @@ using MapsterMapper;
 
 namespace Accounting.Application.Features
 {
-    public class UpdateCustomFormFieldHandler : UpdateEntityHandler<AccountingDbContext, CustomFormField, Guid, UpdateCustomFormField, Guid>
+    public class UpdateCustomFormFieldHandler : DeleteRestrictedUpdateEntityHandler<CustomFormField, UpdateCustomFormField>
     {
         public UpdateCustomFormFieldHandler(AccountingDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
@@ -15,6 +15,11 @@ namespace Accounting.Application.Features
         protected override Guid OnCommandSuccess(DbCommandSuccessArgs<UpdateCustomFormField, CustomFormField> args)
         {
             return args.Entity.Id;
+        }
+
+        protected override string? GetExcludedTables()
+        {
+            return "Froms";
         }
     }
 } 

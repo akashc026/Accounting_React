@@ -1,32 +1,24 @@
 using Accounting.Persistence;
 using Accounting.Persistence.Models;
-using ExcentOne.MediatR.EntityFrameworkCore.Command;
 using MapsterMapper;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Accounting.Application.Features
 {
-    public class UpdateFormHandler : IRequestHandler<UpdateForm, Guid>
+    public class UpdateFormHandler : DeleteRestrictedUpdateEntityHandler<Form, UpdateForm>
     {
-        private readonly AccountingDbContext _dbContext;
-        private readonly IMapper _mapper;
-
         public UpdateFormHandler(AccountingDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
         }
 
-        public async Task<Guid> Handle(UpdateForm request, CancellationToken cancellationToken)
+        protected override Form UpdateEntity(UpdateForm request, Form entity, IMapper mapper)
         {
-            var entity = await _dbContext.Forms.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-            if (entity == null)
+            if (request.IsDeleted.HasValue)
             {
-                throw new InvalidOperationException($"Form with ID {request.Id} not found.");
+                entity.IsDeleted = request.IsDeleted.Value;
             }
 
-            // Update all fields only if they have valid values (not null, not empty, not whitespace)
             if (!string.IsNullOrWhiteSpace(request.FormName))
             {
                 entity.FormName = request.FormName;
@@ -125,9 +117,12 @@ namespace Accounting.Application.Features
                 entity.DiscountOnTaxCR = request.DiscountOnTaxCR.Value;
             }
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            return entity;
+        }
 
-            return entity.Id;
+        protected override string? GetExcludedTables()
+        {
+            return "FormSequences,CustomFormFields";
         }
     }
 }

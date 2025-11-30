@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Accounting.Application.Features
 {
-    public class UpdateProductStockHandler : UpdateEntityHandler<AccountingDbContext, ProductStock, Guid, UpdateProductStock, Guid>
+    public class UpdateProductStockHandler : DeleteRestrictedUpdateEntityHandler<ProductStock, UpdateProductStock>
     {
         public UpdateProductStockHandler(AccountingDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {

@@ -2,6 +2,7 @@ using Accounting.Application.Features;
 using ExcentOne.Application.Features.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Accounting.Application.Services;
 
 namespace Accounting.API.Controllers
 {
@@ -10,10 +11,12 @@ namespace Accounting.API.Controllers
     public class InventoryTransferController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IJournalGenerationService _journalGenerationService;
 
-        public InventoryTransferController(IMediator mediator)
+        public InventoryTransferController(IMediator mediator, IJournalGenerationService journalGenerationService)
         {
             _mediator = mediator;
+            _journalGenerationService = journalGenerationService;
         }
 
         [HttpGet]
@@ -49,7 +52,13 @@ namespace Accounting.API.Controllers
         {
             DeleteInventoryTransfer request = new() { Id = id };
             await _mediator.Send(request);
+
+            await _journalGenerationService.ProcessAsync(new GenerateJvRequest
+            {
+                RecordType = "InventoryTransfer",
+                OperationType = "delete",
+                RecordId = id.ToString()
+            });
         }
     }
 }
-

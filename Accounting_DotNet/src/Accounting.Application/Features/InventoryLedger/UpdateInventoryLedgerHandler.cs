@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Accounting.Application.Features
 {
-    public class UpdateInventoryLedgerHandler : UpdateEntityHandler<AccountingDbContext, InventoryLedger, Guid, UpdateInventoryLedger, Guid>
+    public class UpdateInventoryLedgerHandler : DeleteRestrictedUpdateEntityHandler<InventoryLedger, UpdateInventoryLedger>
     {
         public UpdateInventoryLedgerHandler(AccountingDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {

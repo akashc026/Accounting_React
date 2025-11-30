@@ -6,7 +6,7 @@ using MapsterMapper;
 
 namespace Accounting.Application.Features
 {
-    public class UpdateFormSequenceHandler : UpdateEntityHandler<AccountingDbContext, FormSequence, Guid, UpdateFormSequence, Guid>
+    public class UpdateFormSequenceHandler : DeleteRestrictedUpdateEntityHandler<FormSequence, UpdateFormSequence>
     {
         public UpdateFormSequenceHandler(AccountingDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {

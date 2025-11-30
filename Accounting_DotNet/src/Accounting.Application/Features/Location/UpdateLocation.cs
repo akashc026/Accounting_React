@@ -10,7 +10,6 @@ namespace Accounting.Application.Features
     public class UpdateLocation : IUpdateEntity<Guid,Guid>
     {
         public Guid Id { get; set; }
-        public bool? IsDeleted { get; set; }
 
         public string? Name { get; set; }
 

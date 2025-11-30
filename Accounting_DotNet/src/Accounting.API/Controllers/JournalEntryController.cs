@@ -1,4 +1,5 @@
 using Accounting.Application.Features;
+using Accounting.Application.Services;
 using ExcentOne.Application.Features.Results;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -11,10 +12,12 @@ namespace Accounting.API.Controllers
     public class JournalEntryController : ControllerBase
     {
         private readonly IMediator mediator;
+        private readonly IJournalGenerationService journalGenerationService;
 
-        public JournalEntryController(IMediator mediator)
+        public JournalEntryController(IMediator mediator, IJournalGenerationService journalGenerationService)
         {
             this.mediator = mediator;
+            this.journalGenerationService = journalGenerationService;
         }
 
         [HttpGet]
@@ -57,6 +60,13 @@ namespace Accounting.API.Controllers
         {
             DeleteJournalEntry request = new() { Id = id };
             await mediator.Send(request);
+
+            await journalGenerationService.ProcessAsync(new GenerateJvRequest
+            {
+                RecordType = "JournalEntry",
+                OperationType = "delete",
+                RecordId = id.ToString()
+            });
         }
     }
 }

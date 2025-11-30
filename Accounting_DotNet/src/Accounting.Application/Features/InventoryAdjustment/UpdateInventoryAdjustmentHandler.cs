@@ -16,6 +16,8 @@ namespace Accounting.Application.Features
         {
             return args.Entity.Id;
         }
+
+
     }
 }
 

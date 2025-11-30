@@ -1,51 +1,44 @@
 using Accounting.Persistence;
 using Accounting.Persistence.Models;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+using ExcentOne.Application.Features.Commands;
+using ExcentOne.MediatR.EntityFrameworkCore.Command;
+using MapsterMapper;
 
 namespace Accounting.Application.Features
 {
-    public class UpdateItemFulfilmentHandler : IRequestHandler<UpdateItemFulfilment, Guid>
+    public class UpdateItemFulfilmentHandler : UpdateEntityHandler<AccountingDbContext, ItemFulfilment, Guid, UpdateItemFulfilment, Guid>
     {
-        private readonly AccountingDbContext _dbContext;
-
-        public UpdateItemFulfilmentHandler(AccountingDbContext dbContext)
+        public UpdateItemFulfilmentHandler(AccountingDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
-            _dbContext = dbContext;
         }
 
-        public async Task<Guid> Handle(UpdateItemFulfilment request, CancellationToken cancellationToken)
+        protected override ItemFulfilment UpdateEntity(UpdateItemFulfilment request, ItemFulfilment entity, IMapper mapper)
         {
-            var entity = await _dbContext.ItemFulfilments.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-            
-            if (entity == null)
-                throw new KeyNotFoundException($"ItemFulfilment with ID {request.Id} not found.");
-
-            // Only update fields that have values
             if (request.SOID.HasValue)
                 entity.SOID = request.SOID;
-                
+
             if (request.DeliveryDate.HasValue)
                 entity.DeliveryDate = request.DeliveryDate.Value;
-                
+
             if (request.CustomerID.HasValue)
                 entity.CustomerID = request.CustomerID.Value;
-                
+
             if (request.LocationID.HasValue)
                 entity.LocationID = request.LocationID.Value;
-                
+
             if (request.Form.HasValue)
                 entity.Form = request.Form.Value;
 
             if (request.Status.HasValue)
                 entity.Status = request.Status.Value;
-                
+
             if (request.SequenceNumber != null)
                 entity.SequenceNumber = request.SequenceNumber;
-                
+
             if (request.Inactive.HasValue)
                 entity.Inactive = request.Inactive.Value;
-                
+
             if (request.Discount.HasValue)
                 entity.Discount = request.Discount.Value;
 
@@ -64,9 +57,7 @@ namespace Accounting.Application.Features
             if (request.NetTotal.HasValue)
                 entity.NetTotal = request.NetTotal.Value;
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            
-            return entity.Id;
+            return entity;
         }
     }
 }

@@ -10,8 +10,6 @@ namespace Accounting.Application.Features
     public class UpdateItemReceipt : IUpdateEntity<Guid, Guid>
     {
         public Guid Id { get; set; }
-        public bool? IsDeleted { get; set; }
-
         public Guid? VendorID { get; set; }
 
         public Guid? POID { get; set; }

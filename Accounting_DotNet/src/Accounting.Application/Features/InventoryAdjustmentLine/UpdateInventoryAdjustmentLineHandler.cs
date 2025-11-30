@@ -6,7 +6,7 @@ using MapsterMapper;
 
 namespace Accounting.Application.Features
 {
-    public class UpdateInventoryAdjustmentLineHandler : UpdateEntityHandler<AccountingDbContext, InventoryAdjustmentLine, Guid, UpdateInventoryAdjustmentLine, Guid>
+    public class UpdateInventoryAdjustmentLineHandler : DeleteRestrictedUpdateEntityHandler<InventoryAdjustmentLine, UpdateInventoryAdjustmentLine>
     {
         public UpdateInventoryAdjustmentLineHandler(AccountingDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
@@ -15,6 +15,11 @@ namespace Accounting.Application.Features
         protected override Guid OnCommandSuccess(DbCommandSuccessArgs<UpdateInventoryAdjustmentLine, InventoryAdjustmentLine> args)
         {
             return args.Entity.Id;
+        }
+
+         protected override string? GetExcludedTables()
+        {
+            return "InventoryAdjustment";
         }
     }
 }

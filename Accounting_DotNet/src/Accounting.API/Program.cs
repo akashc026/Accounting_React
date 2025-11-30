@@ -7,11 +7,16 @@ using ExcentOne.Presentation.Features.Exceptions;
 using ExcentOne.Presentation.Features.Routing;
 using FluentValidation;
 using Mapster;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers(options => options.SlugifyUrlTokens());
+builder.Services.AddControllers(options =>
+{
+    options.SlugifyUrlTokens();
+    options.Filters.Add<Accounting.API.Filters.JsonErrorFilter>();
+});
 builder.Services.AddValidatorsFromAssemblyContaining<AccountingApplication>();
 builder.Services.AddSqlServerDbContext<AccountingDbContext>();
 builder.Services.AddMediatR(config =>
@@ -22,6 +27,8 @@ builder.Services.AddMapster();
 
 // Register application services
 builder.Services.AddScoped<IFormSequenceService, FormSequenceService>();
+builder.Services.AddScoped<IJournalGenerationService, JournalGenerationService>();
+builder.Services.Configure<JournalFormTypeSettings>(builder.Configuration.GetSection("JournalFormTypes"));
 
 builder.Services.AddExceptionHandlersFromAssemblyOf<ValidationExceptionHandler>();
 

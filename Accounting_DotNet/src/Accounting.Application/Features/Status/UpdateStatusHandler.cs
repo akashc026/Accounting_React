@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Accounting.Application.Features
 {
-    public class UpdateStatusHandler : UpdateEntityHandler<AccountingDbContext, Status, Guid, UpdateStatus, Guid>
+    public class UpdateStatusHandler : DeleteRestrictedUpdateEntityHandler<Status, UpdateStatus>
     {
         public UpdateStatusHandler(AccountingDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {

@@ -1,12 +1,8 @@
 using Accounting.Application.Features;
+using Accounting.Application.Services;
 using ExcentOne.Application.Features.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Accounting.API.Controllers
 {
@@ -14,11 +10,13 @@ namespace Accounting.API.Controllers
     [Route("vendor-bill")]
     public class VendorBillController : ControllerBase
     {
+        private readonly IJournalGenerationService _journalGenerationService;
         private readonly IMediator _mediator;
 
-        public VendorBillController(IMediator mediator)
+        public VendorBillController(IMediator mediator, IJournalGenerationService journalGenerationService)
         {
             _mediator = mediator;
+            _journalGenerationService = journalGenerationService;
         }
 
         [HttpGet]
@@ -72,6 +70,13 @@ namespace Accounting.API.Controllers
         {
             DeleteVendorBill request = new() { Id = id };
             await _mediator.Send(request);
+
+            await _journalGenerationService.ProcessAsync(new GenerateJvRequest
+            {
+                RecordType = "VendorBill",
+                OperationType = "delete",
+                RecordId = id.ToString()
+            });
         }
 
         [HttpGet("by-vendor-loc/{vendorId:guid}/{locationId:guid}")]

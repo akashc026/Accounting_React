@@ -2,11 +2,7 @@ using Accounting.Application.Features;
 using ExcentOne.Application.Features.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Accounting.Application.Services;
 
 namespace Accounting.API.Controllers
 {
@@ -15,10 +11,12 @@ namespace Accounting.API.Controllers
     public class PurchaseOrderController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IJournalGenerationService _journalGenerationService;
 
-        public PurchaseOrderController(IMediator mediator)
+        public PurchaseOrderController(IMediator mediator, IJournalGenerationService journalGenerationService)
         {
             _mediator = mediator;
+            _journalGenerationService = journalGenerationService;
         }
 
         [HttpGet]
@@ -72,6 +70,13 @@ namespace Accounting.API.Controllers
         {
             DeletePurchaseOrder request = new() { Id = id };
             await _mediator.Send(request);
+
+            await _journalGenerationService.ProcessAsync(new GenerateJvRequest
+            {
+                RecordType = "PurchaseOrder",
+                OperationType = "delete",
+                RecordId = id.ToString()
+            });
         }
     }
 } 

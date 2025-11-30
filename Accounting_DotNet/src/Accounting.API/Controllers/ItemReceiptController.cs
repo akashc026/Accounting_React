@@ -1,12 +1,8 @@
 using Accounting.Application.Features;
+using Accounting.Application.Services;
 using ExcentOne.Application.Features.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Accounting.API.Controllers
 {
@@ -14,11 +10,13 @@ namespace Accounting.API.Controllers
     [Route("item-receipt")]
     public class ItemReceiptController : ControllerBase
     {
+        private readonly IJournalGenerationService _journalGenerationService;
         private readonly IMediator _mediator;
 
-        public ItemReceiptController(IMediator mediator)
+        public ItemReceiptController(IMediator mediator, IJournalGenerationService journalGenerationService)
         {
             _mediator = mediator;
+            _journalGenerationService = journalGenerationService;
         }
 
         [HttpGet]
@@ -72,6 +70,13 @@ namespace Accounting.API.Controllers
         {
             DeleteItemReceipt request = new() { Id = id };
             await _mediator.Send(request);
+
+            await _journalGenerationService.ProcessAsync(new GenerateJvRequest
+            {
+                RecordType = "ItemReceipt",
+                OperationType = "delete",
+                RecordId = id.ToString()
+            });
         }
     }
 } 

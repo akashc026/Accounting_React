@@ -22,31 +22,30 @@ namespace Accounting.Application.Features
 
         public override async Task<Unit> Handle(DeleteProduct request, CancellationToken cancellationToken)
         {
-            var entities = Entities.AsExpandable();
-            var predicate = ComposeFilter(PredicateBuilder.New<Product>(), request);
-
-            var entity = await entities.FirstOrDefaultAsync(predicate, cancellationToken);
+            var entity = await Entities.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (entity is null)
             {
-                if (ThrowIfEntityNotFound)
-                {
-                    throw new KeyNotFoundException($"Product with Id of {request.Id} was not found.");
-                }
-                else
-                {
-                    return Unit.Value;
-                }
+                throw new KeyNotFoundException($"Product with Id of {request.Id} was not found.");
             }
 
-            // Perform hard delete
-            Entities.Remove(entity);
+            var totalCount = new OutputParameter<int?>();
+            await DbContext.Procedures.CheckBlockingReferencesAsync(
+                tableName: "Product",
+                primaryKeyColumn: "Id",
+                primaryKeyValue: request.Id.ToString(),
+                excludeTables: null,
+                totalCount: totalCount,
+                cancellationToken: cancellationToken);
+
+            if ((totalCount.Value ?? 0) > 0)
+            {
+                throw new InvalidOperationException("Product delete not allowed due to existing references.");
+            }
+
+            entity.IsDeleted = true;
+            Entities.Update(entity);
 
             return await SaveChangesAsync(request, entity, cancellationToken);
         }
-
-        protected override Expression<Func<Product, bool>> ComposeFilter(Expression<Func<Product, bool>> predicate, DeleteProduct request)
-        {
-            return predicate.Eq(e => e.Id, request.Id);
-        }
     }
-} 
+}

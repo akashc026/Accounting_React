@@ -1,51 +1,44 @@
 using Accounting.Persistence;
 using Accounting.Persistence.Models;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+using ExcentOne.Application.Features.Commands;
+using ExcentOne.MediatR.EntityFrameworkCore.Command;
+using MapsterMapper;
 
 namespace Accounting.Application.Features
 {
-    public class UpdateCreditMemoHandler : IRequestHandler<UpdateCreditMemo, Guid>
+    public class UpdateCreditMemoHandler : UpdateEntityHandler<AccountingDbContext, CreditMemo, Guid, UpdateCreditMemo, Guid>
     {
-        private readonly AccountingDbContext _dbContext;
-
-        public UpdateCreditMemoHandler(AccountingDbContext dbContext)
+        public UpdateCreditMemoHandler(AccountingDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
-            _dbContext = dbContext;
         }
 
-        public async Task<Guid> Handle(UpdateCreditMemo request, CancellationToken cancellationToken)
+        protected override CreditMemo UpdateEntity(UpdateCreditMemo request, CreditMemo entity, IMapper mapper)
         {
-            var entity = await _dbContext.CreditMemos.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-            
-            if (entity == null)
-                throw new KeyNotFoundException($"CreditMemo with ID {request.Id} not found.");
-
-            // Only update fields that have values
             if (request.Form.HasValue)
                 entity.Form = request.Form.Value;
-                
+
             if (request.CustomerID.HasValue)
                 entity.CustomerID = request.CustomerID.Value;
-                
+
             if (request.LocationID.HasValue)
                 entity.LocationID = request.LocationID.Value;
-                
+
             if (request.TotalAmount.HasValue)
                 entity.TotalAmount = request.TotalAmount.Value;
-                
+
             if (request.Applied.HasValue)
                 entity.Applied = request.Applied.Value;
-                
+
             if (request.UnApplied.HasValue)
                 entity.UnApplied = request.UnApplied.Value;
             
             if (request.SequenceNumber != null)
                 entity.SequenceNumber = request.SequenceNumber;
-                
+
             if (request.TranDate.HasValue)
                 entity.TranDate = request.TranDate.Value;
-                
+
             if (request.Status.HasValue)
                 entity.Status = request.Status.Value;
 
@@ -61,9 +54,7 @@ namespace Accounting.Application.Features
             if (request.NetTotal.HasValue)
                 entity.NetTotal = request.NetTotal.Value;
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            
-            return entity.Id;
+            return entity;
         }
     }
 }

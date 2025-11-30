@@ -46,10 +46,11 @@ namespace Accounting.API.Controllers
 
 
         [HttpDelete("{id:guid}")]
-        public async Task Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             DeleteCustomer request = new() { Id = id };
             await mediator.Send(request);
+            return NoContent();
         }
 
         [HttpGet("active")]
@@ -58,5 +59,6 @@ namespace Accounting.API.Controllers
             GetActiveCustomers request = new();
             return await mediator.Send(request);
         }
+
     }
 }

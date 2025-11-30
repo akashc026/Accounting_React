@@ -6,8 +6,6 @@ namespace Accounting.Application.Features
     public class UpdateInventoryTransfer : IUpdateEntity<Guid, Guid>
     {
         public Guid Id { get; set; }
-        public bool? IsDeleted { get; set; }
-
         public Guid? CustomerID { get; set; }
 
         public DateTime? TranDate { get; set; }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Accounting.Application.Features
 {
-    public class UpdateFormSourceTypeHandler : UpdateEntityHandler<AccountingDbContext, FormSourceType, Guid, UpdateFormSourceType, Guid>
+    public class UpdateFormSourceTypeHandler : DeleteRestrictedUpdateEntityHandler<FormSourceType, UpdateFormSourceType>
     {
         public UpdateFormSourceTypeHandler(AccountingDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {

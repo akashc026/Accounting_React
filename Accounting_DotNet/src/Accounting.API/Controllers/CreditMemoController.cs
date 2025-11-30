@@ -1,4 +1,5 @@
 using Accounting.Application.Features;
+using Accounting.Application.Services;
 using ExcentOne.Application.Features.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +16,12 @@ namespace Accounting.API.Controllers
     public class CreditMemoController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IJournalGenerationService _journalGenerationService;
 
-        public CreditMemoController(IMediator mediator)
+        public CreditMemoController(IMediator mediator, IJournalGenerationService journalGenerationService)
         {
             _mediator = mediator;
+            _journalGenerationService = journalGenerationService;
         }
 
         [HttpGet]
@@ -66,6 +69,13 @@ namespace Accounting.API.Controllers
         {
             DeleteCreditMemo request = new() { Id = id };
             await _mediator.Send(request);
+
+            await _journalGenerationService.ProcessAsync(new GenerateJvRequest
+            {
+                RecordType = "CreditMemo",
+                OperationType = "delete",
+                RecordId = id.ToString()
+            });
         }
 
         [HttpGet("by-customer/{customerId:guid}")]

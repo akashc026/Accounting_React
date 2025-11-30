@@ -1,49 +1,41 @@
 using Accounting.Persistence;
 using Accounting.Persistence.Models;
 using ExcentOne.Application.Features.Commands;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+using ExcentOne.MediatR.EntityFrameworkCore.Command;
+using MapsterMapper;
 
 namespace Accounting.Application.Features
 {
-    public class UpdateDebitMemoHandler : IRequestHandler<UpdateDebitMemo, Guid>
+    public class UpdateDebitMemoHandler : UpdateEntityHandler<AccountingDbContext, DebitMemo, Guid, UpdateDebitMemo, Guid>
     {
-        private readonly AccountingDbContext _dbContext;
-
-        public UpdateDebitMemoHandler(AccountingDbContext dbContext)
+        public UpdateDebitMemoHandler(AccountingDbContext dbContext, IMapper mapper)
+            : base(dbContext, mapper)
         {
-            _dbContext = dbContext;
         }
 
-        public async Task<Guid> Handle(UpdateDebitMemo request, CancellationToken cancellationToken)
+        protected override DebitMemo UpdateEntity(UpdateDebitMemo request, DebitMemo entity, IMapper mapper)
         {
-            var entity = await _dbContext.DebitMemos.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-            
-            if (entity == null)
-                throw new KeyNotFoundException($"DebitMemo with ID {request.Id} not found.");
-
-            // Only update fields that have values
             if (request.CustomerID.HasValue)
                 entity.CustomerID = request.CustomerID.Value;
-                
+
             if (request.LocationID.HasValue)
                 entity.LocationID = request.LocationID.Value;
-                
+
             if (request.TranDate.HasValue)
                 entity.TranDate = request.TranDate.Value;
-                
+
             if (request.TotalAmount.HasValue)
                 entity.TotalAmount = request.TotalAmount.Value;
-                
+
             if (request.Form.HasValue)
                 entity.Form = request.Form.Value;
             
             if (request.SequenceNumber != null)
                 entity.SequenceNumber = request.SequenceNumber;
-                
+
             if (request.AmountDue.HasValue)
                 entity.AmountDue = request.AmountDue.Value;
-                
+
             if (request.AmountPaid.HasValue)
                 entity.AmountPaid = request.AmountPaid.Value;
 
@@ -62,9 +54,7 @@ namespace Accounting.Application.Features
             if (request.Status.HasValue)
                 entity.Status = request.Status.Value;
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            
-            return entity.Id;
+            return entity;
         }
     }
 }

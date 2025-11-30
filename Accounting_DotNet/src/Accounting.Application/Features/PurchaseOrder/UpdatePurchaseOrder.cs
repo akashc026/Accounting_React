@@ -10,7 +10,6 @@ namespace Accounting.Application.Features
     public class UpdatePurchaseOrder : IUpdateEntity<Guid, Guid>
     {
         public Guid Id { get; set; }
-        public bool? IsDeleted { get; set; }
 
         public Guid? VendorID { get; set; }
 

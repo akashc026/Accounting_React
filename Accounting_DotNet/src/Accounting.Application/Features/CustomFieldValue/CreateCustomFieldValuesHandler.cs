@@ -33,7 +33,8 @@ namespace Accounting.Application.Features
                 {
                     ID = Guid.NewGuid(),
                     TypeOfRecord = valueDto.TypeOfRecord,
-                    ValueText = valueDto.ValueText,
+                    // DB column is non-nullable: persist empty string when null/whitespace is provided
+                    ValueText = string.IsNullOrWhiteSpace(valueDto.ValueText) ? string.Empty : valueDto.ValueText,
                     CustomFieldID = valueDto.CustomFieldID,
                     RecordID = valueDto.RecordID,
                     CreatedBy = request.CreatedBy ?? string.Empty

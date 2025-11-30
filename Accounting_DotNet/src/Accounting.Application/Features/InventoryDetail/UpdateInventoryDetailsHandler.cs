@@ -59,5 +59,6 @@ namespace Accounting.Application.Features
 
             return existingDetails.Count;
         }
+
     }
 }

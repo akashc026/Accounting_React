@@ -6,7 +6,7 @@ using MapsterMapper;
 
 namespace Accounting.Application.Features
 {
-    public class UpdateRecordTypeHandler : UpdateEntityHandler<AccountingDbContext, RecordType, Guid, UpdateRecordType, Guid>
+    public class UpdateRecordTypeHandler : DeleteRestrictedUpdateEntityHandler<RecordType, UpdateRecordType>
     {
         public UpdateRecordTypeHandler(AccountingDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {

@@ -1,9 +1,14 @@
+using Accounting.API.Contracts;
+using Accounting.API.Services;
 using Accounting.Application.Features;
 using Accounting.Application.Services;
 using ExcentOne.Application.Features.Results;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Accounting.API.Controllers
 {
@@ -13,11 +18,13 @@ namespace Accounting.API.Controllers
     {
         private readonly IMediator mediator;
         private readonly IJournalGenerationService journalGenerationService;
+        private readonly InvoiceMergeService _mergeService;
 
-        public InvoiceController(IMediator mediator, IJournalGenerationService journalGenerationService)
+        public InvoiceController(IMediator mediator, IJournalGenerationService journalGenerationService, InvoiceMergeService mergeService)
         {
             this.mediator = mediator;
             this.journalGenerationService = journalGenerationService;
+            _mergeService = mergeService;
         }
 
         [HttpGet]
@@ -44,7 +51,14 @@ namespace Accounting.API.Controllers
         public async Task<Guid> Update(Guid id, UpdateInvoice request)
         {
             request.Id = id;
-            return await mediator.Send(request);
+            var result = await mediator.Send(request);
+
+            await mediator.Send(new SyncItemFulfilmentInvoicedQuantities
+            {
+                InvoiceId = id
+            });
+
+            return result;
         }
 
         [HttpDelete("{id:guid}")]
@@ -71,5 +85,43 @@ namespace Accounting.API.Controllers
             };
             return await mediator.Send(request);
         }
+
+        [HttpPost("merge")]
+        public Task<ActionResult<Guid>> Merge([FromBody] InvoiceMergeRequest request)
+        {
+            return HandleMergeAsync(request, isUpdateRequest: false);
+        }
+
+        [HttpPut("merge")]
+        public Task<ActionResult<Guid>> MergeUpdate([FromBody] InvoiceMergeRequest request)
+        {
+            return HandleMergeAsync(request, isUpdateRequest: true);
+        }
+
+        private async Task<ActionResult<Guid>> HandleMergeAsync(InvoiceMergeRequest request, bool isUpdateRequest)
+        {
+            try
+            {
+                var id = await _mergeService.MergeAsync(request, isUpdateRequest);
+                return Ok(id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
     }
 }

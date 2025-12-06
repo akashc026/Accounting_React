@@ -18,8 +18,14 @@ namespace Accounting.Application.Services
 
         public async Task<string> GenerateNextSequenceNumberAsync(Guid formId, CancellationToken cancellationToken = default)
         {
-            // Use a transaction to lock and update safely - prevents concurrent requests from generating same number
-            using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+            // Reuse an existing transaction when present (e.g., caller opens a unit-of-work transaction),
+            // otherwise create a new transaction to protect the sequence increment.
+            var ownsTransaction = _context.Database.CurrentTransaction == null;
+            Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction? transaction = null;
+            if (ownsTransaction)
+            {
+                transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+            }
 
             try
             {
@@ -61,15 +67,21 @@ namespace Accounting.Application.Services
                 sequenceRecord.FormSequenceNumber = nextNumber;
                 await _context.SaveChangesAsync(cancellationToken);
 
-                // Commit transaction - ensures atomicity
-                await transaction.CommitAsync(cancellationToken);
+                // Commit only if we created the transaction
+                if (transaction != null)
+                {
+                    await transaction.CommitAsync(cancellationToken);
+                }
 
                 return formattedSequence;
             }
             catch
             {
-                // Rollback on any error to maintain data consistency
-                await transaction.RollbackAsync(cancellationToken);
+                // Rollback only if we created the transaction
+                if (transaction != null)
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                }
                 throw;
             }
         }

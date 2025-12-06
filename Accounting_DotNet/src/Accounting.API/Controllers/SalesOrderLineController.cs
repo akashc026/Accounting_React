@@ -32,6 +32,21 @@ namespace Accounting.API.Controllers
         public async Task<IActionResult> Update([FromBody] UpdateSalesOrderLines command)
         {
             var updatedCount = await _mediator.Send(command);
+
+            var lineIds = command.Lines?
+                .Select(line => line.Id)
+                .Where(id => id != Guid.Empty)
+                .Distinct()
+                .ToList();
+
+            if (lineIds != null && lineIds.Any())
+            {
+                await _mediator.Send(new SyncSalesOrderFulfillmentQuantities
+                {
+                    SalesOrderLineIds = lineIds
+                });
+            }
+
             return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} sales order line(s) updated successfully" });
         }
 

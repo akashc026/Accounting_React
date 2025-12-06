@@ -65,5 +65,10 @@ namespace Accounting.Application.Features
 
             return entity;
         }
+
+        protected override Guid OnCommandSuccess(DbCommandSuccessArgs<UpdateInvoice, Invoice> args)
+        {
+            return args.Entity.Id;
+        }
     }
 }

@@ -179,7 +179,7 @@
         },
         "runtime": {
           "ExcentOne.EntityFrameworkCore.Relational.dll": {
-            "assemblyVersion": "1.0.0.0",
+            "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
         }
@@ -187,7 +187,7 @@
       "ExcentOne.Linq.Extensions/1.0.0": {
         "runtime": {
           "ExcentOne.Linq.Extensions.dll": {
-            "assemblyVersion": "1.0.0.0",
+            "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
         }
@@ -198,7 +198,7 @@
         },
         "runtime": {
           "ExcentOne.Persistence.Features.dll": {
-            "assemblyVersion": "1.0.0.0",
+            "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
         }

@@ -1,11 +1,11 @@
+using Accounting.API.Contracts;
+using Accounting.API.Services;
 using Accounting.Application.Features;
 using ExcentOne.Application.Features.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Accounting.API.Controllers
@@ -15,10 +15,12 @@ namespace Accounting.API.Controllers
     public class SalesOrderController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly SalesOrderMergeService _mergeService;
 
-        public SalesOrderController(IMediator mediator)
+        public SalesOrderController(IMediator mediator, SalesOrderMergeService mergeService)
         {
             _mediator = mediator;
+            _mergeService = mergeService;
         }
 
         [HttpGet]
@@ -73,5 +75,42 @@ namespace Accounting.API.Controllers
             DeleteSalesOrder request = new() { Id = id };
             await _mediator.Send(request);
         }
+
+        [HttpPost("merge")]
+        public Task<ActionResult<Guid>> Merge([FromBody] SalesOrderMergeRequest request)
+        {
+            return HandleMergeAsync(request, isUpdateRequest: false);
+        }
+
+        [HttpPut("merge")]
+        public Task<ActionResult<Guid>> MergeUpdate([FromBody] SalesOrderMergeRequest request)
+        {
+            return HandleMergeAsync(request, isUpdateRequest: true);
+        }
+
+        private async Task<ActionResult<Guid>> HandleMergeAsync(SalesOrderMergeRequest request, bool isUpdateRequest)
+        {
+            try
+            {
+                var id = await _mergeService.MergeAsync(request, isUpdateRequest);
+                return Ok(id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
-} 
+}

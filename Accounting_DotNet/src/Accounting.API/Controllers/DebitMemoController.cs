@@ -1,3 +1,5 @@
+using Accounting.API.Contracts;
+using Accounting.API.Services;
 using Accounting.Application.Features;
 using Accounting.Application.Services;
 using ExcentOne.Application.Features.Results;
@@ -5,8 +7,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Accounting.API.Controllers
@@ -17,11 +17,13 @@ namespace Accounting.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IJournalGenerationService _journalGenerationService;
+        private readonly DebitMemoMergeService _mergeService;
 
-        public DebitMemoController(IMediator mediator, IJournalGenerationService journalGenerationService)
+        public DebitMemoController(IMediator mediator, IJournalGenerationService journalGenerationService, DebitMemoMergeService mergeService)
         {
             _mediator = mediator;
             _journalGenerationService = journalGenerationService;
+            _mergeService = mergeService;
         }
 
         [HttpGet]
@@ -87,6 +89,43 @@ namespace Accounting.API.Controllers
                 LocationId = locationId
             };
             return await _mediator.Send(request);
+        }
+
+        [HttpPost("merge")]
+        public Task<ActionResult<Guid>> Merge([FromBody] DebitMemoMergeRequest request)
+        {
+            return HandleMergeAsync(request, isUpdateRequest: false);
+        }
+
+        [HttpPut("merge")]
+        public Task<ActionResult<Guid>> MergeUpdate([FromBody] DebitMemoMergeRequest request)
+        {
+            return HandleMergeAsync(request, isUpdateRequest: true);
+        }
+
+        private async Task<ActionResult<Guid>> HandleMergeAsync(DebitMemoMergeRequest request, bool isUpdateRequest)
+        {
+            try
+            {
+                var id = await _mergeService.MergeAsync(request, isUpdateRequest);
+                return Ok(id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

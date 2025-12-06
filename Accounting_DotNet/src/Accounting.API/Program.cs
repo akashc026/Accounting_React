@@ -29,6 +29,10 @@ builder.Services.AddMapster();
 builder.Services.AddScoped<IFormSequenceService, FormSequenceService>();
 builder.Services.AddScoped<IJournalGenerationService, JournalGenerationService>();
 builder.Services.Configure<JournalFormTypeSettings>(builder.Configuration.GetSection("JournalFormTypes"));
+builder.Services.AddScoped<Accounting.API.Services.InvoiceMergeService>();
+builder.Services.AddScoped<Accounting.API.Services.ItemFulfilmentMergeService>();
+builder.Services.AddScoped<Accounting.API.Services.SalesOrderMergeService>();
+builder.Services.AddScoped<Accounting.API.Services.DebitMemoMergeService>();
 
 builder.Services.AddExceptionHandlersFromAssemblyOf<ValidationExceptionHandler>();
 

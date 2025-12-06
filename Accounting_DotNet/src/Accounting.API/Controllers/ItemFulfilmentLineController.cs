@@ -38,13 +38,20 @@ namespace Accounting.API.Controllers
         [HttpPost]
         public async Task<List<Guid>> Create(CreateItemFulfilmentLines request)
         {
-            return await mediator.Send(request);
+            var result = await mediator.Send(request);
+
+            await SyncRelatedSalesOrdersAsync(request.Lines);
+
+            return result;
         }
 
         [HttpPut]
         public async Task<IActionResult> Update(UpdateItemFulfilmentLines request)
         {
             var updatedCount = await mediator.Send(request);
+
+            await SyncRelatedSalesOrdersAsync(request.Lines);
+
             return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} item fulfilment line(s) updated successfully" });
         }
 
@@ -89,5 +96,77 @@ namespace Accounting.API.Controllers
         {
             return await mediator.Send(request);
         }
+
+        private async Task SyncRelatedSalesOrdersAsync(IEnumerable<ItemFulfilmentLineCreateDto>? createLines)
+        {
+            if (createLines == null)
+            {
+                return;
+            }
+
+            var salesOrderLineIds = createLines
+                .Where(line => line.SalesOrderLineId.HasValue && line.SalesOrderLineId != Guid.Empty)
+                .Select(line => line.SalesOrderLineId!.Value)
+                .Distinct()
+                .ToList();
+
+            if (salesOrderLineIds.Any())
+            {
+                await mediator.Send(new SyncSalesOrderFulfillmentQuantities
+                {
+                    SalesOrderLineIds = salesOrderLineIds
+                });
+            }
+
+            var fulfilmentIds = createLines
+                .Select(line => line.DNID)
+                .Where(id => id != Guid.Empty)
+                .Distinct()
+                .ToList();
+
+            foreach (var fulfilmentId in fulfilmentIds)
+            {
+                await mediator.Send(new SyncSalesOrderFulfillmentQuantities
+                {
+                    ItemFulfilmentId = fulfilmentId
+                });
+            }
+        }
+
+        private async Task SyncRelatedSalesOrdersAsync(IEnumerable<ItemFulfilmentLineUpdateDto>? updateLines)
+        {
+            if (updateLines == null)
+            {
+                return;
+            }
+
+            var salesOrderLineIds = updateLines
+                .Where(line => line.SalesOrderLineId.HasValue && line.SalesOrderLineId != Guid.Empty)
+                .Select(line => line.SalesOrderLineId!.Value)
+                .Distinct()
+                .ToList();
+
+            if (salesOrderLineIds.Any())
+            {
+                await mediator.Send(new SyncSalesOrderFulfillmentQuantities
+                {
+                    SalesOrderLineIds = salesOrderLineIds
+                });
+            }
+
+            var fulfilmentIds = updateLines
+                .Where(line => line.DNID.HasValue && line.DNID != Guid.Empty)
+                .Select(line => line.DNID!.Value)
+                .Distinct()
+                .ToList();
+
+            foreach (var fulfilmentId in fulfilmentIds)
+            {
+                await mediator.Send(new SyncSalesOrderFulfillmentQuantities
+                {
+                    ItemFulfilmentId = fulfilmentId
+                });
+            }
+        }
     }
-} 
+}

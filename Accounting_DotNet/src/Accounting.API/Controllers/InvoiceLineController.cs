@@ -38,13 +38,20 @@ namespace Accounting.API.Controllers
         [HttpPost]
         public async Task<List<Guid>> Create(CreateInvoiceLines request)
         {
-            return await mediator.Send(request);
+            var result = await mediator.Send(request);
+
+            await SyncFulfilmentInvoicedQuantitiesAsync(request.Lines, request.Lines?.FirstOrDefault()?.INID);
+
+            return result;
         }
 
         [HttpPut]
         public async Task<IActionResult> Update(UpdateInvoiceLines request)
         {
             var updatedCount = await mediator.Send(request);
+
+            await SyncFulfilmentInvoicedQuantitiesAsync(request.Lines, null);
+
             return Ok(new { UpdatedCount = updatedCount, Message = $"{updatedCount} invoice line(s) updated successfully" });
         }
 
@@ -83,5 +90,119 @@ namespace Accounting.API.Controllers
                 return BadRequest($"Error: {ex.Message}");
             }
         }
+
+        private async Task SyncFulfilmentInvoicedQuantitiesAsync(IEnumerable<InvoiceLineCreateDto>? lines, Guid? invoiceId)
+        {
+            if (lines == null)
+            {
+                return;
+            }
+
+            var lineList = lines.ToList();
+            if (!lineList.Any() && !invoiceId.HasValue)
+            {
+                return;
+            }
+
+            var fulfilmentLineIds = lineList
+                .Where(line => line.ItemFulfillmentLineId.HasValue && line.ItemFulfillmentLineId != Guid.Empty)
+                .Select(line => line.ItemFulfillmentLineId!.Value)
+                .Distinct()
+                .ToList();
+
+            if (!invoiceId.HasValue)
+            {
+                var firstInvoiceId = lineList
+                    .Select(line => line.INID)
+                    .FirstOrDefault(id => id != Guid.Empty);
+
+                if (firstInvoiceId != Guid.Empty)
+                {
+                    invoiceId = firstInvoiceId;
+                }
+            }
+
+            if (!fulfilmentLineIds.Any() && !invoiceId.HasValue)
+            {
+                return;
+            }
+
+            await mediator.Send(new SyncItemFulfilmentInvoicedQuantities
+            {
+                ItemFulfilmentLineIds = fulfilmentLineIds,
+                InvoiceId = invoiceId
+            });
+        }
+
+        private async Task SyncFulfilmentInvoicedQuantitiesAsync(IEnumerable<InvoiceLineUpdateDto>? lines, Guid? invoiceId)
+        {
+            if (lines == null)
+            {
+                return;
+            }
+
+            var lineList = lines.ToList();
+            if (!lineList.Any() && !invoiceId.HasValue)
+            {
+                return;
+            }
+
+            var fulfilmentLineIds = lineList
+                .Where(line => line.ItemFulfillmentLineId.HasValue && line.ItemFulfillmentLineId != Guid.Empty)
+                .Select(line => line.ItemFulfillmentLineId!.Value)
+                .ToList();
+
+            var missingMetadataIds = lineList
+                .Where(line => !line.ItemFulfillmentLineId.HasValue || line.INID == Guid.Empty)
+                .Select(line => line.Id)
+                .Distinct()
+                .ToList();
+
+            foreach (var lineId in missingMetadataIds)
+            {
+                var existingLine = await mediator.Send(new GetInvoiceLine { Id = lineId });
+                if (existingLine != null)
+                {
+                    if (!invoiceId.HasValue && existingLine.INID != Guid.Empty)
+                    {
+                        invoiceId = existingLine.INID;
+                    }
+
+                    if (existingLine.ItemFulfillmentLineId.HasValue)
+                    {
+                        fulfilmentLineIds.Add(existingLine.ItemFulfillmentLineId.Value);
+                    }
+                }
+            }
+
+            if (!invoiceId.HasValue)
+            {
+                var firstInvoiceId = lineList
+                    .Where(line => line.INID.HasValue)
+                    .Select(line => line.INID!.Value)
+                    .FirstOrDefault();
+
+                if (firstInvoiceId != Guid.Empty)
+                {
+                    invoiceId = firstInvoiceId;
+                }
+            }
+
+            fulfilmentLineIds = fulfilmentLineIds
+                .Where(id => id != Guid.Empty)
+                .Distinct()
+                .ToList();
+
+            if (!fulfilmentLineIds.Any() && !invoiceId.HasValue)
+            {
+                return;
+            }
+
+            await mediator.Send(new SyncItemFulfilmentInvoicedQuantities
+            {
+                ItemFulfilmentLineIds = fulfilmentLineIds,
+                InvoiceId = invoiceId
+            });
+        }
     }
-} 
+}

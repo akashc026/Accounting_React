@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace Accounting.API.Filters
@@ -20,11 +21,17 @@ namespace Accounting.API.Filters
                 _ => StatusCodes.Status500InternalServerError
             };
 
-            string payload = TryPassThroughJson(context.Exception.Message) ??
+            string errorMessage = context.Exception switch
+            {
+                DbUpdateException dbEx when dbEx.InnerException != null => dbEx.InnerException.Message,
+                _ => context.Exception.Message
+            };
+
+            string payload = TryPassThroughJson(errorMessage) ??
                              JsonSerializer.Serialize(new
                              {
                                  allow = false,
-                                 error = context.Exception.Message
+                                 error = errorMessage
                              });
 
             context.Result = new ContentResult
